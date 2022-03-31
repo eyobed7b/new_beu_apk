@@ -17,12 +17,14 @@ class ConditionCheckBox extends StatelessWidget {
         value: authController.acceptTerms,
         onChanged: (bool isChecked) => authController.toggleTerms(),
       ),
-      Text('i_agree_with'.tr, style: robotoRegular),
+      Text('i_agree_with'.tr, style: sfRegular),
       InkWell(
-        onTap: () => Get.toNamed(RouteHelper.getHtmlRoute('terms-and-condition')),
+        onTap: () =>
+            Get.toNamed(RouteHelper.getHtmlRoute('terms-and-condition')),
         child: Padding(
           padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-          child: Text('terms_conditions'.tr, style: robotoMedium.copyWith(color: Colors.blue)),
+          child: Text('terms_conditions'.tr,
+              style: sfMedium.copyWith(color: Colors.blue)),
         ),
       ),
     ]);

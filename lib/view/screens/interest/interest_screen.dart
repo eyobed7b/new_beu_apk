@@ -33,10 +33,10 @@ class InterestScreen extends StatelessWidget {
                             children: [
                               SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
                               Text('choose_your_interests'.tr,
-                                  style: robotoMedium.copyWith(fontSize: 22)),
+                                  style: sfMedium.copyWith(fontSize: 22)),
                               SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                               Text('get_personalized_recommendations'.tr,
-                                  style: robotoRegular.copyWith(
+                                  style: sfRegular.copyWith(
                                       color: Theme.of(context).disabledColor)),
                               SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
                               Expanded(
@@ -103,7 +103,7 @@ class InterestScreen extends StatelessWidget {
                                               child: Text(
                                             categoryController
                                                 .categoryList[index].name,
-                                            style: robotoMedium.copyWith(
+                                            style: sfMedium.copyWith(
                                               fontSize:
                                                   Dimensions.fontSizeSmall,
                                               color: categoryController

@@ -150,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       SizedBox(height: height * 0.08),
 
                       /*SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                          Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),*/
+                          Text(AppConstants.APP_NAME, style: sfMedium.copyWith(fontSize: 25)),*/
                     ],
                   ),
                 )

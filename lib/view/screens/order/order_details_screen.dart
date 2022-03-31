@@ -130,13 +130,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(children: [
-                                    Text('${'order_id'.tr}:',
-                                        style: robotoRegular),
+                                    Text('${'order_id'.tr}:', style: sfRegular),
                                     SizedBox(
                                         width: Dimensions
                                             .PADDING_SIZE_EXTRA_SMALL),
-                                    Text(_order.id.toString(),
-                                        style: robotoMedium),
+                                    Text(_order.id.toString(), style: sfMedium),
                                     SizedBox(
                                         width: Dimensions
                                             .PADDING_SIZE_EXTRA_SMALL),
@@ -148,7 +146,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     Text(
                                       DateConverter.dateTimeStringToDateTime(
                                           _order.createdAt),
-                                      style: robotoRegular,
+                                      style: sfRegular,
                                     ),
                                   ]),
                                   SizedBox(
@@ -157,7 +155,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                   _order.scheduled == 1
                                       ? Row(children: [
                                           Text('${'scheduled_at'.tr}:',
-                                              style: robotoRegular),
+                                              style: sfRegular),
                                           SizedBox(
                                               width: Dimensions
                                                   .PADDING_SIZE_EXTRA_SMALL),
@@ -165,7 +163,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                               DateConverter
                                                   .dateTimeStringToDateTime(
                                                       _order.scheduleAt),
-                                              style: robotoMedium),
+                                              style: sfMedium),
                                         ])
                                       : SizedBox(),
                                   SizedBox(
@@ -179,11 +177,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       ? Row(children: [
                                           Text(
                                               '${'delivery_verification_code'.tr}:',
-                                              style: robotoRegular),
+                                              style: sfRegular),
                                           SizedBox(
                                               width: Dimensions
                                                   .PADDING_SIZE_EXTRA_SMALL),
-                                          Text(_order.otp, style: robotoMedium),
+                                          Text(_order.otp, style: sfMedium),
                                         ])
                                       : SizedBox(),
                                   SizedBox(
@@ -194,8 +192,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           : 0),
 
                                   Row(children: [
-                                    Text(_order.orderType.tr,
-                                        style: robotoMedium),
+                                    Text(_order.orderType.tr, style: sfMedium),
                                     Expanded(child: SizedBox()),
                                     Container(
                                       padding: EdgeInsets.symmetric(
@@ -213,7 +210,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                 'cash_on_delivery'
                                             ? 'cash_on_delivery'.tr
                                             : 'digital_payment'.tr,
-                                        style: robotoRegular.copyWith(
+                                        style: sfRegular.copyWith(
                                             color: Theme.of(context).cardColor,
                                             fontSize:
                                                 Dimensions.fontSizeExtraSmall),
@@ -228,15 +225,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         vertical: Dimensions
                                             .PADDING_SIZE_EXTRA_SMALL),
                                     child: Row(children: [
-                                      Text('${'item'.tr}:',
-                                          style: robotoRegular),
+                                      Text('${'item'.tr}:', style: sfRegular),
                                       SizedBox(
                                           width: Dimensions
                                               .PADDING_SIZE_EXTRA_SMALL),
                                       Text(
                                         orderController.orderDetails.length
                                             .toString(),
-                                        style: robotoMedium.copyWith(
+                                        style: sfMedium.copyWith(
                                             color:
                                                 Theme.of(context).primaryColor),
                                       ),
@@ -260,7 +256,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         _order.orderStatus == 'delivered'
                                             ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered)}'
                                             : _order.orderStatus.tr,
-                                        style: robotoRegular.copyWith(
+                                        style: sfRegular.copyWith(
                                             fontSize: Dimensions.fontSizeSmall),
                                       ),
                                     ]),
@@ -290,7 +286,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                               Text('additional_note'.tr,
-                                                  style: robotoRegular),
+                                                  style: sfRegular),
                                               SizedBox(
                                                   height: Dimensions
                                                       .PADDING_SIZE_SMALL),
@@ -311,7 +307,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                 ),
                                                 child: Text(
                                                   _order.orderNote,
-                                                  style: robotoRegular.copyWith(
+                                                  style: sfRegular.copyWith(
                                                       fontSize: Dimensions
                                                           .fontSizeSmall,
                                                       color: Theme.of(context)
@@ -325,7 +321,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       : SizedBox(),
 
                                   Text('restaurant_details'.tr,
-                                      style: robotoRegular),
+                                      style: sfRegular),
                                   SizedBox(
                                       height:
                                           Dimensions.PADDING_SIZE_EXTRA_SMALL),
@@ -351,7 +347,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                             _order.restaurant.name,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: robotoRegular.copyWith(
+                                            style: sfRegular.copyWith(
                                                 fontSize:
                                                     Dimensions.fontSizeSmall),
                                           ),
@@ -359,7 +355,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                             _order.restaurant.address,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: robotoRegular.copyWith(
+                                            style: sfRegular.copyWith(
                                                 fontSize:
                                                     Dimensions.fontSizeSmall,
                                                 color: Theme.of(context)
@@ -404,12 +400,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('item_price'.tr,
-                                            style: robotoRegular),
+                                        Text('item_price'.tr, style: sfRegular),
                                         Text(
                                             PriceConverter.convertPrice(
                                                 _itemsPrice),
-                                            style: robotoRegular),
+                                            style: sfRegular),
                                       ]),
                                   SizedBox(height: 10),
 
@@ -417,10 +412,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('addons'.tr, style: robotoRegular),
+                                        Text('addons'.tr, style: sfRegular),
                                         Text(
                                             '(+) ${PriceConverter.convertPrice(_addOns)}',
-                                            style: robotoRegular),
+                                            style: sfRegular),
                                       ]),
 
                                   Divider(
@@ -433,12 +428,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('subtotal'.tr,
-                                            style: robotoMedium),
+                                        Text('subtotal'.tr, style: sfMedium),
                                         Text(
                                             PriceConverter.convertPrice(
                                                 _subTotal),
-                                            style: robotoMedium),
+                                            style: sfMedium),
                                       ]),
                                   SizedBox(height: 10),
 
@@ -446,11 +440,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('discount'.tr,
-                                            style: robotoRegular),
+                                        Text('discount'.tr, style: sfRegular),
                                         Text(
                                             '(-) ${PriceConverter.convertPrice(_discount)}',
-                                            style: robotoRegular),
+                                            style: sfRegular),
                                       ]),
                                   SizedBox(height: 10),
 
@@ -460,10 +453,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                               Text('coupon_discount'.tr,
-                                                  style: robotoRegular),
+                                                  style: sfRegular),
                                               Text(
                                                 '(-) ${PriceConverter.convertPrice(_couponDiscount)}',
-                                                style: robotoRegular,
+                                                style: sfRegular,
                                               ),
                                             ])
                                       : SizedBox(),
@@ -474,11 +467,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('vat_tax'.tr,
-                                            style: robotoRegular),
+                                        Text('vat_tax'.tr, style: sfRegular),
                                         Text(
                                             '(+) ${PriceConverter.convertPrice(_tax)}',
-                                            style: robotoRegular),
+                                            style: sfRegular),
                                       ]),
                                   SizedBox(height: 10),
 
@@ -487,14 +479,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text('delivery_fee'.tr,
-                                            style: robotoRegular),
+                                            style: sfRegular),
                                         _deliveryCharge > 0
                                             ? Text(
                                                 '(+) ${PriceConverter.convertPrice(_deliveryCharge)}',
-                                                style: robotoRegular,
+                                                style: sfRegular,
                                               )
                                             : Text('free'.tr,
-                                                style: robotoRegular.copyWith(
+                                                style: sfRegular.copyWith(
                                                     color: Theme.of(context)
                                                         .primaryColor)),
                                       ]),
@@ -515,7 +507,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text('total_amount'.tr,
-                                            style: robotoMedium.copyWith(
+                                            style: sfMedium.copyWith(
                                               fontSize:
                                                   Dimensions.fontSizeLarge,
                                               color: Theme.of(context)
@@ -523,7 +515,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                             )),
                                         Text(
                                           PriceConverter.convertPrice(_total),
-                                          style: robotoMedium.copyWith(
+                                          style: sfMedium.copyWith(
                                               fontSize:
                                                   Dimensions.fontSizeLarge,
                                               color: Theme.of(context)
@@ -585,7 +577,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           ));
                                         },
                                         child: Text('cancel_order'.tr,
-                                            style: robotoBold.copyWith(
+                                            style: sfBold.copyWith(
                                               color: Theme.of(context)
                                                   .disabledColor,
                                               fontSize:
@@ -612,7 +604,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                   Dimensions.RADIUS_SMALL),
                             ),
                             child: Text('order_cancelled'.tr,
-                                style: robotoMedium.copyWith(
+                                style: sfMedium.copyWith(
                                     color: Theme.of(context).primaryColor)),
                           ),
                         ),

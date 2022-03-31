@@ -43,17 +43,22 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     super.initState();
 
-    _countryDialCode = Get.find<AuthController>().getUserCountryCode().isNotEmpty ? Get.find<AuthController>().getUserCountryCode()
-        : CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).dialCode;
-    _phoneController.text =  Get.find<AuthController>().getUserNumber() ?? '';
-    _passwordController.text = Get.find<AuthController>().getUserPassword() ?? '';
+    _countryDialCode =
+        Get.find<AuthController>().getUserCountryCode().isNotEmpty
+            ? Get.find<AuthController>().getUserCountryCode()
+            : CountryCode.fromCountryCode(
+                    Get.find<SplashController>().configModel.country)
+                .dialCode;
+    _phoneController.text = Get.find<AuthController>().getUserNumber() ?? '';
+    _passwordController.text =
+        Get.find<AuthController>().getUserPassword() ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if(widget.exitFromApp) {
+        if (widget.exitFromApp) {
           if (_canExit) {
             if (GetPlatform.isAndroid) {
               SystemNavigator.pop();
@@ -65,7 +70,8 @@ class _SignInScreenState extends State<SignInScreen> {
             return Future.value(false);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('back_press_again_to_exit'.tr, style: TextStyle(color: Colors.white)),
+              content: Text('back_press_again_to_exit'.tr,
+                  style: TextStyle(color: Colors.white)),
               behavior: SnackBarBehavior.floating,
               backgroundColor: Colors.green,
               duration: Duration(seconds: 2),
@@ -77,16 +83,25 @@ class _SignInScreenState extends State<SignInScreen> {
             });
             return Future.value(false);
           }
-        }else {
+        } else {
           return true;
         }
       },
       child: Scaffold(
-        appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : !widget.exitFromApp ? AppBar(leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(Icons.arrow_back_ios_rounded, color: Theme.of(context).textTheme.bodyText1.color),
-        ), elevation: 0, backgroundColor: Colors.transparent) : null,
-        body: SafeArea(child: Center(
+        appBar: ResponsiveHelper.isDesktop(context)
+            ? WebMenuBar()
+            : !widget.exitFromApp
+                ? AppBar(
+                    leading: IconButton(
+                      onPressed: () => Get.back(),
+                      icon: Icon(Icons.arrow_back_ios_rounded,
+                          color: Theme.of(context).textTheme.bodyText1.color),
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent)
+                : null,
+        body: SafeArea(
+            child: Center(
           child: Scrollbar(
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -94,57 +109,82 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Center(
                 child: Container(
                   width: context.width > 700 ? 700 : context.width,
-                  padding: context.width > 700 ? EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT) : null,
-                  decoration: context.width > 700 ? BoxDecoration(
-                    color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                    boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)],
-                  ) : null,
+                  padding: context.width > 700
+                      ? EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT)
+                      : null,
+                  decoration: context.width > 700
+                      ? BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey[Get.isDarkMode ? 700 : 300],
+                                blurRadius: 5,
+                                spreadRadius: 1)
+                          ],
+                        )
+                      : null,
                   child: GetBuilder<AuthController>(builder: (authController) {
-
                     return Column(children: [
-
                       Image.asset(Images.logo, width: 100),
                       SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                       Image.asset(Images.logo_name, width: 100),
                       SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
 
-                      Text('sign_in'.tr.toUpperCase(), style: robotoBlack.copyWith(fontSize: 30)),
+                      Text('sign_in'.tr.toUpperCase(),
+                          style: sfBlack.copyWith(fontSize: 30)),
                       SizedBox(height: 50),
 
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.RADIUS_SMALL),
                           color: Theme.of(context).cardColor,
-                          boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey[Get.isDarkMode ? 800 : 200],
+                                spreadRadius: 1,
+                                blurRadius: 5)
+                          ],
                         ),
                         child: Column(children: [
-
                           Row(children: [
                             CodePickerWidget(
                               onChanged: (CountryCode countryCode) {
                                 _countryDialCode = countryCode.dialCode;
                               },
-                              initialSelection: _countryDialCode != null ? _countryDialCode : Get.find<LocalizationController>().locale.countryCode,
+                              initialSelection: _countryDialCode != null
+                                  ? _countryDialCode
+                                  : Get.find<LocalizationController>()
+                                      .locale
+                                      .countryCode,
                               favorite: [_countryDialCode],
                               showDropDownButton: true,
                               padding: EdgeInsets.zero,
                               showFlagMain: true,
                               flagWidth: 30,
-                              textStyle: robotoRegular.copyWith(
-                                fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
+                              textStyle: sfRegular.copyWith(
+                                fontSize: Dimensions.fontSizeLarge,
+                                color:
+                                    Theme.of(context).textTheme.bodyText1.color,
                               ),
                             ),
-                            Expanded(flex: 1, child: CustomTextField(
-                              hintText: 'phone'.tr,
-                              controller: _phoneController,
-                              focusNode: _phoneFocus,
-                              nextFocus: _passwordFocus,
-                              inputType: TextInputType.phone,
-                              divider: false,
-                            )),
+                            Expanded(
+                                flex: 1,
+                                child: CustomTextField(
+                                  hintText: 'phone'.tr,
+                                  controller: _phoneController,
+                                  focusNode: _phoneFocus,
+                                  nextFocus: _passwordFocus,
+                                  inputType: TextInputType.phone,
+                                  divider: false,
+                                )),
                           ]),
-                          Padding(padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_LARGE), child: Divider(height: 1)),
-
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.PADDING_SIZE_LARGE),
+                              child: Divider(height: 1)),
                           CustomTextField(
                             hintText: 'password'.tr,
                             controller: _passwordController,
@@ -153,10 +193,11 @@ class _SignInScreenState extends State<SignInScreen> {
                             inputType: TextInputType.visiblePassword,
                             prefixIcon: Images.lock,
                             isPassword: true,
-                            onSubmit: (text) => (GetPlatform.isWeb && authController.acceptTerms)
-                                ? _login(authController, _countryDialCode) : null,
+                            onSubmit: (text) => (GetPlatform.isWeb &&
+                                    authController.acceptTerms)
+                                ? _login(authController, _countryDialCode)
+                                : null,
                           ),
-
                         ]),
                       ),
                       SizedBox(height: 10),
@@ -168,7 +209,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             leading: Checkbox(
                               activeColor: Theme.of(context).primaryColor,
                               value: authController.isActiveRememberMe,
-                              onChanged: (bool isChecked) => authController.toggleRememberMe(),
+                              onChanged: (bool isChecked) =>
+                                  authController.toggleRememberMe(),
                             ),
                             title: Text('remember_me'.tr),
                             contentPadding: EdgeInsets.zero,
@@ -177,7 +219,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () => Get.toNamed(RouteHelper.getForgotPassRoute(false, null)),
+                          onPressed: () => Get.toNamed(
+                              RouteHelper.getForgotPassRoute(false, null)),
                           child: Text('${'forgot_password'.tr}?'),
                         ),
                       ]),
@@ -186,23 +229,30 @@ class _SignInScreenState extends State<SignInScreen> {
                       ConditionCheckBox(authController: authController),
                       SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-                      !authController.isLoading ? Row(children: [
-                        Expanded(child: CustomButton(
-                          buttonText: 'sign_up'.tr,
-                          transparent: true,
-                          onPressed: () => Get.toNamed(RouteHelper.getSignUpRoute()),
-                        )),
-                        Expanded(child: CustomButton(
-                          buttonText: 'sign_in'.tr,
-                          onPressed: authController.acceptTerms ? () => _login(authController, _countryDialCode) : null,
-                        )),
-                      ]) : Center(child: CircularProgressIndicator()),
+                      !authController.isLoading
+                          ? Row(children: [
+                              Expanded(
+                                  child: CustomButton(
+                                buttonText: 'sign_up'.tr,
+                                transparent: true,
+                                onPressed: () =>
+                                    Get.toNamed(RouteHelper.getSignUpRoute()),
+                              )),
+                              Expanded(
+                                  child: CustomButton(
+                                buttonText: 'sign_in'.tr,
+                                onPressed: authController.acceptTerms
+                                    ? () =>
+                                        _login(authController, _countryDialCode)
+                                    : null,
+                              )),
+                            ])
+                          : Center(child: CircularProgressIndicator()),
                       SizedBox(height: 30),
 
                       // SocialLoginWidget(),
 
                       GuestButton(),
-
                     ]);
                   }),
                 ),
@@ -217,40 +267,47 @@ class _SignInScreenState extends State<SignInScreen> {
   void _login(AuthController authController, String countryDialCode) async {
     String _phone = _phoneController.text.trim();
     String _password = _passwordController.text.trim();
-    String _numberWithCountryCode = countryDialCode+_phone;
+    String _numberWithCountryCode = countryDialCode + _phone;
     bool _isValid = GetPlatform.isWeb ? true : false;
-    if(!GetPlatform.isWeb) {
+    if (!GetPlatform.isWeb) {
       try {
-        PhoneNumber phoneNumber = await PhoneNumberUtil().parse(_numberWithCountryCode);
-        _numberWithCountryCode = '+' + phoneNumber.countryCode + phoneNumber.nationalNumber;
+        PhoneNumber phoneNumber =
+            await PhoneNumberUtil().parse(_numberWithCountryCode);
+        _numberWithCountryCode =
+            '+' + phoneNumber.countryCode + phoneNumber.nationalNumber;
         _isValid = true;
       } catch (e) {}
     }
     if (_phone.isEmpty) {
       showCustomSnackBar('enter_phone_number'.tr);
-    }else if (!_isValid) {
+    } else if (!_isValid) {
       showCustomSnackBar('invalid_phone_number'.tr);
-    }else if (_password.isEmpty) {
+    } else if (_password.isEmpty) {
       showCustomSnackBar('enter_password'.tr);
-    }else if (_password.length < 6) {
+    } else if (_password.length < 6) {
       showCustomSnackBar('password_should_be'.tr);
-    }else {
-      authController.login(_numberWithCountryCode, _password).then((status) async {
+    } else {
+      authController
+          .login(_numberWithCountryCode, _password)
+          .then((status) async {
         if (status.isSuccess) {
           if (authController.isActiveRememberMe) {
-            authController.saveUserNumberAndPassword(_phone, _password, countryDialCode);
+            authController.saveUserNumberAndPassword(
+                _phone, _password, countryDialCode);
           } else {
             authController.clearUserNumberAndPassword();
           }
           String _token = status.message.substring(1, status.message.length);
-          if(Get.find<SplashController>().configModel.customerVerification && int.parse(status.message[0]) == 0) {
+          if (Get.find<SplashController>().configModel.customerVerification &&
+              int.parse(status.message[0]) == 0) {
             List<int> _encoded = utf8.encode(_password);
             String _data = base64Encode(_encoded);
-            Get.toNamed(RouteHelper.getVerificationRoute(_numberWithCountryCode, _token, RouteHelper.signUp, _data));
-          }else {
+            Get.toNamed(RouteHelper.getVerificationRoute(
+                _numberWithCountryCode, _token, RouteHelper.signUp, _data));
+          } else {
             Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
           }
-        }else {
+        } else {
           showCustomSnackBar(status.message);
         }
       });

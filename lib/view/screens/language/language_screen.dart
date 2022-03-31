@@ -1,3 +1,4 @@
+import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/styles.dart';
@@ -43,17 +44,17 @@ class ChooseLanguageScreen extends StatelessWidget {
                           // SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                           // Center(child: Image.asset(Images.logo_name, width: 100)),
 
-                          //Center(child: Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: Dimensions.FONT_SIZE_LARGE))),
+                          //Center(child: Text(AppConstants.APP_NAME, style: sfMedium.copyWith(fontSize: Dimensions.FONT_SIZE_LARGE))),
                           // SizedBox(height: 30),
 
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal:
                                     Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                            child:
-                                Text('select_language'.tr, style: robotoMedium),
+                            child: Text('select_language'.tr,
+                                style: TextStyle(fontSize: 18)),
                           ),
-                          SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                          SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
                           ListView.builder(
                             // gridDelegate:
@@ -79,7 +80,7 @@ class ChooseLanguageScreen extends StatelessWidget {
                           SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
                           Text('you_can_change_language'.tr,
-                              style: robotoRegular.copyWith(
+                              style: sfRegular.copyWith(
                                 fontSize: Dimensions.fontSizeSmall,
                                 color: Theme.of(context).disabledColor,
                               )),
@@ -89,7 +90,7 @@ class ChooseLanguageScreen extends StatelessWidget {
               ),
             )),
             CustomButton(
-              buttonText: 'save'.tr,
+              buttonText: "save_and_continue".tr,
               margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
               onPressed: () {
                 if (localizationController.languages.length > 0 &&
@@ -103,7 +104,9 @@ class ChooseLanguageScreen extends StatelessWidget {
                   if (fromMenu) {
                     Navigator.pop(context);
                   } else {
-                    Get.offNamed(RouteHelper.getOnBoardingRoute());
+                    Get.find<SplashController>().disableIntro();
+                    Get.offNamed(
+                        RouteHelper.getSignInRoute(RouteHelper.onBoarding));
                   }
                 } else {
                   showCustomSnackBar('select_a_language'.tr);

@@ -94,8 +94,7 @@ class CategoryView extends StatelessWidget {
                                     child: Text(
                                       categoryController
                                           .categoryList[index].name,
-                                      style:
-                                          robotoMedium.copyWith(fontSize: 11),
+                                      style: sfMedium.copyWith(fontSize: 11),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,

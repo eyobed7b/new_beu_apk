@@ -44,12 +44,12 @@ class TrackDetailsView extends StatelessWidget {
               padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
               child: Text(
                 'delivery_man_not_assigned'.tr,
-                style: robotoMedium,
+                style: sfMedium,
                 textAlign: TextAlign.center,
               ),
             )
           : Column(children: [
-              Text('trip_route'.tr, style: robotoMedium),
+              Text('trip_route'.tr, style: sfMedium),
               SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
               Row(children: [
                 Expanded(
@@ -57,8 +57,7 @@ class TrackDetailsView extends StatelessWidget {
                   _takeAway
                       ? track.deliveryAddress.address
                       : track.deliveryMan.location,
-                  style: robotoRegular.copyWith(
-                      fontSize: Dimensions.fontSizeSmall),
+                  style: sfRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 )),
@@ -79,8 +78,7 @@ class TrackDetailsView extends StatelessWidget {
                   _takeAway
                       ? track.restaurant.address
                       : track.deliveryAddress.address,
-                  style: robotoRegular.copyWith(
-                      fontSize: Dimensions.fontSizeSmall),
+                  style: sfRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 )),
@@ -103,7 +101,7 @@ class TrackDetailsView extends StatelessWidget {
                             size: 25, color: Theme.of(context).primaryColor),
                         Text(
                           'direction'.tr,
-                          style: robotoRegular.copyWith(
+                          style: sfRegular.copyWith(
                               fontSize: Dimensions.fontSizeExtraSmall,
                               color: Theme.of(context).disabledColor),
                         ),
@@ -117,7 +115,7 @@ class TrackDetailsView extends StatelessWidget {
                           color: Theme.of(context).primaryColor),
                       Text(
                         '$_distance ${'km'.tr}',
-                        style: robotoRegular.copyWith(
+                        style: sfRegular.copyWith(
                             fontSize: Dimensions.fontSizeExtraSmall,
                             color: Theme.of(context).disabledColor),
                       ),
@@ -127,8 +125,8 @@ class TrackDetailsView extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     _takeAway ? 'restaurant'.tr : 'delivery_man'.tr,
-                    style: robotoMedium.copyWith(
-                        fontSize: Dimensions.fontSizeSmall),
+                    style:
+                        sfMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
                   )),
               SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
               Row(children: [
@@ -151,7 +149,7 @@ class TrackDetailsView extends StatelessWidget {
                             : '${track.deliveryMan.fName} ${track.deliveryMan.lName}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: robotoMedium.copyWith(
+                        style: sfMedium.copyWith(
                             fontSize: Dimensions.fontSizeExtraSmall),
                       ),
                       RatingBar(
@@ -186,7 +184,7 @@ class TrackDetailsView extends StatelessWidget {
                     ),
                     child: Text(
                       'call'.tr,
-                      style: robotoRegular.copyWith(
+                      style: sfRegular.copyWith(
                           fontSize: Dimensions.fontSizeExtraSmall,
                           color: Theme.of(context).cardColor),
                     ),

@@ -156,7 +156,7 @@ class OrderView extends StatelessWidget {
                                               children: [
                                                 Row(children: [
                                                   Text('${'order_id'.tr}:',
-                                                      style: robotoRegular.copyWith(
+                                                      style: sfRegular.copyWith(
                                                           fontSize: Dimensions
                                                               .fontSizeSmall)),
                                                   SizedBox(
@@ -164,7 +164,7 @@ class OrderView extends StatelessWidget {
                                                           .PADDING_SIZE_EXTRA_SMALL),
                                                   Text(
                                                       '#${orderList[index].id}',
-                                                      style: robotoMedium.copyWith(
+                                                      style: sfMedium.copyWith(
                                                           fontSize: Dimensions
                                                               .fontSizeSmall)),
                                                 ]),
@@ -176,7 +176,7 @@ class OrderView extends StatelessWidget {
                                                       .dateTimeStringToDateTime(
                                                           orderList[index]
                                                               .createdAt),
-                                                  style: robotoRegular.copyWith(
+                                                  style: sfRegular.copyWith(
                                                       color: Theme.of(context)
                                                           .disabledColor,
                                                       fontSize: Dimensions
@@ -209,8 +209,7 @@ class OrderView extends StatelessWidget {
                                                     orderList[index]
                                                         .orderStatus
                                                         .tr,
-                                                    style:
-                                                        robotoMedium.copyWith(
+                                                    style: sfMedium.copyWith(
                                                       fontSize: Dimensions
                                                           .fontSizeExtraSmall,
                                                       color: Theme.of(context)
@@ -257,9 +256,8 @@ class OrderView extends StatelessWidget {
                                                               width: Dimensions
                                                                   .PADDING_SIZE_EXTRA_SMALL),
                                                           Text('track_order'.tr,
-                                                              style:
-                                                                  robotoMedium
-                                                                      .copyWith(
+                                                              style: sfMedium
+                                                                  .copyWith(
                                                                 fontSize: Dimensions
                                                                     .fontSizeExtraSmall,
                                                                 color: Theme.of(
@@ -271,7 +269,7 @@ class OrderView extends StatelessWidget {
                                                     )
                                                   : Text(
                                                       '${orderList[index].detailsCount} ${orderList[index].detailsCount > 1 ? 'items'.tr : 'item'.tr}',
-                                                      style: robotoRegular.copyWith(
+                                                      style: sfRegular.copyWith(
                                                           fontSize: Dimensions
                                                               .fontSizeExtraSmall),
                                                     ),

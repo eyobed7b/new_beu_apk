@@ -12,27 +12,32 @@ import 'package:get/get.dart';
 class RateReviewScreen extends StatefulWidget {
   final List<OrderDetailsModel> orderDetailsList;
   final DeliveryMan deliveryMan;
-  RateReviewScreen({@required this.orderDetailsList, @required this.deliveryMan});
+  RateReviewScreen(
+      {@required this.orderDetailsList, @required this.deliveryMan});
 
   @override
   _RateReviewScreenState createState() => _RateReviewScreenState();
 }
 
-class _RateReviewScreenState extends State<RateReviewScreen> with TickerProviderStateMixin {
+class _RateReviewScreenState extends State<RateReviewScreen>
+    with TickerProviderStateMixin {
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: widget.deliveryMan == null ? 1 : 2, initialIndex: 0, vsync: this);
+    _tabController = TabController(
+        length: widget.deliveryMan == null ? 1 : 2,
+        initialIndex: 0,
+        vsync: this);
     Get.find<ProductController>().initRatingData(widget.orderDetailsList);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(title: 'rate_review'.tr),
-
       body: Column(children: [
         Center(
           child: Container(
@@ -43,28 +48,43 @@ class _RateReviewScreenState extends State<RateReviewScreen> with TickerProvider
               labelColor: Theme.of(context).textTheme.bodyText1.color,
               indicatorColor: Theme.of(context).primaryColor,
               indicatorWeight: 3,
-              unselectedLabelStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
-              labelStyle: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-              tabs: widget.deliveryMan != null ? [
-                Tab(text: widget.orderDetailsList.length > 1 ? 'items'.tr : 'item'.tr),
-                Tab(text: 'delivery_man'.tr),
-              ] : [
-                Tab(text: widget.orderDetailsList.length > 1 ? 'items'.tr : 'item'.tr),
-              ],
+              unselectedLabelStyle: sfRegular.copyWith(
+                  color: Theme.of(context).disabledColor,
+                  fontSize: Dimensions.fontSizeSmall),
+              labelStyle: sfMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+              tabs: widget.deliveryMan != null
+                  ? [
+                      Tab(
+                          text: widget.orderDetailsList.length > 1
+                              ? 'items'.tr
+                              : 'item'.tr),
+                      Tab(text: 'delivery_man'.tr),
+                    ]
+                  : [
+                      Tab(
+                          text: widget.orderDetailsList.length > 1
+                              ? 'items'.tr
+                              : 'item'.tr),
+                    ],
             ),
           ),
         ),
-
-        Expanded(child: TabBarView(
+        Expanded(
+            child: TabBarView(
           controller: _tabController,
-          children: widget.deliveryMan != null ? [
-            ProductReviewWidget(orderDetailsList: widget.orderDetailsList),
-            DeliveryManReviewWidget(deliveryMan: widget.deliveryMan, orderID: widget.orderDetailsList[0].orderId.toString()),
-          ] : [
-            ProductReviewWidget(orderDetailsList: widget.orderDetailsList),
-          ],
+          children: widget.deliveryMan != null
+              ? [
+                  ProductReviewWidget(
+                      orderDetailsList: widget.orderDetailsList),
+                  DeliveryManReviewWidget(
+                      deliveryMan: widget.deliveryMan,
+                      orderID: widget.orderDetailsList[0].orderId.toString()),
+                ]
+              : [
+                  ProductReviewWidget(
+                      orderDetailsList: widget.orderDetailsList),
+                ],
         )),
-
       ]),
     );
   }

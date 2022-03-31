@@ -87,7 +87,7 @@ class CategoryScreen extends StatelessWidget {
                                           Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                   Text(
                                     catController.categoryList[index].name,
-                                    style: robotoMedium.copyWith(
+                                    style: sfMedium.copyWith(
                                         fontSize: Dimensions.fontSizeSmall),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,

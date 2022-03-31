@@ -26,107 +26,151 @@ class CampaignScreen extends StatelessWidget {
       body: GetBuilder<CampaignController>(builder: (campaignController) {
         return CustomScrollView(
           slivers: [
-
-            ResponsiveHelper.isDesktop(context) ? SliverToBoxAdapter(
-              child: Container(
-                color: Color(0xFF171A29),
-                padding: EdgeInsets.all(Dimensions.PADDING_SIZE_LARGE),
-                alignment: Alignment.center,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                  child: CustomImage(
-                    fit: BoxFit.cover, height: 220, width: 1150, placeholder: Images.restaurant_cover,
-                    image: '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${campaign.image}',
+            ResponsiveHelper.isDesktop(context)
+                ? SliverToBoxAdapter(
+                    child: Container(
+                      color: Color(0xFF171A29),
+                      padding: EdgeInsets.all(Dimensions.PADDING_SIZE_LARGE),
+                      alignment: Alignment.center,
+                      child: ClipRRect(
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                        child: CustomImage(
+                          fit: BoxFit.cover,
+                          height: 220,
+                          width: 1150,
+                          placeholder: Images.restaurant_cover,
+                          image:
+                              '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${campaign.image}',
+                        ),
+                      ),
+                    ),
+                  )
+                : SliverAppBar(
+                    expandedHeight: 230,
+                    toolbarHeight: 50,
+                    pinned: true,
+                    floating: false,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    leading: IconButton(
+                        icon: Icon(Icons.chevron_left, color: Colors.white),
+                        onPressed: () => Get.back()),
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text(
+                        campaign.title,
+                        style: sfMedium.copyWith(
+                            fontSize: Dimensions.fontSizeLarge,
+                            color: Colors.white),
+                      ),
+                      background: CustomImage(
+                        fit: BoxFit.cover,
+                        placeholder: Images.restaurant_cover,
+                        image:
+                            '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${campaign.image}',
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ) : SliverAppBar(
-              expandedHeight: 230,
-              toolbarHeight: 50,
-              pinned: true,
-              floating: false,
-              backgroundColor: Theme.of(context).primaryColor,
-              leading: IconButton(icon: Icon(Icons.chevron_left, color: Colors.white), onPressed: () => Get.back()),
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  campaign.title,
-                  style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.white),
-                ),
-                background: CustomImage(
-                  fit: BoxFit.cover, placeholder: Images.restaurant_cover,
-                  image: '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${campaign.image}',
-                ),
-              ),
-            ),
-
-            SliverToBoxAdapter(child: Center(child: Container(
+            SliverToBoxAdapter(
+                child: Center(
+                    child: Container(
               width: Dimensions.WEB_MAX_WIDTH,
               padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(Dimensions.RADIUS_EXTRA_LARGE)),
+                borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(Dimensions.RADIUS_EXTRA_LARGE)),
               ),
               child: Column(children: [
-
-                campaignController.campaign != null ? Column(
-                  children: [
-
-                    Row(children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                        child: CustomImage(
-                          image: '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${campaignController.campaign.image}',
-                          height: 40, width: 50, fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-                      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(
-                          campaignController.campaign.title, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
-                          maxLines: 1, overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          campaignController.campaign.description ?? '', maxLines: 2, overflow: TextOverflow.ellipsis,
-                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-                        ),
-                      ])),
-                    ]),
-                    SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-
-                    campaignController.campaign.startTime != null ? Row(children: [
-                      Text('campaign_schedule'.tr, style: robotoRegular.copyWith(
-                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
-                      )),
-                      SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                      Text(
-                        '${DateConverter.isoStringToLocalDateOnly(campaignController.campaign.startDate)}'
-                            ' - ${DateConverter.isoStringToLocalDateOnly(campaignController.campaign.endDate)}',
-                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
-                      ),
-                    ]) : SizedBox(),
-                    SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-
-                    campaignController.campaign.startTime != null ? Row(children: [
-                      Text('daily_time'.tr, style: robotoRegular.copyWith(
-                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
-                      )),
-                      SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                      Text(
-                        '${DateConverter.convertTimeToTime(campaignController.campaign.startTime)}'
-                            ' - ${DateConverter.convertTimeToTime(campaignController.campaign.endTime)}',
-                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
-                      ),
-                    ]) : SizedBox(),
-                    SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-
-                  ],
-                ) : SizedBox(),
-
+                campaignController.campaign != null
+                    ? Column(
+                        children: [
+                          Row(children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.RADIUS_SMALL),
+                              child: CustomImage(
+                                image:
+                                    '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${campaignController.campaign.image}',
+                                height: 40,
+                                width: 50,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+                            Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                  Text(
+                                    campaignController.campaign.title,
+                                    style: sfMedium.copyWith(
+                                        fontSize: Dimensions.fontSizeLarge),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    campaignController.campaign.description ??
+                                        '',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: sfRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeSmall,
+                                        color: Theme.of(context).disabledColor),
+                                  ),
+                                ])),
+                          ]),
+                          SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                          campaignController.campaign.startTime != null
+                              ? Row(children: [
+                                  Text('campaign_schedule'.tr,
+                                      style: sfRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall,
+                                        color: Theme.of(context).disabledColor,
+                                      )),
+                                  SizedBox(
+                                      width:
+                                          Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                  Text(
+                                    '${DateConverter.isoStringToLocalDateOnly(campaignController.campaign.startDate)}'
+                                    ' - ${DateConverter.isoStringToLocalDateOnly(campaignController.campaign.endDate)}',
+                                    style: sfMedium.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall,
+                                        color: Theme.of(context).primaryColor),
+                                  ),
+                                ])
+                              : SizedBox(),
+                          SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                          campaignController.campaign.startTime != null
+                              ? Row(children: [
+                                  Text('daily_time'.tr,
+                                      style: sfRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall,
+                                        color: Theme.of(context).disabledColor,
+                                      )),
+                                  SizedBox(
+                                      width:
+                                          Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                  Text(
+                                    '${DateConverter.convertTimeToTime(campaignController.campaign.startTime)}'
+                                    ' - ${DateConverter.convertTimeToTime(campaignController.campaign.endTime)}',
+                                    style: sfMedium.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall,
+                                        color: Theme.of(context).primaryColor),
+                                  ),
+                                ])
+                              : SizedBox(),
+                          SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                        ],
+                      )
+                    : SizedBox(),
                 ProductView(
-                  isRestaurant: true, products: null,
-                  restaurants: campaignController.campaign != null ? campaignController.campaign.restaurants : null,
+                  isRestaurant: true,
+                  products: null,
+                  restaurants: campaignController.campaign != null
+                      ? campaignController.campaign.restaurants
+                      : null,
                 ),
-
               ]),
             ))),
           ],

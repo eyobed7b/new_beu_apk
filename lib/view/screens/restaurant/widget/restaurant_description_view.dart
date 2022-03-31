@@ -43,7 +43,7 @@ class RestaurantDescriptionView extends StatelessWidget {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             restaurant.name,
-            style: robotoMedium.copyWith(
+            style: sfMedium.copyWith(
                 fontSize: Dimensions.fontSizeLarge, color: _textColor),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -56,7 +56,7 @@ class RestaurantDescriptionView extends StatelessWidget {
             restaurant.address ?? '',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: robotoRegular.copyWith(
+            style: sfRegular.copyWith(
                 fontSize: Dimensions.fontSizeSmall,
                 color: Theme.of(context).disabledColor),
           ),
@@ -67,7 +67,7 @@ class RestaurantDescriptionView extends StatelessWidget {
           restaurant.openingTime != null
               ? Row(children: [
                   Text('daily_time'.tr,
-                      style: robotoRegular.copyWith(
+                      style: sfRegular.copyWith(
                         fontSize: Dimensions.fontSizeExtraSmall,
                         color: Theme.of(context).disabledColor,
                       )),
@@ -75,7 +75,7 @@ class RestaurantDescriptionView extends StatelessWidget {
                   Text(
                     '${DateConverter.convertTimeToTime(restaurant.openingTime)}'
                     ' - ${DateConverter.convertTimeToTime(restaurant.closeingTime)}',
-                    style: robotoMedium.copyWith(
+                    style: sfMedium.copyWith(
                         fontSize: Dimensions.fontSizeExtraSmall,
                         color: Theme.of(context).primaryColor),
                   ),
@@ -87,14 +87,14 @@ class RestaurantDescriptionView extends StatelessWidget {
                   : 0),
           Row(children: [
             Text('minimum_order'.tr,
-                style: robotoRegular.copyWith(
+                style: sfRegular.copyWith(
                   fontSize: Dimensions.fontSizeExtraSmall,
                   color: Theme.of(context).disabledColor,
                 )),
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(
               PriceConverter.convertPrice(restaurant.minimumOrder),
-              style: robotoMedium.copyWith(
+              style: sfMedium.copyWith(
                   fontSize: Dimensions.fontSizeExtraSmall,
                   color: Theme.of(context).primaryColor),
             ),
@@ -138,14 +138,14 @@ class RestaurantDescriptionView extends StatelessWidget {
               SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
               Text(
                 restaurant.avgRating.toStringAsFixed(1),
-                style: robotoMedium.copyWith(
+                style: sfMedium.copyWith(
                     fontSize: Dimensions.fontSizeSmall, color: _textColor),
               ),
             ]),
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(
               '${restaurant.ratingCount} ${'ratings'.tr}',
-              style: robotoRegular.copyWith(
+              style: sfRegular.copyWith(
                   fontSize: Dimensions.fontSizeSmall, color: _textColor),
             ),
           ]),
@@ -169,7 +169,7 @@ class RestaurantDescriptionView extends StatelessWidget {
                 color: Theme.of(context).primaryColor, size: 20),
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text('location'.tr,
-                style: robotoRegular.copyWith(
+                style: sfRegular.copyWith(
                     fontSize: Dimensions.fontSizeSmall, color: _textColor)),
           ]),
         ),
@@ -180,13 +180,13 @@ class RestaurantDescriptionView extends StatelessWidget {
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(
               '${restaurant.deliveryTime} ${'min'.tr}',
-              style: robotoMedium.copyWith(
+              style: sfMedium.copyWith(
                   fontSize: Dimensions.fontSizeSmall, color: _textColor),
             ),
           ]),
           SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
           Text('delivery_time'.tr,
-              style: robotoRegular.copyWith(
+              style: sfRegular.copyWith(
                   fontSize: Dimensions.fontSizeSmall, color: _textColor)),
         ]),
         (restaurant.delivery && restaurant.freeDelivery)
@@ -198,7 +198,7 @@ class RestaurantDescriptionView extends StatelessWidget {
                     color: Theme.of(context).primaryColor, size: 20),
                 SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                 Text('free_delivery'.tr,
-                    style: robotoRegular.copyWith(
+                    style: sfRegular.copyWith(
                         fontSize: Dimensions.fontSizeSmall, color: _textColor)),
               ])
             : SizedBox(),

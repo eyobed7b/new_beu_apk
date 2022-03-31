@@ -9,7 +9,13 @@ class SearchField extends StatefulWidget {
   final Function iconPressed;
   final Function onSubmit;
   final Function onChanged;
-  SearchField({@required this.controller, @required this.hint, @required this.suffixIcon, @required this.iconPressed, this.onSubmit, this.onChanged});
+  SearchField(
+      {@required this.controller,
+      @required this.hint,
+      @required this.suffixIcon,
+      @required this.iconPressed,
+      this.onSubmit,
+      this.onChanged});
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -23,9 +29,14 @@ class _SearchFieldState extends State<SearchField> {
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         hintText: widget.hint,
-        hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), borderSide: BorderSide.none),
-        filled: true, fillColor: Theme.of(context).cardColor,
+        hintStyle: sfRegular.copyWith(
+            fontSize: Dimensions.fontSizeSmall,
+            color: Theme.of(context).disabledColor),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+            borderSide: BorderSide.none),
+        filled: true,
+        fillColor: Theme.of(context).cardColor,
         isDense: true,
         suffixIcon: IconButton(
           onPressed: widget.iconPressed,

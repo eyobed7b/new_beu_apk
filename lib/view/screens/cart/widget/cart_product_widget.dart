@@ -144,7 +144,7 @@ class CartProductWidget extends StatelessWidget {
                                         color: Colors.black.withOpacity(0.6)),
                                     child: Text('not_available_now_break'.tr,
                                         textAlign: TextAlign.center,
-                                        style: robotoRegular.copyWith(
+                                        style: sfRegular.copyWith(
                                           color: Colors.white,
                                           fontSize: 8,
                                         )),
@@ -160,7 +160,7 @@ class CartProductWidget extends StatelessWidget {
                             children: [
                               Text(
                                 cart.product.name,
-                                style: robotoMedium.copyWith(
+                                style: sfMedium.copyWith(
                                     fontSize: Dimensions.fontSizeSmall),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -174,7 +174,7 @@ class CartProductWidget extends StatelessWidget {
                               Text(
                                 PriceConverter.convertPrice(
                                     cart.discountedPrice + cart.discountAmount),
-                                style: robotoMedium.copyWith(
+                                style: sfMedium.copyWith(
                                     fontSize: Dimensions.fontSizeSmall),
                               ),
                             ]),
@@ -193,7 +193,7 @@ class CartProductWidget extends StatelessWidget {
                           isIncrement: false,
                         ),
                         Text(cart.quantity.toString(),
-                            style: robotoMedium.copyWith(
+                            style: sfMedium.copyWith(
                                 fontSize: Dimensions.fontSizeExtraLarge)),
                         QuantityButton(
                           onTap: () => Get.find<CartController>()
@@ -222,12 +222,12 @@ class CartProductWidget extends StatelessWidget {
                             child: Row(children: [
                               SizedBox(width: 80),
                               Text('${'addons'.tr}: ',
-                                  style: robotoMedium.copyWith(
+                                  style: sfMedium.copyWith(
                                       fontSize: Dimensions.fontSizeSmall)),
                               Flexible(
                                   child: Text(
                                 _addOnText,
-                                style: robotoRegular.copyWith(
+                                style: sfRegular.copyWith(
                                     fontSize: Dimensions.fontSizeSmall,
                                     color: Theme.of(context).disabledColor),
                               )),
@@ -241,12 +241,12 @@ class CartProductWidget extends StatelessWidget {
                             child: Row(children: [
                               SizedBox(width: 80),
                               Text('${'variations'.tr}: ',
-                                  style: robotoMedium.copyWith(
+                                  style: sfMedium.copyWith(
                                       fontSize: Dimensions.fontSizeSmall)),
                               Flexible(
                                   child: Text(
                                 _variationText,
-                                style: robotoRegular.copyWith(
+                                style: sfRegular.copyWith(
                                     fontSize: Dimensions.fontSizeSmall,
                                     color: Theme.of(context).disabledColor),
                               )),
@@ -274,16 +274,16 @@ class CartProductWidget extends StatelessWidget {
                                   child: Icon(Icons.remove_circle, color: Theme.of(context).primaryColor, size: 18),
                                 ),
                               ),
-                              Text(addOns[index].name, style: robotoRegular.copyWith(fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL)),
+                              Text(addOns[index].name, style: sfRegular.copyWith(fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL)),
                               SizedBox(width: 2),
                               Text(
                                 PriceConverter.convertPrice(addOns[index].price),
-                                style: robotoMedium.copyWith(fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL),
+                                style: sfMedium.copyWith(fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL),
                               ),
                               SizedBox(width: 2),
                               Text(
                                 '(${cart.addOnIds[index].quantity})',
-                                style: robotoRegular.copyWith(fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL),
+                                style: sfRegular.copyWith(fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL),
                               ),
                             ]),
                           );

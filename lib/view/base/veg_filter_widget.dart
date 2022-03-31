@@ -15,50 +15,82 @@ class VegFilterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool _ltr = Get.find<LocalizationController>().isLtr;
 
-    return Get.find<SplashController>().configModel.toggleVegNonVeg ? Align(alignment: Alignment.center, child: Container(
-      height: 30,
-      margin: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(Dimensions.RADIUS_SMALL)),
-        border: Border.all(color: Theme.of(context).primaryColor),
-      ),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: Get.find<ProductController>().productTypeList.length,
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () => onSelected(Get.find<ProductController>().productTypeList[index]),
+    return Get.find<SplashController>().configModel.toggleVegNonVeg
+        ? Align(
+            alignment: Alignment.center,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
-              alignment: Alignment.center,
+              height: 30,
+              margin:
+                  EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(
-                    _ltr ? index == 0 ? Dimensions.RADIUS_SMALL : 0
-                        : index == Get.find<ProductController>().productTypeList.length-1
-                        ? Dimensions.RADIUS_SMALL : 0,
-                  ),
-                  right: Radius.circular(
-                    _ltr ? index == Get.find<ProductController>().productTypeList.length-1
-                        ? Dimensions.RADIUS_SMALL : 0 : index == 0
-                        ? Dimensions.RADIUS_SMALL : 0,
-                  ),
-                ),
-                color: Get.find<ProductController>().productTypeList[index] == type ? Theme.of(context).primaryColor
-                    : Theme.of(context).cardColor,
+                borderRadius:
+                    BorderRadius.all(Radius.circular(Dimensions.RADIUS_SMALL)),
+                border: Border.all(color: Theme.of(context).primaryColor),
               ),
-              child: Text(
-                Get.find<ProductController>().productTypeList[index].tr,
-                style: Get.find<ProductController>().productTypeList[index] == type
-                    ? robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).cardColor)
-                    : robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: Get.find<ProductController>().productTypeList.length,
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () => onSelected(
+                        Get.find<ProductController>().productTypeList[index]),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Dimensions.PADDING_SIZE_SMALL),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.horizontal(
+                          left: Radius.circular(
+                            _ltr
+                                ? index == 0
+                                    ? Dimensions.RADIUS_SMALL
+                                    : 0
+                                : index ==
+                                        Get.find<ProductController>()
+                                                .productTypeList
+                                                .length -
+                                            1
+                                    ? Dimensions.RADIUS_SMALL
+                                    : 0,
+                          ),
+                          right: Radius.circular(
+                            _ltr
+                                ? index ==
+                                        Get.find<ProductController>()
+                                                .productTypeList
+                                                .length -
+                                            1
+                                    ? Dimensions.RADIUS_SMALL
+                                    : 0
+                                : index == 0
+                                    ? Dimensions.RADIUS_SMALL
+                                    : 0,
+                          ),
+                        ),
+                        color: Get.find<ProductController>()
+                                    .productTypeList[index] ==
+                                type
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).cardColor,
+                      ),
+                      child: Text(
+                        Get.find<ProductController>().productTypeList[index].tr,
+                        style: Get.find<ProductController>()
+                                    .productTypeList[index] ==
+                                type
+                            ? sfMedium.copyWith(
+                                fontSize: Dimensions.fontSizeSmall,
+                                color: Theme.of(context).cardColor)
+                            : sfRegular.copyWith(
+                                fontSize: Dimensions.fontSizeSmall),
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-          );
-        },
-      ),
-    )) : SizedBox();
+            ))
+        : SizedBox();
   }
 }

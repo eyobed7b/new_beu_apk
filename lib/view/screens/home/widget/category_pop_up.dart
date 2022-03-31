@@ -91,7 +91,7 @@ class CategoryPopUp extends StatelessWidget {
                                       Text(
                                         categoryController
                                             .categoryList[index].name,
-                                        style: robotoMedium.copyWith(
+                                        style: sfMedium.copyWith(
                                             fontSize: Dimensions.fontSizeSmall),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

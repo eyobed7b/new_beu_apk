@@ -159,7 +159,7 @@ class ProductWidget extends StatelessWidget {
                     children: [
                       Text(
                         isRestaurant ? restaurant.name : product.name,
-                        style: robotoMedium.copyWith(
+                        style: sfMedium.copyWith(
                             fontSize: Dimensions.fontSizeSmall),
                         maxLines: _desktop ? 2 : 1,
                         overflow: TextOverflow.ellipsis,
@@ -174,7 +174,7 @@ class ProductWidget extends StatelessWidget {
                                 ? " No Address"
                                 : restaurant.address
                             : product.restaurantName ?? '',
-                        style: robotoRegular.copyWith(
+                        style: sfRegular.copyWith(
                           fontSize: Dimensions.fontSizeExtraSmall,
                           color: Theme.of(context).disabledColor,
                         ),
@@ -212,7 +212,7 @@ class ProductWidget extends StatelessWidget {
                                 PriceConverter.convertPrice(product.price,
                                     discount: _discount,
                                     discountType: _discountType),
-                                style: robotoMedium.copyWith(
+                                style: sfMedium.copyWith(
                                     fontSize: Dimensions.fontSizeSmall),
                               ),
                               SizedBox(
@@ -223,7 +223,7 @@ class ProductWidget extends StatelessWidget {
                                   ? Text(
                                       PriceConverter.convertPrice(
                                           product.price),
-                                      style: robotoMedium.copyWith(
+                                      style: sfMedium.copyWith(
                                         fontSize: Dimensions.fontSizeExtraSmall,
                                         color: Theme.of(context).disabledColor,
                                         decoration: TextDecoration.lineThrough,

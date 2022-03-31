@@ -216,7 +216,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                     children: [
                                       Text(
                                         widget.product.name,
-                                        style: robotoMedium.copyWith(
+                                        style: sfMedium.copyWith(
                                             fontSize: Dimensions.fontSizeLarge),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -237,7 +237,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                               EdgeInsets.fromLTRB(0, 5, 5, 5),
                                           child: Text(
                                             widget.product.restaurantName,
-                                            style: robotoRegular.copyWith(
+                                            style: sfRegular.copyWith(
                                                 fontSize:
                                                     Dimensions.fontSizeSmall,
                                                 color: Theme.of(context)
@@ -253,14 +253,14 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                       Text(
                                         '${PriceConverter.convertPrice(_startingPrice, discount: _discount, discountType: _discountType)}'
                                         '${_endingPrice != null ? ' - ${PriceConverter.convertPrice(_endingPrice, discount: _discount, discountType: _discountType)}' : ''}',
-                                        style: robotoMedium.copyWith(
+                                        style: sfMedium.copyWith(
                                             fontSize: Dimensions.fontSizeLarge),
                                       ),
                                       price > priceWithDiscount
                                           ? Text(
                                               '${PriceConverter.convertPrice(_startingPrice)}'
                                               '${_endingPrice != null ? ' - ${PriceConverter.convertPrice(_endingPrice)}' : ''}',
-                                              style: robotoMedium.copyWith(
+                                              style: sfMedium.copyWith(
                                                   color: Theme.of(context)
                                                       .disabledColor,
                                                   decoration: TextDecoration
@@ -293,7 +293,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                               widget.product.veg == 0
                                                   ? 'non_veg'.tr
                                                   : 'veg'.tr,
-                                              style: robotoRegular.copyWith(
+                                              style: sfRegular.copyWith(
                                                   fontSize: Dimensions
                                                       .fontSizeExtraSmall,
                                                   color: Colors.white),
@@ -358,12 +358,12 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('description'.tr, style: robotoMedium),
+                                  Text('description'.tr, style: sfMedium),
                                   SizedBox(
                                       height:
                                           Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                   Text(widget.product.description,
-                                      style: robotoRegular),
+                                      style: sfRegular),
                                   SizedBox(
                                       height: Dimensions.PADDING_SIZE_LARGE),
                                 ],
@@ -381,7 +381,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                 children: [
                                   Text(
                                       widget.product.choiceOptions[index].title,
-                                      style: robotoMedium),
+                                      style: sfMedium),
                                   SizedBox(
                                       height:
                                           Dimensions.PADDING_SIZE_EXTRA_SMALL),
@@ -438,7 +438,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                                 .trim(),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: robotoRegular.copyWith(
+                                            style: sfRegular.copyWith(
                                               color: productController
                                                               .variationIndex[
                                                           index] !=
@@ -468,7 +468,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
 
                         // Quantity
                         Row(children: [
-                          Text('quantity'.tr, style: robotoMedium),
+                          Text('quantity'.tr, style: sfMedium),
                           Expanded(child: SizedBox()),
                           Row(children: [
                             QuantityButton(
@@ -480,7 +480,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                               isIncrement: false,
                             ),
                             Text(productController.quantity.toString(),
-                                style: robotoMedium.copyWith(
+                                style: sfMedium.copyWith(
                                     fontSize: Dimensions.fontSizeLarge)),
                             QuantityButton(
                               onTap: () => productController.setQuantity(true),
@@ -495,7 +495,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                    Text('addons'.tr, style: robotoMedium),
+                                    Text('addons'.tr, style: sfMedium),
                                     SizedBox(
                                         height: Dimensions
                                             .PADDING_SIZE_EXTRA_SMALL),
@@ -576,8 +576,8 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                                             .ellipsis,
                                                         textAlign:
                                                             TextAlign.center,
-                                                        style: robotoMedium
-                                                            .copyWith(
+                                                        style:
+                                                            sfMedium.copyWith(
                                                           color: productController
                                                                       .addOnActiveList[
                                                                   index]
@@ -606,8 +606,8 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                                         maxLines: 1,
                                                         overflow: TextOverflow
                                                             .ellipsis,
-                                                        style: robotoRegular
-                                                            .copyWith(
+                                                        style:
+                                                            sfRegular.copyWith(
                                                           color: productController
                                                                       .addOnActiveList[
                                                                   index]
@@ -666,11 +666,10 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                                                   .addOnQtyList[
                                                                       index]
                                                                   .toString(),
-                                                              style: robotoMedium
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          Dimensions
-                                                                              .fontSizeSmall),
+                                                              style: sfMedium.copyWith(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .fontSizeSmall),
                                                             ),
                                                             Expanded(
                                                               child: InkWell(
@@ -702,10 +701,10 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                             : SizedBox(),
 
                         Row(children: [
-                          Text('${'total_amount'.tr}:', style: robotoMedium),
+                          Text('${'total_amount'.tr}:', style: sfMedium),
                           SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                           Text(PriceConverter.convertPrice(priceWithAddons),
-                              style: robotoBold.copyWith(
+                              style: sfBold.copyWith(
                                   color: Theme.of(context).primaryColor)),
                         ]),
                         SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
@@ -730,14 +729,14 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                 child: !_isRestAvailable
                                     ? Text(
                                         'restaurant_is_closed_now'.tr,
-                                        style: robotoMedium.copyWith(
+                                        style: sfMedium.copyWith(
                                           color: Theme.of(context).primaryColor,
                                           fontSize: Dimensions.fontSizeLarge,
                                         ),
                                       )
                                     : Column(children: [
                                         Text('not_available_now'.tr,
-                                            style: robotoMedium.copyWith(
+                                            style: sfMedium.copyWith(
                                               color: Theme.of(context)
                                                   .primaryColor,
                                               fontSize:
@@ -746,7 +745,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                         Text(
                                           '${'available_will_be'.tr} ${DateConverter.convertTimeToTime(widget.product.availableTimeStarts)} '
                                           '- ${DateConverter.convertTimeToTime(widget.product.availableTimeEnds)}',
-                                          style: robotoRegular,
+                                          style: sfRegular,
                                         ),
                                       ]),
                               ),
@@ -873,7 +872,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
       mainButton: TextButton(
         onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
         child: Text('view_cart'.tr,
-            style: robotoMedium.copyWith(color: Theme.of(context).cardColor)),
+            style: sfMedium.copyWith(color: Theme.of(context).cardColor)),
       ),
       onTap: (_) => Get.toNamed(RouteHelper.getCartRoute()),
       duration: Duration(seconds: 3),
