@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "697591541278",
+    "project_id": "beu-delivery",
+    "storage_bucket": "beu-delivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697591541278:android:8f19543e937ed43ccbc80f",
+        "android_client_info": {
+          "package_name": "com.beu.beudelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697591541278-l9qc6vfcskp1htj57ngilnmik25ltvq2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5a4cduj366BMg2lTGHSIoA03rQdo1tcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "697591541278-l9qc6vfcskp1htj57ngilnmik25ltvq2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
