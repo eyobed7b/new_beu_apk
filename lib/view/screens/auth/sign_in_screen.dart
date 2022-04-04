@@ -23,8 +23,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/style.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:timer_button/timer_button.dart';
 
 class SignInScreen extends StatefulWidget {
   final bool exitFromApp;
@@ -41,7 +45,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordController = TextEditingController();
   String _countryDialCode;
   bool _canExit = GetPlatform.isWeb ? true : false;
-
   @override
   void initState() {
     super.initState();
@@ -127,175 +130,212 @@ class _SignInScreenState extends State<SignInScreen> {
                         )
                       : null,
                   child: GetBuilder<AuthController>(builder: (authController) {
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Stack(
+                    return !authController.isWaitingForOTP
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Image.asset(Images.illustration, width: 100.h),
-                              Positioned(
-                                  bottom: 1.h,
-                                  child: Text(
-                                    "Enter your phone number",
-                                    style: sfBlack.copyWith(fontSize: 3.h),
-                                  ))
-                            ],
-                          ),
-                          SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
-
-                          // Text('sign_in'.tr.toUpperCase(),
-                          //     style: sfBlack.copyWith(fontSize: 30)),
-                          // SizedBox(height: 50),
-
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                  Dimensions.RADIUS_SMALL),
-                              color: Theme.of(context).cardColor,
-                              boxShadow: [
-                                BoxShadow(
-                                    color:
-                                        Colors.grey[Get.isDarkMode ? 800 : 200],
-                                    spreadRadius: 1,
-                                    blurRadius: 5)
-                              ],
-                            ),
-                            child: Column(children: [
-                              Row(children: [
-                                CodePickerWidget(
-                                  alignLeft: true,
-                                  onChanged: (CountryCode countryCode) {
-                                    _countryDialCode = countryCode.dialCode;
-                                  },
-                                  initialSelection: _countryDialCode != null
-                                      ? _countryDialCode
-                                      : Get.find<LocalizationController>()
-                                          .locale
-                                          .countryCode,
-                                  favorite: [_countryDialCode],
-                                  flagDecoration:
-                                      BoxDecoration(shape: BoxShape.circle),
-                                  showCountryOnly: true,
-                                  padding: EdgeInsets.zero,
-                                  showDropDownButton: true,
-                                  flagWidth: 50,
-                                  hideMainText: true,
-                                  textStyle: sfRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeLarge,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .color,
-                                  ),
+                                Stack(
+                                  children: [
+                                    Image.asset(Images.illustration,
+                                        width: 100.h),
+                                    Positioned(
+                                        bottom: 1.h,
+                                        child: Text(
+                                          "Enter your phone number",
+                                          style:
+                                              sfBlack.copyWith(fontSize: 3.h),
+                                        ))
+                                  ],
                                 ),
-                                Expanded(
-                                    flex: 100,
-                                    child: CustomTextField(
-                                      hintText: 'phone'.tr,
-                                      controller: _phoneController,
-                                      focusNode: _phoneFocus,
-                                      nextFocus: _passwordFocus,
-                                      inputType: TextInputType.phone,
-                                      divider: false,
-                                    )),
-                                !authController.isLoading
-                                    ? GestureDetector(
-                                        onTap: () => _login(
-                                            authController, _countryDialCode),
-                                        child: Container(
-                                          height: 6.h,
-                                          width: 6.h,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(2.w),
-                                              gradient: LinearGradient(colors: [
-                                                Theme.of(context).primaryColor,
-                                                Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary
-                                              ])),
-                                          child: Icon(
-                                            Icons.arrow_forward,
-                                            color: Colors.white,
-                                            size: 3.h,
-                                          ),
+                                SizedBox(
+                                    height:
+                                        Dimensions.PADDING_SIZE_EXTRA_LARGE),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.RADIUS_SMALL),
+                                    color: Theme.of(context).cardColor,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors
+                                              .grey[Get.isDarkMode ? 800 : 200],
+                                          spreadRadius: 1,
+                                          blurRadius: 5)
+                                    ],
+                                  ),
+                                  child: Column(children: [
+                                    Row(children: [
+                                      CodePickerWidget(
+                                        alignLeft: true,
+                                        onChanged: (CountryCode countryCode) {
+                                          _countryDialCode =
+                                              countryCode.dialCode;
+                                        },
+                                        initialSelection: _countryDialCode !=
+                                                null
+                                            ? _countryDialCode
+                                            : Get.find<LocalizationController>()
+                                                .locale
+                                                .countryCode,
+                                        favorite: [_countryDialCode],
+                                        flagDecoration: BoxDecoration(
+                                            shape: BoxShape.circle),
+                                        showCountryOnly: true,
+                                        padding: EdgeInsets.zero,
+                                        showDropDownButton: true,
+                                        flagWidth: 50,
+                                        hideMainText: true,
+                                        textStyle: sfRegular.copyWith(
+                                          fontSize: Dimensions.fontSizeLarge,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              .color,
                                         ),
-                                      )
-                                    : CircularProgressIndicator()
-                              ]),
-                              // Padding(
-                              //     padding: EdgeInsets.symmetric(
-                              //         horizontal: Dimensions.PADDING_SIZE_LARGE),
-                              //     child: Divider(height: 1)),
-                              // CustomTextField(
-                              //   hintText: 'password'.tr,
-                              //   controller: _passwordController,
-                              //   focusNode: _passwordFocus,
-                              //   inputAction: TextInputAction.done,
-                              //   inputType: TextInputType.visiblePassword,
-                              //   prefixIcon: Images.lock,
-                              //   isPassword: true,
-                              //   onSubmit: (text) => (GetPlatform.isWeb &&
-                              //           authController.acceptTerms)
-                              //       ? _login(authController, _countryDialCode)
-                              //       : null,
-                              // ),
-                            ]),
-                          ),
-                          // SizedBox(height: 10),
-
-                          // Row(children: [
-                          //   Expanded(
-                          //     child: ListTile(
-                          //       onTap: () => authController.toggleRememberMe(),
-                          //       leading: Checkbox(
-                          //         activeColor: Theme.of(context).primaryColor,
-                          //         value: authController.isActiveRememberMe,
-                          //         onChanged: (bool isChecked) =>
-                          //             authController.toggleRememberMe(),
-                          //       ),
-                          //       title: Text('remember_me'.tr),
-                          //       contentPadding: EdgeInsets.zero,
-                          //       dense: true,
-                          //       horizontalTitleGap: 0,
-                          //     ),
-                          //   ),
-                          //   TextButton(
-                          //     onPressed: () => Get.toNamed(
-                          //         RouteHelper.getForgotPassRoute(false, null)),
-                          //     child: Text('${'forgot_password'.tr}?'),
-                          //   ),
-                          // ]),
-                          // SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
-                          // ConditionCheckBox(authController: authController),
-                          // SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-
-                          !authController.isLoading
-                              ? Row(children: [
-                                  // Expanded(
-                                  //     child: CustomButton(
-                                  //   buttonText: 'sign_up'.tr,
-                                  //   transparent: true,
-                                  //   onPressed: () =>
-                                  //       Get.toNamed(RouteHelper.getSignUpRoute()),
-                                  // )),
-                                  // Expanded(
-                                  //     child: CustomButton(
-                                  //   buttonText: 'sign_in'.tr,
-                                  //   onPressed: authController.acceptTerms
-                                  //       ? () =>
-                                  //           _login(authController, _countryDialCode)
-                                  //       : null,
-                                  // )),
-                                ])
-                              : Center(child: CircularProgressIndicator()),
-                          SizedBox(height: 30),
-
-                          // SocialLoginWidget(),
-
-                          GuestButton(),
-                        ]);
+                                      ),
+                                      Expanded(
+                                          flex: 100,
+                                          child: CustomTextField(
+                                            hintText: 'phone'.tr,
+                                            controller: _phoneController,
+                                            focusNode: _phoneFocus,
+                                            nextFocus: _passwordFocus,
+                                            inputType: TextInputType.phone,
+                                            divider: false,
+                                          )),
+                                      !authController.isLoading
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                authController.waitForOTP(true);
+                                                _login(authController,
+                                                    _countryDialCode);
+                                              },
+                                              child: Container(
+                                                height: 6.h,
+                                                width: 6.h,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            2.w),
+                                                    gradient: LinearGradient(
+                                                        colors: [
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary
+                                                        ])),
+                                                child: Icon(
+                                                  Icons.arrow_forward,
+                                                  color: Colors.white,
+                                                  size: 3.h,
+                                                ),
+                                              ),
+                                            )
+                                          : CircularProgressIndicator()
+                                    ]),
+                                  ]),
+                                ),
+                                GuestButton(),
+                              ])
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () =>
+                                        authController.waitForOTP(false),
+                                    child: Container(
+                                      width: 12.w,
+                                      height: 12.w,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(1.5.h),
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.3)),
+                                      child: Icon(
+                                        Icons.arrow_back,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Text(
+                                    "Enter the \ncode from the SMS",
+                                    maxLines: 2,
+                                    style: sfRegular.copyWith(
+                                        fontSize: 30,
+                                        color: Color.fromARGB(255, 9, 5, 28)),
+                                  ),
+                                  SizedBox(height: 3.h),
+                                  Text(
+                                    "We sent a code to $_countryDialCode ${_phoneController.text}. Please enter the code below to verify your phone number.",
+                                    style: sfRegular.copyWith(fontSize: 16),
+                                  ),
+                                  SizedBox(height: 3.h),
+                                  OTPTextField(
+                                    onChanged: (value) {},
+                                    length: 6,
+                                    width: 336,
+                                    fieldWidth: 50,
+                                    style: const TextStyle(fontSize: 17),
+                                    textFieldAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    fieldStyle: FieldStyle.underline,
+                                    onCompleted: (pin) {
+                                      if (kDebugMode) {
+                                        print("Completed: " + pin);
+                                      }
+                                      authController.verifyOTP(pin);
+                                    },
+                                  ),
+                                  SizedBox(height: 3.h),
+                                  Align(
+                                      alignment: Alignment.center,
+                                      child: TimerButton(
+                                        label: "Send OTP Again",
+                                        buttonType: ButtonType.TextButton,
+                                        timeOutInSeconds: 20,
+                                        onPressed: () {},
+                                        disabledColor: Colors.transparent,
+                                        color: Colors.transparent,
+                                        disabledTextStyle: const TextStyle(
+                                            fontSize: 16.0, color: Colors.grey),
+                                        activeTextStyle: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.deepOrange),
+                                      )),
+                                  SizedBox(
+                                    height: 38.h,
+                                  ),
+                                  Container(
+                                    height: 7.h,
+                                    width: 90.w,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(1.5.h),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Theme.of(context).primaryColor,
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary
+                                            ])),
+                                    child: Center(
+                                      child: !authController.isLoading
+                                          ? Text("Next",
+                                              style: sfBold.copyWith(
+                                                  fontSize: 18,
+                                                  color: Colors.white))
+                                          : CircularProgressIndicator(),
+                                    ),
+                                  )
+                                ]),
+                          );
                   }),
                 ),
               ),
@@ -306,7 +346,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void _login(AuthController authController, String countryDialCode) async {
     String _phone = _phoneController.text.trim();
-    String _password = _passwordController.text.trim();
     String _numberWithCountryCode = countryDialCode + _phone;
     bool _isValid = GetPlatform.isWeb ? true : false;
     if (!GetPlatform.isWeb) {
@@ -315,56 +354,45 @@ class _SignInScreenState extends State<SignInScreen> {
             await PhoneNumberUtil().parse(_numberWithCountryCode);
         _numberWithCountryCode =
             '+' + phoneNumber.countryCode + phoneNumber.nationalNumber;
+
         _isValid = true;
-      } catch (e) {}
+      } catch (e) {
+        if (kDebugMode) {
+          print("Phone Number: $_numberWithCountryCode");
+        }
+      }
     }
     if (_phone.isEmpty) {
       showCustomSnackBar('enter_phone_number'.tr);
     } else if (!_isValid) {
       showCustomSnackBar('invalid_phone_number'.tr);
-    } else if (_password.isEmpty) {
-      showCustomSnackBar('enter_password'.tr);
-    } else if (_password.length < 6) {
-      showCustomSnackBar('password_should_be'.tr);
     } else {
-      // authController
-      //     .login(_numberWithCountryCode, _password)
-      //     .then((status) async {
-      //   if (status.isSuccess) {
-      //     if (authController.isActiveRememberMe) {
-      //       authController.saveUserNumberAndPassword(
-      //           _phone, _password, countryDialCode);
-      //     } else {
-      //       authController.clearUserNumberAndPassword();
-      //     }
-      //     String _token = status.message.substring(1, status.message.length);
-      //     if (Get.find<SplashController>().configModel.customerVerification &&
-      //         int.parse(status.message[0]) == 0) {
-      //       List<int> _encoded = utf8.encode(_password);
-      //       String _data = base64Encode(_encoded);
-      //       Get.toNamed(RouteHelper.getVerificationRoute(
-      //           _numberWithCountryCode, _token, RouteHelper.signUp, _data));
-      //     } else {
-      //       Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
-      //     }
-      //   } else {
-      //     showCustomSnackBar(status.message);
-      //   }
-      // });
-      verifyNumber(_numberWithCountryCode);
+      if (kDebugMode) {
+        print("Phone number: $_numberWithCountryCode");
+      }
+      verifyNumber(_numberWithCountryCode, authController);
     }
   }
 
-  verifyNumber(String phonenumber) async {
+  verifyNumber(String phonenumber, AuthController controller) async {
     if (kDebugMode) {
-      print("Verifying he number $phonenumber");
+      print("FirebaseAuth Verifying he number $phonenumber");
     }
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phonenumber,
-      verificationCompleted: (PhoneAuthCredential credential) {
+      verificationCompleted: (PhoneAuthCredential credential) async {
         if (kDebugMode) {
           print("token is ${credential.token}");
         }
+
+        FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+          FirebaseAuth.instance.currentUser.getIdToken().then((token) {
+            if (kDebugMode) {
+              print("token is $token");
+            }
+            controller.loginUser(token);
+          });
+        });
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
@@ -381,6 +409,8 @@ class _SignInScreenState extends State<SignInScreen> {
         if (kDebugMode) {
           print("Verification ID set");
         }
+        controller.setVerificationId(verificationId);
+        controller.waitForOTP(true);
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );

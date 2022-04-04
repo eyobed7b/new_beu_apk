@@ -5,6 +5,8 @@ import 'package:efood_multivendor/data/model/response/response_model.dart';
 import 'package:efood_multivendor/data/repository/auth_repo.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,10 +19,14 @@ class AuthController extends GetxController implements GetxService {
   bool _isLoading = false;
   bool _notification = true;
   bool _acceptTerms = true;
+  bool _isWaitingForOTP = false;
+  String _verificationId;
 
+  bool get isWaitingForOTP => _isWaitingForOTP;
   bool get isLoading => _isLoading;
   bool get notification => _notification;
   bool get acceptTerms => _acceptTerms;
+  String get verificationId => _verificationId;
 
   Future<ResponseModel> registration(SignUpBody signUpBody) async {
     _isLoading = true;
@@ -271,10 +277,47 @@ class AuthController extends GetxController implements GetxService {
     return authRepo.getUserToken();
   }
 
+  void waitForOTP(bool val) {
+    _isWaitingForOTP = val;
+    update();
+  }
+
+  Future<ResponseModel> loginUser(String token) async {
+    ResponseModel responseModel;
+    Response res = await authRepo.sendFirebaseToken(token);
+    if (res.statusCode == 200) {
+      authRepo.saveUserToken(res.body['token']);
+      responseModel = ResponseModel(
+          true, '${res.body['is_phone_verified']}${res.body['token']}');
+    } else {
+      responseModel = ResponseModel(false, res.statusText);
+    }
+
+    return responseModel;
+  }
+
   bool setNotificationActive(bool isActive) {
     _notification = isActive;
     authRepo.setNotificationActive(isActive);
     update();
     return _notification;
+  }
+
+  void verifyOTP(String pin) {
+    _isLoading = true;
+    update();
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId, smsCode: pin);
+    FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+      FirebaseAuth.instance.currentUser.getIdToken().then((token) {
+        loginUser(token);
+        _isLoading = false;
+      });
+    });
+  }
+
+  void setVerificationId(String verificationId) {
+    _verificationId = verificationId;
+    update();
   }
 }

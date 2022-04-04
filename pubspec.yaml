@@ -62,11 +62,10 @@ dependencies:
   cached_network_image: ^3.2.0
   # google_sign_in: ^5.2.1
   flutter_facebook_auth: ^3.5.7
-<<<<<<< HEAD
   firebase_auth: ^3.3.12
-=======
   pin_code_fields: ^7.3.0
->>>>>>> 444558b44ead5b25b52ead4c12f1699e5704b5cc
+  otp_text_field: ^1.1.2
+  timer_button: ^2.0.0
 
 dev_dependencies:
   flutter_test:

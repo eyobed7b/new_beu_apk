@@ -16,82 +16,107 @@ class AuthRepo {
   AuthRepo({@required this.apiClient, @required this.sharedPreferences});
 
   Future<Response> registration(SignUpBody signUpBody) async {
-    return await apiClient.postData(AppConstants.REGISTER_URI, signUpBody.toJson());
+    return await apiClient.postData(
+        AppConstants.REGISTER_URI, signUpBody.toJson());
   }
 
   Future<Response> login({String phone, String password}) async {
-    return await apiClient.postData(AppConstants.LOGIN_URI, {"phone": phone, "password": password});
+    return await apiClient.postData(
+        AppConstants.LOGIN_URI, {"phone": phone, "password": password});
   }
 
   Future<Response> loginWithSocialMedia(String email) async {
-    return await apiClient.postData(AppConstants.SOCIAL_LOGIN_URL, {"email": email});
+    return await apiClient
+        .postData(AppConstants.SOCIAL_LOGIN_URL, {"email": email});
   }
 
-  Future<Response> registerWithSocialMedia(SocialLogInBody socialLogInBody) async {
-    return await apiClient.postData(AppConstants.SOCIAL_REGISTER_URL, socialLogInBody.toJson());
+  Future<Response> registerWithSocialMedia(
+      SocialLogInBody socialLogInBody) async {
+    return await apiClient.postData(
+        AppConstants.SOCIAL_REGISTER_URL, socialLogInBody.toJson());
   }
 
   Future<Response> updateToken() async {
     String _deviceToken;
     if (GetPlatform.isIOS) {
-      NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
-        alert: true, announcement: false, badge: true, carPlay: false,
-        criticalAlert: false, provisional: false, sound: true,
+      NotificationSettings settings =
+          await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
       );
-      if(settings.authorizationStatus == AuthorizationStatus.authorized) {
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
         _deviceToken = await _saveDeviceToken();
       }
-    }else {
+    } else {
       _deviceToken = await _saveDeviceToken();
     }
-    if(!GetPlatform.isWeb) {
+    if (!GetPlatform.isWeb) {
       FirebaseMessaging.instance.subscribeToTopic(AppConstants.TOPIC);
     }
-    return await apiClient.postData(AppConstants.TOKEN_URI, {"_method": "put", "cm_firebase_token": _deviceToken});
+    return await apiClient.postData(AppConstants.TOKEN_URI,
+        {"_method": "put", "cm_firebase_token": _deviceToken});
   }
 
   Future<String> _saveDeviceToken() async {
     String _deviceToken = '';
-    if(!GetPlatform.isWeb) {
+    if (!GetPlatform.isWeb) {
       _deviceToken = await FirebaseMessaging.instance.getToken();
     }
     if (_deviceToken != null) {
-      print('--------Device Token---------- '+_deviceToken);
+      print('--------Device Token---------- ' + _deviceToken);
     }
     return _deviceToken;
   }
 
   Future<Response> forgetPassword(String phone) async {
-    return await apiClient.postData(AppConstants.FORGET_PASSWORD_URI, {"phone": phone});
+    return await apiClient
+        .postData(AppConstants.FORGET_PASSWORD_URI, {"phone": phone});
   }
 
   Future<Response> verifyToken(String phone, String token) async {
-    return await apiClient.postData(AppConstants.VERIFY_TOKEN_URI, {"phone": phone, "reset_token": token});
+    return await apiClient.postData(
+        AppConstants.VERIFY_TOKEN_URI, {"phone": phone, "reset_token": token});
   }
 
-  Future<Response> resetPassword(String resetToken, String number, String password, String confirmPassword) async {
+  Future<Response> resetPassword(String resetToken, String number,
+      String password, String confirmPassword) async {
     return await apiClient.postData(
       AppConstants.RESET_PASSWORD_URI,
-      {"_method": "put", "reset_token": resetToken, "phone": number, "password": password, "confirm_password": confirmPassword},
+      {
+        "_method": "put",
+        "reset_token": resetToken,
+        "phone": number,
+        "password": password,
+        "confirm_password": confirmPassword
+      },
     );
   }
 
   Future<Response> checkEmail(String email) async {
-    return await apiClient.postData(AppConstants.CHECK_EMAIL_URI, {"email": email});
+    return await apiClient
+        .postData(AppConstants.CHECK_EMAIL_URI, {"email": email});
   }
 
   Future<Response> verifyEmail(String email, String token) async {
-    return await apiClient.postData(AppConstants.VERIFY_EMAIL_URI, {"email": email, "token": token});
+    return await apiClient.postData(
+        AppConstants.VERIFY_EMAIL_URI, {"email": email, "token": token});
   }
 
   Future<Response> verifyPhone(String phone, String otp) async {
-    return await apiClient.postData(AppConstants.VERIFY_PHONE_URI, {"phone": phone, "otp": otp});
+    return await apiClient
+        .postData(AppConstants.VERIFY_PHONE_URI, {"phone": phone, "otp": otp});
   }
 
   // for  user token
   Future<bool> saveUserToken(String token) async {
     apiClient.token = token;
-    apiClient.updateHeader(token, null, sharedPreferences.getString(AppConstants.LANGUAGE_CODE));
+    apiClient.updateHeader(
+        token, null, sharedPreferences.getString(AppConstants.LANGUAGE_CODE));
     return await sharedPreferences.setString(AppConstants.TOKEN, token);
   }
 
@@ -104,9 +129,10 @@ class AuthRepo {
   }
 
   bool clearSharedData() {
-    if(!GetPlatform.isWeb) {
+    if (!GetPlatform.isWeb) {
       FirebaseMessaging.instance.unsubscribeFromTopic(AppConstants.TOPIC);
-      apiClient.postData(AppConstants.TOKEN_URI, {"_method": "put", "cm_firebase_token": '@'});
+      apiClient.postData(
+          AppConstants.TOKEN_URI, {"_method": "put", "cm_firebase_token": '@'});
     }
     sharedPreferences.remove(AppConstants.TOKEN);
     sharedPreferences.setStringList(AppConstants.CART_LIST, []);
@@ -117,14 +143,21 @@ class AuthRepo {
   }
 
   // for  Remember Email
-  Future<void> saveUserNumberAndPassword(String number, String password, String countryCode) async {
+  Future<void> saveUserNumberAndPassword(
+      String number, String password, String countryCode) async {
     try {
       await sharedPreferences.setString(AppConstants.USER_PASSWORD, password);
       await sharedPreferences.setString(AppConstants.USER_NUMBER, number);
-      await sharedPreferences.setString(AppConstants.USER_COUNTRY_CODE, countryCode);
+      await sharedPreferences.setString(
+          AppConstants.USER_COUNTRY_CODE, countryCode);
     } catch (e) {
       throw e;
     }
+  }
+
+  Future<Response> sendFirebaseToken(String token) async {
+    return await apiClient
+        .postData(AppConstants.LOGIN_URI, {"fireBaseToken": token});
   }
 
   String getUserNumber() {
@@ -144,13 +177,14 @@ class AuthRepo {
   }
 
   void setNotificationActive(bool isActive) {
-    if(isActive) {
+    if (isActive) {
       updateToken();
-    }else {
-      if(!GetPlatform.isWeb) {
+    } else {
+      if (!GetPlatform.isWeb) {
         FirebaseMessaging.instance.unsubscribeFromTopic(AppConstants.TOPIC);
-        if(isLoggedIn()) {
-          FirebaseMessaging.instance.unsubscribeFromTopic('zone_${Get.find<LocationController>().getUserAddress().zoneId}_customer');
+        if (isLoggedIn()) {
+          FirebaseMessaging.instance.unsubscribeFromTopic(
+              'zone_${Get.find<LocationController>().getUserAddress().zoneId}_customer');
         }
       }
     }
