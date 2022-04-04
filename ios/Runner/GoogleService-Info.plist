@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1049699819506-2magqnhq5chvmvj75v287hngt3qb13rr.apps.googleusercontent.com</string>
+	<string>697591541278-u54nusici1frbmica1889kcnst357e7o.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1049699819506-2magqnhq5chvmvj75v287hngt3qb13rr</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>1049699819506-gdmkdga8uj8vpg7rnga48l469gogpj62.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.697591541278-u54nusici1frbmica1889kcnst357e7o</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAva0nNIlji_8cM-_ITWGIAj1a42LM6ddk</string>
+	<string>AIzaSyAH1DOZsvsKwu3abNoRjF68roT3f7gQJRg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1049699819506</string>
+	<string>697591541278</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.sixamtech.stackFood</string>
+	<string>com.beu.beudelivery</string>
 	<key>PROJECT_ID</key>
-	<string>stackfood-bd3ee</string>
+	<string>beu-delivery</string>
 	<key>STORAGE_BUCKET</key>
-	<string>stackfood-bd3ee.appspot.com</string>
+	<string>beu-delivery.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1049699819506:ios:32a527342150777389956b</string>
+	<string>1:697591541278:ios:e403a6b31588b8cacbc80f</string>
 </dict>
 </plist>

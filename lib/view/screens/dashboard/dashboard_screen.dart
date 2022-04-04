@@ -10,7 +10,10 @@ import 'package:efood_multivendor/view/screens/home/home_screen.dart';
 import 'package:efood_multivendor/view/screens/menu/menu_screen.dart';
 import 'package:efood_multivendor/view/screens/order/order_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
 class DashboardScreen extends StatefulWidget {
   final int pageIndex;
@@ -37,9 +40,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     _screens = [
       HomeScreen(),
-      FavouriteScreen(),
-      CartScreen(fromNav: true),
       OrderScreen(),
+      // FavouriteScreen(),
+      // CartScreen(fromNav: true),
+      // OrderScreen(),
       Container(),
     ];
 
@@ -60,11 +64,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _setPage(0);
           return false;
         } else {
-          if(_canExit) {
+          if (_canExit) {
             return true;
-          }else {
+          } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('back_press_again_to_exit'.tr, style: TextStyle(color: Colors.white)),
+              content: Text('back_press_again_to_exit'.tr,
+                  style: TextStyle(color: Colors.white)),
               behavior: SnackBarBehavior.floating,
               backgroundColor: Colors.green,
               duration: Duration(seconds: 2),
@@ -80,49 +85,114 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
       child: Scaffold(
         key: _scaffoldKey,
+        extendBody: true,
+        body: _screens[_pageIndex],
+        bottomNavigationBar: ResponsiveHelper.isDesktop(context)
+            ? SizedBox()
+            : DotNavigationBar(
+                enablePaddingAnimation: false,
+                // enableFloatingNavBar: false,
+                borderRadius: 10,
+                // itemPadding: EdgeInsets.only(
+                //     left: getProportionateScreenWidth(0),
+                //     right: getProportionateScreenWidth(10)),
+                margin: EdgeInsets.only(
+                    // bottom: getProportionateScreenHeight(100),
+                    left: 0,
+                    right: 0),
+                dotIndicatorColor: Colors.transparent,
+                backgroundColor: Colors.white,
+                marginR: EdgeInsets.symmetric(horizontal: 18, vertical: (15)),
+                paddingR: EdgeInsets.only(bottom: 10, top: 10, right: 10),
 
-        floatingActionButton: ResponsiveHelper.isDesktop(context) ? null : FloatingActionButton(
-          elevation: 5,
-          backgroundColor: _pageIndex == 2 ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
-          onPressed: () => _setPage(2),
-          child: CartWidget(color: _pageIndex == 2 ? Theme.of(context).cardColor : Theme.of(context).disabledColor, size: 30),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-        bottomNavigationBar: ResponsiveHelper.isDesktop(context) ? SizedBox() : BottomAppBar(
-          elevation: 5,
-          notchMargin: 5,
-          clipBehavior: Clip.antiAlias,
-          shape: CircularNotchedRectangle(),
-
-          child: Padding(
-            padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-            child: Row(children: [
-              BottomNavItem(iconData: Icons.home, isSelected: _pageIndex == 0, onTap: () => _setPage(0)),
-              BottomNavItem(iconData: Icons.favorite, isSelected: _pageIndex == 1, onTap: () => _setPage(1)),
-              Expanded(child: SizedBox()),
-              BottomNavItem(iconData: Icons.shopping_bag, isSelected: _pageIndex == 3, onTap: () => _setPage(3)),
-              BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () {
-                Get.bottomSheet(MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
-              }),
-            ]),
-          ),
-        ),
-        body: PageView.builder(
-          controller: _pageController,
-          itemCount: _screens.length,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return _screens[index];
-          },
-        ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.4),
+                    spreadRadius: 3,
+                    blurRadius: 5,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+                selectedItemColor: Colors.red,
+                currentIndex: _pageIndex,
+                unselectedItemColor: Colors.grey[300],
+                onTap: _setPage,
+                items: <DotNavigationBarItem>[
+                  DotNavigationBarItem(
+                    // selectedColor: Colors.green,
+                    icon: Opacity(
+                      opacity: _pageIndex == 0 ? 1 : 0.4,
+                      child: ShaderMask(
+                        shaderCallback: (Rect bounds) {
+                          return LinearGradient(
+                            // center: Alignment.topLeft,
+                            // radius: 0.5,
+                            colors: <Color>[
+                              Color(0xffff8022),
+                              Color(0xffff2222)
+                            ],
+                            tileMode: TileMode.repeated,
+                          ).createShader(bounds);
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/home.svg',
+                        ),
+                      ),
+                    ),
+                  ),
+                  DotNavigationBarItem(
+                    // selectedColor: Colors.green,
+                    icon: Opacity(
+                      opacity: _pageIndex == 1 ? 1 : 0.4,
+                      child: ShaderMask(
+                        shaderCallback: (Rect bounds) {
+                          return LinearGradient(
+                            // center: Alignment.topLeft,
+                            // radius: 0.5,
+                            colors: <Color>[
+                              Color(0xffff8022),
+                              Color(0xffff2222)
+                            ],
+                            tileMode: TileMode.repeated,
+                          ).createShader(bounds);
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/order.svg',
+                        ),
+                      ),
+                    ),
+                  ),
+                  DotNavigationBarItem(
+                    // selectedColor: Colors.green,
+                    icon: Opacity(
+                      opacity: _pageIndex == 2 ? 1 : 0.4,
+                      child: ShaderMask(
+                        shaderCallback: (Rect bounds) {
+                          return LinearGradient(
+                            // center: Alignment.topLeft,
+                            // radius: 0.5,
+                            colors: <Color>[
+                              Color(0xffff8022),
+                              Color(0xffff2222)
+                            ],
+                            tileMode: TileMode.repeated,
+                          ).createShader(bounds);
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/profile.svg',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }
 
   void _setPage(int pageIndex) {
     setState(() {
-      _pageController.jumpToPage(pageIndex);
+      // _pageController.jumpToPage(pageIndex);
       _pageIndex = pageIndex;
     });
   }
