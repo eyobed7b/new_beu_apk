@@ -201,7 +201,9 @@ class PopularRestaurantView extends StatelessWidget {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            _restaurantList[index].address,
+                                            _restaurantList[index]
+                                                .address
+                                                .toString(),
                                             style: sfMedium.copyWith(
                                                 fontSize: Dimensions
                                                     .fontSizeExtraSmall,
