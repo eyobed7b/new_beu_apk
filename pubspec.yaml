@@ -40,6 +40,7 @@ dependencies:
   cached_network_image: ^3.2.0
   google_sign_in: ^5.2.1
   flutter_facebook_auth: ^3.5.7
+  firebase_auth: ^3.3.12
 
 dev_dependencies:
   flutter_test:
@@ -69,5 +70,5 @@ flutter:
           weight: 500
         - asset: assets/font/SF-Pro-Text-Bold.otf
           weight: 700
-        - asset: assets/font/SF-Pro-Text--Black.otf
+        - asset: assets/font/SF-Pro-Text-Black.otf
           weight: 900

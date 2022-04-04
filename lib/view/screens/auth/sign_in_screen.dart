@@ -8,6 +8,7 @@ import 'package:efood_multivendor/controller/localization_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
@@ -18,10 +19,12 @@ import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/auth/widget/code_picker_widget.dart';
 import 'package:efood_multivendor/view/screens/auth/widget/condition_check_box.dart';
 import 'package:efood_multivendor/view/screens/auth/widget/guest_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:phone_number/phone_number.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInScreen extends StatefulWidget {
   final bool exitFromApp;
@@ -57,56 +60,54 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        if (widget.exitFromApp) {
-          if (_canExit) {
-            if (GetPlatform.isAndroid) {
-              SystemNavigator.pop();
-            } else if (GetPlatform.isIOS) {
-              exit(0);
+        onWillPop: () async {
+          if (widget.exitFromApp) {
+            if (_canExit) {
+              if (GetPlatform.isAndroid) {
+                SystemNavigator.pop();
+              } else if (GetPlatform.isIOS) {
+                exit(0);
+              } else {
+                Navigator.pushNamed(context, RouteHelper.getInitialRoute());
+              }
+              return Future.value(false);
             } else {
-              Navigator.pushNamed(context, RouteHelper.getInitialRoute());
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('back_press_again_to_exit'.tr,
+                    style: TextStyle(color: Colors.white)),
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+                margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+              ));
+              _canExit = true;
+              Timer(Duration(seconds: 2), () {
+                _canExit = false;
+              });
+              return Future.value(false);
             }
-            return Future.value(false);
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('back_press_again_to_exit'.tr,
-                  style: TextStyle(color: Colors.white)),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-              margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-            ));
-            _canExit = true;
-            Timer(Duration(seconds: 2), () {
-              _canExit = false;
-            });
-            return Future.value(false);
+            return true;
           }
-        } else {
-          return true;
-        }
-      },
-      child: Scaffold(
-        appBar: ResponsiveHelper.isDesktop(context)
-            ? WebMenuBar()
-            : !widget.exitFromApp
-                ? AppBar(
-                    leading: IconButton(
-                      onPressed: () => Get.back(),
-                      icon: Icon(Icons.arrow_back_ios_rounded,
-                          color: Theme.of(context).textTheme.bodyText1.color),
-                    ),
-                    elevation: 0,
-                    backgroundColor: Colors.transparent)
-                : null,
-        body: SafeArea(
-            child: Center(
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-              child: Center(
+        },
+        child: Scaffold(
+          appBar: ResponsiveHelper.isDesktop(context)
+              ? WebMenuBar()
+              : !widget.exitFromApp
+                  ? AppBar(
+                      leading: IconButton(
+                        onPressed: () => Get.back(),
+                        icon: Icon(Icons.arrow_back_ios_rounded,
+                            color: Theme.of(context).textTheme.bodyText1.color),
+                      ),
+                      elevation: 0,
+                      backgroundColor: Colors.transparent)
+                  : null,
+          body: SafeArea(
+            child: Scrollbar(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                 child: Container(
                   width: context.width > 700 ? 700 : context.width,
                   padding: context.width > 700
@@ -126,142 +127,181 @@ class _SignInScreenState extends State<SignInScreen> {
                         )
                       : null,
                   child: GetBuilder<AuthController>(builder: (authController) {
-                    return Column(children: [
-                      Image.asset(Images.logo, width: 100),
-                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                      Image.asset(Images.logo_name, width: 100),
-                      SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
-
-                      Text('sign_in'.tr.toUpperCase(),
-                          style: sfBlack.copyWith(fontSize: 30)),
-                      SizedBox(height: 50),
-
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                          color: Theme.of(context).cardColor,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey[Get.isDarkMode ? 800 : 200],
-                                spreadRadius: 1,
-                                blurRadius: 5)
-                          ],
-                        ),
-                        child: Column(children: [
-                          Row(children: [
-                            CodePickerWidget(
-                              onChanged: (CountryCode countryCode) {
-                                _countryDialCode = countryCode.dialCode;
-                              },
-                              initialSelection: _countryDialCode != null
-                                  ? _countryDialCode
-                                  : Get.find<LocalizationController>()
-                                      .locale
-                                      .countryCode,
-                              favorite: [_countryDialCode],
-                              showDropDownButton: true,
-                              padding: EdgeInsets.zero,
-                              showFlagMain: true,
-                              flagWidth: 30,
-                              textStyle: sfRegular.copyWith(
-                                fontSize: Dimensions.fontSizeLarge,
-                                color:
-                                    Theme.of(context).textTheme.bodyText1.color,
-                              ),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: CustomTextField(
-                                  hintText: 'phone'.tr,
-                                  controller: _phoneController,
-                                  focusNode: _phoneFocus,
-                                  nextFocus: _passwordFocus,
-                                  inputType: TextInputType.phone,
-                                  divider: false,
-                                )),
-                          ]),
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: Dimensions.PADDING_SIZE_LARGE),
-                              child: Divider(height: 1)),
-                          CustomTextField(
-                            hintText: 'password'.tr,
-                            controller: _passwordController,
-                            focusNode: _passwordFocus,
-                            inputAction: TextInputAction.done,
-                            inputType: TextInputType.visiblePassword,
-                            prefixIcon: Images.lock,
-                            isPassword: true,
-                            onSubmit: (text) => (GetPlatform.isWeb &&
-                                    authController.acceptTerms)
-                                ? _login(authController, _countryDialCode)
-                                : null,
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Stack(
+                            children: [
+                              Image.asset(Images.illustration, width: 100.h),
+                              Positioned(
+                                  bottom: 1.h,
+                                  child: Text(
+                                    "Enter your phone number",
+                                    style: sfBlack.copyWith(fontSize: 3.h),
+                                  ))
+                            ],
                           ),
-                        ]),
-                      ),
-                      SizedBox(height: 10),
+                          SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
 
-                      Row(children: [
-                        Expanded(
-                          child: ListTile(
-                            onTap: () => authController.toggleRememberMe(),
-                            leading: Checkbox(
-                              activeColor: Theme.of(context).primaryColor,
-                              value: authController.isActiveRememberMe,
-                              onChanged: (bool isChecked) =>
-                                  authController.toggleRememberMe(),
+                          // Text('sign_in'.tr.toUpperCase(),
+                          //     style: sfBlack.copyWith(fontSize: 30)),
+                          // SizedBox(height: 50),
+
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.RADIUS_SMALL),
+                              color: Theme.of(context).cardColor,
+                              boxShadow: [
+                                BoxShadow(
+                                    color:
+                                        Colors.grey[Get.isDarkMode ? 800 : 200],
+                                    spreadRadius: 1,
+                                    blurRadius: 5)
+                              ],
                             ),
-                            title: Text('remember_me'.tr),
-                            contentPadding: EdgeInsets.zero,
-                            dense: true,
-                            horizontalTitleGap: 0,
+                            child: Column(children: [
+                              Row(children: [
+                                CodePickerWidget(
+                                  alignLeft: true,
+                                  onChanged: (CountryCode countryCode) {
+                                    _countryDialCode = countryCode.dialCode;
+                                  },
+                                  initialSelection: _countryDialCode != null
+                                      ? _countryDialCode
+                                      : Get.find<LocalizationController>()
+                                          .locale
+                                          .countryCode,
+                                  favorite: [_countryDialCode],
+                                  flagDecoration:
+                                      BoxDecoration(shape: BoxShape.circle),
+                                  showCountryOnly: true,
+                                  padding: EdgeInsets.zero,
+                                  showDropDownButton: true,
+                                  flagWidth: 50,
+                                  hideMainText: true,
+                                  textStyle: sfRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeLarge,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
+                                  ),
+                                ),
+                                Expanded(
+                                    flex: 100,
+                                    child: CustomTextField(
+                                      hintText: 'phone'.tr,
+                                      controller: _phoneController,
+                                      focusNode: _phoneFocus,
+                                      nextFocus: _passwordFocus,
+                                      inputType: TextInputType.phone,
+                                      divider: false,
+                                    )),
+                                !authController.isLoading
+                                    ? GestureDetector(
+                                        onTap: () => _login(
+                                            authController, _countryDialCode),
+                                        child: Container(
+                                          height: 6.h,
+                                          width: 6.h,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(2.w),
+                                              gradient: LinearGradient(colors: [
+                                                Theme.of(context).primaryColor,
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary
+                                              ])),
+                                          child: Icon(
+                                            Icons.arrow_forward,
+                                            color: Colors.white,
+                                            size: 3.h,
+                                          ),
+                                        ),
+                                      )
+                                    : CircularProgressIndicator()
+                              ]),
+                              // Padding(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: Dimensions.PADDING_SIZE_LARGE),
+                              //     child: Divider(height: 1)),
+                              // CustomTextField(
+                              //   hintText: 'password'.tr,
+                              //   controller: _passwordController,
+                              //   focusNode: _passwordFocus,
+                              //   inputAction: TextInputAction.done,
+                              //   inputType: TextInputType.visiblePassword,
+                              //   prefixIcon: Images.lock,
+                              //   isPassword: true,
+                              //   onSubmit: (text) => (GetPlatform.isWeb &&
+                              //           authController.acceptTerms)
+                              //       ? _login(authController, _countryDialCode)
+                              //       : null,
+                              // ),
+                            ]),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () => Get.toNamed(
-                              RouteHelper.getForgotPassRoute(false, null)),
-                          child: Text('${'forgot_password'.tr}?'),
-                        ),
-                      ]),
-                      SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+                          // SizedBox(height: 10),
 
-                      ConditionCheckBox(authController: authController),
-                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                          // Row(children: [
+                          //   Expanded(
+                          //     child: ListTile(
+                          //       onTap: () => authController.toggleRememberMe(),
+                          //       leading: Checkbox(
+                          //         activeColor: Theme.of(context).primaryColor,
+                          //         value: authController.isActiveRememberMe,
+                          //         onChanged: (bool isChecked) =>
+                          //             authController.toggleRememberMe(),
+                          //       ),
+                          //       title: Text('remember_me'.tr),
+                          //       contentPadding: EdgeInsets.zero,
+                          //       dense: true,
+                          //       horizontalTitleGap: 0,
+                          //     ),
+                          //   ),
+                          //   TextButton(
+                          //     onPressed: () => Get.toNamed(
+                          //         RouteHelper.getForgotPassRoute(false, null)),
+                          //     child: Text('${'forgot_password'.tr}?'),
+                          //   ),
+                          // ]),
+                          // SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
-                      !authController.isLoading
-                          ? Row(children: [
-                              Expanded(
-                                  child: CustomButton(
-                                buttonText: 'sign_up'.tr,
-                                transparent: true,
-                                onPressed: () =>
-                                    Get.toNamed(RouteHelper.getSignUpRoute()),
-                              )),
-                              Expanded(
-                                  child: CustomButton(
-                                buttonText: 'sign_in'.tr,
-                                onPressed: authController.acceptTerms
-                                    ? () =>
-                                        _login(authController, _countryDialCode)
-                                    : null,
-                              )),
-                            ])
-                          : Center(child: CircularProgressIndicator()),
-                      SizedBox(height: 30),
+                          // ConditionCheckBox(authController: authController),
+                          // SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-                      // SocialLoginWidget(),
+                          !authController.isLoading
+                              ? Row(children: [
+                                  // Expanded(
+                                  //     child: CustomButton(
+                                  //   buttonText: 'sign_up'.tr,
+                                  //   transparent: true,
+                                  //   onPressed: () =>
+                                  //       Get.toNamed(RouteHelper.getSignUpRoute()),
+                                  // )),
+                                  // Expanded(
+                                  //     child: CustomButton(
+                                  //   buttonText: 'sign_in'.tr,
+                                  //   onPressed: authController.acceptTerms
+                                  //       ? () =>
+                                  //           _login(authController, _countryDialCode)
+                                  //       : null,
+                                  // )),
+                                ])
+                              : Center(child: CircularProgressIndicator()),
+                          SizedBox(height: 30),
 
-                      GuestButton(),
-                    ]);
+                          // SocialLoginWidget(),
+
+                          GuestButton(),
+                        ]);
                   }),
                 ),
               ),
             ),
           ),
-        )),
-      ),
-    );
+        ));
   }
 
   void _login(AuthController authController, String countryDialCode) async {
@@ -287,30 +327,62 @@ class _SignInScreenState extends State<SignInScreen> {
     } else if (_password.length < 6) {
       showCustomSnackBar('password_should_be'.tr);
     } else {
-      authController
-          .login(_numberWithCountryCode, _password)
-          .then((status) async {
-        if (status.isSuccess) {
-          if (authController.isActiveRememberMe) {
-            authController.saveUserNumberAndPassword(
-                _phone, _password, countryDialCode);
-          } else {
-            authController.clearUserNumberAndPassword();
-          }
-          String _token = status.message.substring(1, status.message.length);
-          if (Get.find<SplashController>().configModel.customerVerification &&
-              int.parse(status.message[0]) == 0) {
-            List<int> _encoded = utf8.encode(_password);
-            String _data = base64Encode(_encoded);
-            Get.toNamed(RouteHelper.getVerificationRoute(
-                _numberWithCountryCode, _token, RouteHelper.signUp, _data));
-          } else {
-            Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
+      // authController
+      //     .login(_numberWithCountryCode, _password)
+      //     .then((status) async {
+      //   if (status.isSuccess) {
+      //     if (authController.isActiveRememberMe) {
+      //       authController.saveUserNumberAndPassword(
+      //           _phone, _password, countryDialCode);
+      //     } else {
+      //       authController.clearUserNumberAndPassword();
+      //     }
+      //     String _token = status.message.substring(1, status.message.length);
+      //     if (Get.find<SplashController>().configModel.customerVerification &&
+      //         int.parse(status.message[0]) == 0) {
+      //       List<int> _encoded = utf8.encode(_password);
+      //       String _data = base64Encode(_encoded);
+      //       Get.toNamed(RouteHelper.getVerificationRoute(
+      //           _numberWithCountryCode, _token, RouteHelper.signUp, _data));
+      //     } else {
+      //       Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
+      //     }
+      //   } else {
+      //     showCustomSnackBar(status.message);
+      //   }
+      // });
+      verifyNumber(_numberWithCountryCode);
+    }
+  }
+
+  verifyNumber(String phonenumber) async {
+    if (kDebugMode) {
+      print("Verifying he number $phonenumber");
+    }
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phonenumber,
+      verificationCompleted: (PhoneAuthCredential credential) {
+        if (kDebugMode) {
+          print("token is ${credential.token}");
+        }
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          if (kDebugMode) {
+            print('The provided phone number is not valid.');
           }
         } else {
-          showCustomSnackBar(status.message);
+          if (kDebugMode) {
+            print(e.message);
+          }
         }
-      });
-    }
+      },
+      codeSent: (String verificationId, int resendToken) {
+        if (kDebugMode) {
+          print("Verification ID set");
+        }
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
   }
 }

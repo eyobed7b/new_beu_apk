@@ -36,7 +36,6 @@ Future<void> main() async {
   Map<String, Map<String, String>> _languages = await di.init();
 
   int _orderID;
-
   try {
     if (GetPlatform.isMobile) {
       final RemoteMessage remoteMessage =

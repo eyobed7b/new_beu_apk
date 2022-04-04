@@ -13,6 +13,7 @@ import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/view/base/no_internet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:efood_multivendor/helper/size_config.dart' as Size;
 
 class SplashScreen extends StatefulWidget {
   final String orderID;
@@ -119,6 +120,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    Size.init(context);
+
     return Stack(children: <Widget>[
       Container(
         color: Colors.white,

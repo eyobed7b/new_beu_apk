@@ -55,4 +55,5 @@ class Images {
   static const String pattern_bg = 'assets/image/pattern.png';
   static const String name = 'assets/image/name.png';
   static const String amharic = 'assets/image/amharic.png';
+  static const String illustration = 'assets/image/illustration.png';
 }
