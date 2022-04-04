@@ -53,6 +53,9 @@ class Images {
   static const String restaurant_join = 'assets/image/restaurant_join.png';
   static const String delivery_man_join = 'assets/image/delivery_man_join.png';
   static const String pattern_bg = 'assets/image/pattern.png';
+  static const String pattern_svg = 'assets/icons/pattern.svg';
   static const String name = 'assets/image/name.png';
   static const String amharic = 'assets/image/amharic.png';
+  static const String setLocation = 'assets/image/Set_Location.png';
+  static const String location_gps = 'assets/icons/location.svg';
 }
