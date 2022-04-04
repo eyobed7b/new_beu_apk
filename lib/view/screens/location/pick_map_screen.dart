@@ -67,37 +67,37 @@ class _PickMapScreenState extends State<PickMapScreen> {
               '${locationController.pickPlaceMark.postalCode ?? ''} ${locationController.pickPlaceMark.country ?? ''}'}');*/
 
           return Stack(children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: widget.fromAddAddress
-                    ? LatLng(locationController.position.latitude,
-                        locationController.position.longitude)
-                    : _initialPosition,
-                zoom: 17,
-              ),
-              onMapCreated: (GoogleMapController mapController) {
-                _mapController = mapController;
-                if (!widget.fromAddAddress) {
-                  Get.find<LocationController>()
-                      .getCurrentLocation(false, mapController: mapController);
-                }
-              },
-              zoomControlsEnabled: false,
-              onCameraMove: (CameraPosition cameraPosition) {
-                _cameraPosition = cameraPosition;
-              },
-              onCameraMoveStarted: () {
-                locationController.disableButton();
-              },
-              onCameraIdle: () {
-                Get.find<LocationController>()
-                    .updatePosition(_cameraPosition, false);
-              },
-            ),
-            Center(
-                child: !locationController.loading
-                    ? Image.asset(Images.pick_marker, height: 50, width: 50)
-                    : CircularProgressIndicator()),
+            // GoogleMap(
+            //   initialCameraPosition: CameraPosition(
+            //     target: widget.fromAddAddress
+            //         ? LatLng(locationController.position.latitude,
+            //             locationController.position.longitude)
+            //         : _initialPosition,
+            //     zoom: 17,
+            //   ),
+            //   onMapCreated: (GoogleMapController mapController) {
+            //     _mapController = mapController;
+            //     if (!widget.fromAddAddress) {
+            //       Get.find<LocationController>()
+            //           .getCurrentLocation(false, mapController: mapController);
+            //     }
+            //   },
+            //   zoomControlsEnabled: false,
+            //   onCameraMove: (CameraPosition cameraPosition) {
+            //     _cameraPosition = cameraPosition;
+            //   },
+            //   onCameraMoveStarted: () {
+            //     locationController.disableButton();
+            //   },
+            //   onCameraIdle: () {
+            //     Get.find<LocationController>()
+            //         .updatePosition(_cameraPosition, false);
+            //   },
+            // ),
+            // Center(
+            //     child: !locationController.loading
+            //         ? Image.asset(Images.pick_marker, height: 50, width: 50)
+            //         : CircularProgressIndicator()),
             Positioned(
               top: Dimensions.PADDING_SIZE_LARGE,
               left: Dimensions.PADDING_SIZE_SMALL,
@@ -134,77 +134,77 @@ class _PickMapScreenState extends State<PickMapScreen> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 80,
-              right: Dimensions.PADDING_SIZE_SMALL,
-              child: FloatingActionButton(
-                child: Icon(Icons.my_location,
-                    color: Theme.of(context).primaryColor),
-                mini: true,
-                backgroundColor: Theme.of(context).cardColor,
-                onPressed: () => _checkPermission(() {
-                  Get.find<LocationController>()
-                      .getCurrentLocation(false, mapController: _mapController);
-                }),
-              ),
-            ),
-            Positioned(
-              bottom: Dimensions.PADDING_SIZE_LARGE,
-              left: Dimensions.PADDING_SIZE_SMALL,
-              right: Dimensions.PADDING_SIZE_SMALL,
-              child: !locationController.isLoading
-                  ? CustomButton(
-                      buttonText: locationController.inZone
-                          ? widget.fromAddAddress
-                              ? 'pick_address'.tr
-                              : 'pick_location'.tr
-                          : 'service_not_available_in_this_area'.tr,
-                      onPressed: (locationController.buttonDisabled ||
-                              locationController.loading)
-                          ? null
-                          : () {
-                              if (locationController.pickPosition.latitude !=
-                                      0 &&
-                                  locationController.pickAddress.isNotEmpty) {
-                                if (widget.fromAddAddress) {
-                                  if (widget.googleMapController != null) {
-                                    widget.googleMapController.moveCamera(
-                                        CameraUpdate.newCameraPosition(
-                                            CameraPosition(
-                                                target: LatLng(
-                                                  locationController
-                                                      .pickPosition.latitude,
-                                                  locationController
-                                                      .pickPosition.longitude,
-                                                ),
-                                                zoom: 17)));
-                                    locationController.setAddAddressData();
-                                  }
-                                  Get.back();
-                                } else {
-                                  AddressModel _address = AddressModel(
-                                    latitude: locationController
-                                        .pickPosition.latitude
-                                        .toString(),
-                                    longitude: locationController
-                                        .pickPosition.longitude
-                                        .toString(),
-                                    addressType: 'others',
-                                    address: locationController.pickAddress,
-                                  );
-                                  locationController.saveAddressAndNavigate(
-                                      _address,
-                                      widget.fromSignUp,
-                                      widget.route,
-                                      widget.canRoute);
-                                }
-                              } else {
-                                showCustomSnackBar('pick_an_address'.tr);
-                              }
-                            },
-                    )
-                  : Center(child: CircularProgressIndicator()),
-            ),
+            // Positioned(
+            //   bottom: 80,
+            //   right: Dimensions.PADDING_SIZE_SMALL,
+            //   child: FloatingActionButton(
+            //     child: Icon(Icons.my_location,
+            //         color: Theme.of(context).primaryColor),
+            //     mini: true,
+            //     backgroundColor: Theme.of(context).cardColor,
+            //     onPressed: () => _checkPermission(() {
+            //       Get.find<LocationController>()
+            //           .getCurrentLocation(false, mapController: _mapController);
+            //     }),
+            //   ),
+            // ),
+            // Positioned(
+            //   bottom: Dimensions.PADDING_SIZE_LARGE,
+            //   left: Dimensions.PADDING_SIZE_SMALL,
+            //   right: Dimensions.PADDING_SIZE_SMALL,
+            //   child: !locationController.isLoading
+            //       ? CustomButton(
+            //           buttonText: locationController.inZone
+            //               ? widget.fromAddAddress
+            //                   ? 'pick_address'.tr
+            //                   : 'pick_location'.tr
+            //               : 'service_not_available_in_this_area'.tr,
+            //           onPressed: (locationController.buttonDisabled ||
+            //                   locationController.loading)
+            //               ? null
+            //               : () {
+            //                   if (locationController.pickPosition.latitude !=
+            //                           0 &&
+            //                       locationController.pickAddress.isNotEmpty) {
+            //                     if (widget.fromAddAddress) {
+            //                       if (widget.googleMapController != null) {
+            //                         widget.googleMapController.moveCamera(
+            //                             CameraUpdate.newCameraPosition(
+            //                                 CameraPosition(
+            //                                     target: LatLng(
+            //                                       locationController
+            //                                           .pickPosition.latitude,
+            //                                       locationController
+            //                                           .pickPosition.longitude,
+            //                                     ),
+            //                                     zoom: 17)));
+            //                         locationController.setAddAddressData();
+            //                       }
+            //                       Get.back();
+            //                     } else {
+            //                       AddressModel _address = AddressModel(
+            //                         latitude: locationController
+            //                             .pickPosition.latitude
+            //                             .toString(),
+            //                         longitude: locationController
+            //                             .pickPosition.longitude
+            //                             .toString(),
+            //                         addressType: 'others',
+            //                         address: locationController.pickAddress,
+            //                       );
+            //                       locationController.saveAddressAndNavigate(
+            //                           _address,
+            //                           widget.fromSignUp,
+            //                           widget.route,
+            //                           widget.canRoute);
+            //                     }
+            //                   } else {
+            //                     showCustomSnackBar('pick_an_address'.tr);
+            //                   }
+            //                 },
+            //         )
+            //       : Center(child: CircularProgressIndicator()),
+            // ),
           ]);
         }),
       ))),
