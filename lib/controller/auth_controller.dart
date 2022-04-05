@@ -7,8 +7,10 @@ import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:phone_number/phone_number.dart';
 
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
@@ -206,7 +208,6 @@ class AuthController extends GetxController implements GetxService {
   Future<ResponseModel> verifyPhone(String phone, String token) async {
     _isLoading = true;
     update();
-    print('---------$phone');
     Response response = await authRepo.verifyPhone(phone, _verificationCode);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
@@ -228,6 +229,82 @@ class AuthController extends GetxController implements GetxService {
   void updateVerificationCode(String query) {
     _verificationCode = query;
     update();
+  }
+
+  void sendOTP(
+      TextEditingController phoneController, String countryDialCode) async {
+    _isLoading = true;
+    String _phone = phoneController.text.trim();
+    String _numberWithCountryCode = countryDialCode + _phone;
+    bool _isValid = GetPlatform.isWeb ? true : false;
+    if (!GetPlatform.isWeb) {
+      try {
+        PhoneNumber phoneNumber =
+            await PhoneNumberUtil().parse(_numberWithCountryCode);
+        _numberWithCountryCode =
+            '+' + phoneNumber.countryCode + phoneNumber.nationalNumber;
+
+        _isValid = true;
+      } catch (e) {
+        if (kDebugMode) {
+          print("Phone Number: $_numberWithCountryCode");
+        }
+      }
+    }
+    if (_phone.isEmpty) {
+      showCustomSnackBar('enter_phone_number'.tr);
+    } else if (!_isValid) {
+      showCustomSnackBar('invalid_phone_number'.tr);
+    } else {
+      if (kDebugMode) {
+        print("Phone number: $_numberWithCountryCode");
+      }
+      verifyNumber(_numberWithCountryCode);
+    }
+  }
+
+  verifyNumber(String phonenumber) async {
+    if (kDebugMode) {
+      print("FirebaseAuth Verifying he number $phonenumber");
+    }
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phonenumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        if (kDebugMode) {
+          print("token is ${credential.token}");
+        }
+
+        FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+          FirebaseAuth.instance.currentUser.getIdToken().then((token) {
+            if (kDebugMode) {
+              print("token is $token");
+            }
+            loginUser(token);
+          });
+          _isLoading = false;
+        });
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          if (kDebugMode) {
+            print('The provided phone number is not valid.');
+          }
+        } else {
+          if (kDebugMode) {
+            print(e.message);
+          }
+        }
+      },
+      codeSent: (String verificationId, int resendToken) {
+        _isLoading = false;
+        if (kDebugMode) {
+          print("Verification ID set");
+        }
+        setVerificationId(verificationId);
+        waitForOTP(true);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
   }
 
   bool _isActiveRememberMe = false;
@@ -287,12 +364,14 @@ class AuthController extends GetxController implements GetxService {
     Response res = await authRepo.sendFirebaseToken(token);
     if (res.statusCode == 200) {
       authRepo.saveUserToken(res.body['token']);
-      responseModel = ResponseModel(
-          true, '${res.body['is_phone_verified']}${res.body['token']}');
+      if (res.body['userName'] == null) {
+        responseModel = ResponseModel(true, "newuser");
+      } else {
+        responseModel = ResponseModel(true, res.body['userName']);
+      }
     } else {
       responseModel = ResponseModel(false, res.statusText);
     }
-
     return responseModel;
   }
 
@@ -303,17 +382,20 @@ class AuthController extends GetxController implements GetxService {
     return _notification;
   }
 
-  void verifyOTP(String pin) {
+  verifyOTP(String pin) async {
     _isLoading = true;
     update();
+    ResponseModel responseModel;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: pin);
-    FirebaseAuth.instance.signInWithCredential(credential).then((value) {
-      FirebaseAuth.instance.currentUser.getIdToken().then((token) {
-        loginUser(token);
-        _isLoading = false;
-      });
+    UserCredential pCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    String token = await FirebaseAuth.instance.currentUser.getIdToken();
+    await loginUser(token).then((value) {
+      responseModel = value;
+      _isLoading = false;
     });
+    return responseModel;
   }
 
   void setVerificationId(String verificationId) {

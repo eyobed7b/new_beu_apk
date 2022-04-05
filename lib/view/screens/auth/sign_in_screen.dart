@@ -30,6 +30,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:timer_button/timer_button.dart';
 
+import '../../../data/model/response/response_model.dart';
+
 class SignInScreen extends StatefulWidget {
   final bool exitFromApp;
   SignInScreen({@required this.exitFromApp});
@@ -206,8 +208,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                       !authController.isLoading
                                           ? GestureDetector(
                                               onTap: () {
-                                                authController.waitForOTP(true);
-                                                _login(authController,
+                                                authController.sendOTP(
+                                                    _phoneController,
                                                     _countryDialCode);
                                               },
                                               child: Container(
@@ -276,21 +278,24 @@ class _SignInScreenState extends State<SignInScreen> {
                                   ),
                                   SizedBox(height: 3.h),
                                   OTPTextField(
-                                    onChanged: (value) {},
-                                    length: 6,
-                                    width: 336,
-                                    fieldWidth: 50,
-                                    style: const TextStyle(fontSize: 17),
-                                    textFieldAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    fieldStyle: FieldStyle.underline,
-                                    onCompleted: (pin) {
-                                      if (kDebugMode) {
-                                        print("Completed: " + pin);
-                                      }
-                                      authController.verifyOTP(pin);
-                                    },
-                                  ),
+                                      onChanged: (value) {},
+                                      length: 6,
+                                      width: 336,
+                                      fieldWidth: 50,
+                                      style: const TextStyle(fontSize: 17),
+                                      textFieldAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      fieldStyle: FieldStyle.underline,
+                                      onCompleted: (pin) async {
+                                        if (kDebugMode) {
+                                          print("Completed: " + pin);
+                                        }
+                                        ResponseModel res =
+                                            await authController.verifyOTP(pin);
+                                        if (res.message == "newuser") {
+                                          Get.toNamed(RouteHelper.signUp);
+                                        }
+                                      }),
                                   SizedBox(height: 3.h),
                                   Align(
                                       alignment: Alignment.center,
@@ -342,77 +347,5 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
         ));
-  }
-
-  void _login(AuthController authController, String countryDialCode) async {
-    String _phone = _phoneController.text.trim();
-    String _numberWithCountryCode = countryDialCode + _phone;
-    bool _isValid = GetPlatform.isWeb ? true : false;
-    if (!GetPlatform.isWeb) {
-      try {
-        PhoneNumber phoneNumber =
-            await PhoneNumberUtil().parse(_numberWithCountryCode);
-        _numberWithCountryCode =
-            '+' + phoneNumber.countryCode + phoneNumber.nationalNumber;
-
-        _isValid = true;
-      } catch (e) {
-        if (kDebugMode) {
-          print("Phone Number: $_numberWithCountryCode");
-        }
-      }
-    }
-    if (_phone.isEmpty) {
-      showCustomSnackBar('enter_phone_number'.tr);
-    } else if (!_isValid) {
-      showCustomSnackBar('invalid_phone_number'.tr);
-    } else {
-      if (kDebugMode) {
-        print("Phone number: $_numberWithCountryCode");
-      }
-      verifyNumber(_numberWithCountryCode, authController);
-    }
-  }
-
-  verifyNumber(String phonenumber, AuthController controller) async {
-    if (kDebugMode) {
-      print("FirebaseAuth Verifying he number $phonenumber");
-    }
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phonenumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        if (kDebugMode) {
-          print("token is ${credential.token}");
-        }
-
-        FirebaseAuth.instance.signInWithCredential(credential).then((value) {
-          FirebaseAuth.instance.currentUser.getIdToken().then((token) {
-            if (kDebugMode) {
-              print("token is $token");
-            }
-            controller.loginUser(token);
-          });
-        });
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        if (e.code == 'invalid-phone-number') {
-          if (kDebugMode) {
-            print('The provided phone number is not valid.');
-          }
-        } else {
-          if (kDebugMode) {
-            print(e.message);
-          }
-        }
-      },
-      codeSent: (String verificationId, int resendToken) {
-        if (kDebugMode) {
-          print("Verification ID set");
-        }
-        controller.setVerificationId(verificationId);
-        controller.waitForOTP(true);
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
   }
 }
