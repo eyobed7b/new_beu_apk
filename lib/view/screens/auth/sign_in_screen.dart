@@ -297,13 +297,17 @@ class _SignInScreenState extends State<SignInScreen> {
                                             await authController.verifyOTP(pin);
                                         if (res.message == "newuser") {
                                           Get.toNamed(RouteHelper.signUp);
+                                        } else {
+                                          Get.toNamed(RouteHelper
+                                              .getAccessLocationRoute(
+                                                  RouteHelper.signUp));
                                         }
                                       }),
                                   SizedBox(height: 3.h),
                                   Align(
                                       alignment: Alignment.center,
                                       child: TimerButton(
-                                        label: "send_sms_again",
+                                        label: "send_sms_again".tr,
                                         buttonType: ButtonType.TextButton,
                                         timeOutInSeconds: 20,
                                         onPressed: () {
