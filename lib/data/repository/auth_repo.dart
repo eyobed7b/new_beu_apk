@@ -107,6 +107,11 @@ class AuthRepo {
         AppConstants.VERIFY_EMAIL_URI, {"email": email, "token": token});
   }
 
+  Future<Response> registerUser(String name) async {
+    return await apiClient
+        .postData(AppConstants.REGISTER_USER_URI, {"name": name});
+  }
+
   Future<Response> verifyPhone(String phone, String otp) async {
     return await apiClient
         .postData(AppConstants.VERIFY_PHONE_URI, {"phone": phone, "otp": otp});

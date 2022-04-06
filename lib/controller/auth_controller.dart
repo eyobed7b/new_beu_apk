@@ -205,6 +205,22 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
+  Future<ResponseModel> registerUser(name) async {
+    _isLoading = true;
+    update();
+
+    Response response = await authRepo.registerUser(name);
+    ResponseModel responseModel;
+    if (response.statusCode == 200) {
+      responseModel = ResponseModel(true, response.body["message"]);
+    } else {
+      responseModel = ResponseModel(false, response.statusText);
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+
   Future<ResponseModel> verifyPhone(String phone, String token) async {
     _isLoading = true;
     update();
