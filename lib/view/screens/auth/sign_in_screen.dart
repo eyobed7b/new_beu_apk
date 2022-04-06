@@ -143,7 +143,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     Positioned(
                                         bottom: 1.h,
                                         child: Text(
-                                          "Enter your phone number",
+                                          "enter_phone_number".tr,
                                           style:
                                               sfBlack.copyWith(fontSize: 3.h),
                                         ))
@@ -265,7 +265,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
-                                    "Enter the \ncode from the SMS",
+                                    "enter_the_code".tr,
                                     maxLines: 2,
                                     style: sfRegular.copyWith(
                                         fontSize: 30,
@@ -273,7 +273,10 @@ class _SignInScreenState extends State<SignInScreen> {
                                   ),
                                   SizedBox(height: 3.h),
                                   Text(
-                                    "We sent a code to $_countryDialCode ${_phoneController.text}. Please enter the code below to verify your phone number.",
+                                    "sent_the_code".tr +
+                                        _countryDialCode +
+                                        _phoneController.text +
+                                        "please_enter_code".tr,
                                     style: sfRegular.copyWith(fontSize: 16),
                                   ),
                                   SizedBox(height: 3.h),
@@ -300,10 +303,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                   Align(
                                       alignment: Alignment.center,
                                       child: TimerButton(
-                                        label: "Send OTP Again",
+                                        label: "send_sms_again",
                                         buttonType: ButtonType.TextButton,
                                         timeOutInSeconds: 20,
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          authController.sendOTP(
+                                              _phoneController,
+                                              _countryDialCode);
+                                        },
                                         disabledColor: Colors.transparent,
                                         color: Colors.transparent,
                                         disabledTextStyle: const TextStyle(
@@ -332,7 +339,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                             ])),
                                     child: Center(
                                       child: !authController.isLoading
-                                          ? Text("Next",
+                                          ? Text("next".tr,
                                               style: sfBold.copyWith(
                                                   fontSize: 18,
                                                   color: Colors.white))

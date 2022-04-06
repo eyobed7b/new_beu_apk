@@ -4,6 +4,7 @@ import 'package:country_code_picker/country_code.dart';
 import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/data/model/body/signup_body.dart';
+import 'package:efood_multivendor/data/model/response/response_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/helper/size_config.dart';
@@ -17,6 +18,7 @@ import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/auth/widget/code_picker_widget.dart';
 import 'package:efood_multivendor/view/screens/auth/widget/condition_check_box.dart';
 import 'package:efood_multivendor/view/screens/auth/widget/guest_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phone_number/phone_number.dart';
@@ -147,27 +149,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               //       ])
                               //     : Center(child: CircularProgressIndicator()),
                               SizedBox(height: 50.h),
-                              Container(
-                                height: 7.h,
-                                width: 90.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(1.5.h),
-                                    gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          Theme.of(context).primaryColor,
-                                          Theme.of(context)
-                                              .colorScheme
-                                              .secondary
-                                        ])),
-                                child: Center(
-                                  child: !authController.isLoading
-                                      ? Text("Next",
-                                          style: sfBold.copyWith(
-                                              fontSize: 18,
-                                              color: Colors.white))
-                                      : CircularProgressIndicator(),
+                              GestureDetector(
+                                onTap: () async {
+                                  _register(authController);
+                                },
+                                child: Container(
+                                  height: 7.h,
+                                  width: 90.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(1.5.h),
+                                      gradient: LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Theme.of(context).primaryColor,
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .secondary
+                                          ])),
+                                  child: Center(
+                                    child: !authController.isLoading
+                                        ? Text("next".tr,
+                                            style: sfBold.copyWith(
+                                                fontSize: 18,
+                                                color: Colors.white))
+                                        : CircularProgressIndicator(),
+                                  ),
                                 ),
                               )
                               // SocialLoginWidget(),
@@ -182,65 +190,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ));
   }
 
-  void _register(AuthController authController, String countryCode) async {
-    String _firstName = _firstNameController.text.trim();
-    String _lastName = _lastNameController.text.trim();
-    String _email = _emailController.text.trim();
-    String _number = _phoneController.text.trim();
-    String _password = _passwordController.text.trim();
-    String _confirmPassword = _confirmPasswordController.text.trim();
-
-    String _numberWithCountryCode = countryCode + _number;
-    bool _isValid = GetPlatform.isWeb ? true : false;
-    if (!GetPlatform.isWeb) {
-      try {
-        PhoneNumber phoneNumber =
-            await PhoneNumberUtil().parse(_numberWithCountryCode);
-        _numberWithCountryCode =
-            '+' + phoneNumber.countryCode + phoneNumber.nationalNumber;
-        _isValid = true;
-      } catch (e) {}
-    }
-
-    if (_firstName.isEmpty) {
-      showCustomSnackBar('enter_your_first_name'.tr);
-    } else if (_lastName.isEmpty) {
-      showCustomSnackBar('enter_your_last_name'.tr);
-    } else if (_email.isEmpty) {
-      showCustomSnackBar('enter_email_address'.tr);
-    } else if (!GetUtils.isEmail(_email)) {
-      showCustomSnackBar('enter_a_valid_email_address'.tr);
-    } else if (_number.isEmpty) {
-      showCustomSnackBar('enter_phone_number'.tr);
-    } else if (!_isValid) {
-      showCustomSnackBar('invalid_phone_number'.tr);
-    } else if (_password.isEmpty) {
-      showCustomSnackBar('enter_password'.tr);
-    } else if (_password.length < 6) {
-      showCustomSnackBar('password_should_be'.tr);
-    } else if (_password != _confirmPassword) {
-      showCustomSnackBar('confirm_password_does_not_matched'.tr);
-    } else {
-      SignUpBody signUpBody = SignUpBody(
-          fName: _firstName,
-          lName: _lastName,
-          email: _email,
-          phone: _numberWithCountryCode,
-          password: _password);
-      authController.registration(signUpBody).then((status) async {
-        if (status.isSuccess) {
-          if (Get.find<SplashController>().configModel.customerVerification) {
-            List<int> _encoded = utf8.encode(_password);
-            String _data = base64Encode(_encoded);
-            Get.toNamed(RouteHelper.getVerificationRoute(_numberWithCountryCode,
-                status.message, RouteHelper.signUp, _data));
-          } else {
-            Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
-          }
-        } else {
-          showCustomSnackBar(status.message);
-        }
-      });
-    }
+  void _register(AuthController authController) async {
+    authController.registerUser(_firstNameController.text).then((status) async {
+      if (status.isSuccess) {
+        Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
+      } else {
+        showCustomSnackBar(status.message);
+      }
+    });
   }
 }
