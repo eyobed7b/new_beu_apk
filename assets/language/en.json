@@ -369,5 +369,6 @@
   "send_sms_again" : "Send SMS again",
   "enter_the_code" : "Enter the \ncode the SMS",
   "sent_the_code" : "We sent a code to",
-  "please_enter_code" :  "Please enter the code below to verify your phone number."
+  "please_enter_code" :  "Please enter the code below to verify your phone number.",
+  "all_rest_desc": "Discover new tastes near you"
 }
