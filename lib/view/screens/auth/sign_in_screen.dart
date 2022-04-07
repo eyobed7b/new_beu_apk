@@ -295,13 +295,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                         }
                                         ResponseModel res =
                                             await authController.verifyOTP(pin);
-                                        if (res.message == "newuser") {
-                                          Get.toNamed(RouteHelper.signUp);
-                                        } else {
-                                          Get.toNamed(RouteHelper
-                                              .getAccessLocationRoute(
-                                                  RouteHelper.signUp));
-                                        }
                                       }),
                                   SizedBox(height: 3.h),
                                   Align(
