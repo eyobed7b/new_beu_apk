@@ -1,3 +1,4 @@
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
@@ -41,36 +42,47 @@ class CustomButton extends StatelessWidget {
 
     return Center(
         child: SizedBox(
-            width: width != null ? width : Dimensions.WEB_MAX_WIDTH,
+            width: width != null ? width : Dimensions.WEB_MAX_WIDTH * 2.9,
             child: Padding(
-              padding: margin == null ? EdgeInsets.all(0) : margin,
-              child: TextButton(
-                onPressed: onPressed,
-                style: _flatButtonStyle,
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  icon != null
-                      ? Padding(
-                          padding: EdgeInsets.only(
-                              right: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                          child: Icon(icon,
-                              color: transparent
-                                  ? Theme.of(context).primaryColor
-                                  : Theme.of(context).cardColor),
-                        )
-                      : SizedBox(),
-                  Text(buttonText ?? '',
-                      textAlign: TextAlign.center,
-                      style: sfBold.copyWith(
+                padding: margin == null ? EdgeInsets.all(0) : margin,
+                child: GestureDetector(
+                  onTap: onPressed,
+                  child: Container(
+                    height: 6.h,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(radius),
                         color: transparent
-                            ? Theme.of(context).primaryColor
-                            : Theme.of(context).cardColor,
-                        fontSize: fontSize != null
-                            ? fontSize
-                            : Dimensions.fontSizeLarge,
-                      )),
-                ]),
-              ),
-            )));
+                            ? Colors.transparent
+                            : Theme.of(context).primaryColor,
+                        gradient: LinearGradient(
+                          colors: [Color(0xffff8022), Color(0xffff2222)],
+                        )),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          icon != null
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                      right:
+                                          Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                  child: Icon(icon,
+                                      color: transparent
+                                          ? Theme.of(context).primaryColor
+                                          : Theme.of(context).cardColor),
+                                )
+                              : SizedBox(),
+                          Text(buttonText ?? '',
+                              textAlign: TextAlign.center,
+                              style: sfBold.copyWith(
+                                color: transparent
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).cardColor,
+                                fontSize: fontSize != null
+                                    ? fontSize
+                                    : Dimensions.fontSizeLarge,
+                              )),
+                        ]),
+                  ),
+                ))));
   }
 }
