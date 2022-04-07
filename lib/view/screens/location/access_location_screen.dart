@@ -157,30 +157,33 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                             ],
                           ),
                           width: MediaQuery.of(context).size.width / 1.1,
-                          child: Center(
-                            child: TextFormField(
-                              onTap: () =>
-                                  Get.toNamed(RouteHelper.getPickMapRoute(
-                                widget.route == null
-                                    ? widget.fromSignUp
-                                        ? RouteHelper.signUp
-                                        : RouteHelper.accessLocation
-                                    : widget.route,
-                                widget.route != null,
-                              )),
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  FeatherIcons.search,
-                                  color: Colors.black,
+                          child: Hero(
+                            tag: "SearchLocation",
+                            child: Center(
+                              child: TextFormField(
+                                onTap: () => Get.toNamed(
+                                    RouteHelper.getSearchLoactionRoute(
+                                  widget.route == null
+                                      ? widget.fromSignUp
+                                          ? RouteHelper.signUp
+                                          : RouteHelper.accessLocation
+                                      : widget.route,
+                                  widget.route != null,
+                                )),
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(
+                                    FeatherIcons.search,
+                                    color: Colors.black,
+                                  ),
+                                  hintText: 'search_address_here'.tr,
+                                  hintStyle: sfRegular.copyWith(
+                                      fontSize: Dimensions.fontSizeSmall * 1.5),
+                                  border: InputBorder.none,
                                 ),
-                                hintText: 'search_address_here'.tr,
-                                hintStyle: sfRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeSmall * 1.5),
-                                border: InputBorder.none,
+                                onChanged: (value) {
+                                  // locationController.setAddress(value);
+                                },
                               ),
-                              onChanged: (value) {
-                                // locationController.setAddress(value);
-                              },
                             ),
                           )),
                       SizedBox(
