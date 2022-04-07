@@ -365,9 +365,11 @@
   "are_you_sure_want_to_delete_address": "Are you sure want to delete address",
   "join_us": "Join Us",
   "fill_in_info": "Fill in your info to get started",
-  "fill_in_info_desc": "This data will be displayed in your account profile for security",
-  "send_sms_again": "Send SMS again",
-  "enter_the_code": "Enter the \ncode the SMS",
-  "sent_the_code": "We sent a code to",
-  "please_enter_code": "Please enter the code below to verify your phone number."
+  "fill_in_info_desc" : "This data will be displayed in your account profile for security",
+  "send_sms_again" : "Send SMS again",
+  "enter_the_code" : "Enter the \ncode the SMS",
+  "sent_the_code" : "We sent a code to",
+  "please_enter_code" :  "Please enter the code below to verify your phone number.",
+  "all_rest_desc": "Discover new tastes near you"
+
 }

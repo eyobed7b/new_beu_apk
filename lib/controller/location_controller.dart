@@ -391,14 +391,11 @@ class LocationController extends GetxController implements GetxService {
     }
     HomeScreen.loadData(false);
     Get.find<OrderController>().clearPrevData();
-    if (fromSignUp) {
-      Get.offAllNamed(RouteHelper.getInterestRoute());
+
+    if (route != null && canRoute) {
+      Get.offAllNamed(route);
     } else {
-      if (route != null && canRoute) {
-        Get.offAllNamed(route);
-      } else {
-        Get.offAllNamed(RouteHelper.getInitialRoute());
-      }
+      Get.offAllNamed(RouteHelper.getInitialRoute());
     }
   }
 
