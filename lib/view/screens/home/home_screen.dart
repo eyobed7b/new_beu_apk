@@ -54,6 +54,7 @@ class HomeScreen extends StatelessWidget {
           ? Theme.of(context).cardColor
           : null,
       body: SafeArea(
+        bottom: false,
         child: RefreshIndicator(
           onRefresh: () async {
             await Get.find<BannerController>().getBannerList(true);

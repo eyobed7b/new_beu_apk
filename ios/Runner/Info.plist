@@ -18,6 +18,25 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.1049699819506-2magqnhq5chvmvj75v287hngt3qb13rr</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-697591541278-ios-e403a6b31588b8cacbc80f</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -56,18 +75,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CFBundleURLTypes</key>
-    <array>
-    	<dict>
-    		<key>CFBundleTypeRole</key>
-    		<string>Editor</string>
-    		<key>CFBundleURLSchemes</key>
-    		<array>
-    			<!-- TODO Replace this value: -->
-    			<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
-    			<string>com.googleusercontent.apps.1049699819506-2magqnhq5chvmvj75v287hngt3qb13rr</string>
-    		</array>
-    	</dict>
-    </array>
 </dict>
 </plist>

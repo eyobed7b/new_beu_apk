@@ -21,7 +21,7 @@ class ProfileBgWidget extends StatelessWidget {
           width: context.width,
           height: 260,
           child: Center(
-              child: Image.asset(Images.profile_bg,
+              child: Image.asset(Images.restaurant_join,
                   height: 260,
                   width: Dimensions.WEB_MAX_WIDTH,
                   fit: BoxFit.fill)),
@@ -50,8 +50,9 @@ class ProfileBgWidget extends StatelessWidget {
             'profile'.tr,
             textAlign: TextAlign.center,
             style: sfRegular.copyWith(
-                fontSize: Dimensions.fontSizeLarge,
-                color: Theme.of(context).cardColor),
+              fontSize: Dimensions.fontSizeLarge * 1.4,
+              color: Colors.black,
+            ),
           ),
         ),
         backButton
@@ -59,8 +60,8 @@ class ProfileBgWidget extends StatelessWidget {
                 top: MediaQuery.of(context).padding.top,
                 left: 10,
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios,
-                      color: Theme.of(context).cardColor, size: 20),
+                  icon:
+                      Icon(Icons.arrow_back_ios, color: Colors.black, size: 25),
                   onPressed: () => Get.back(),
                 ),
               )

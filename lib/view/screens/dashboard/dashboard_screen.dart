@@ -15,6 +15,8 @@ import 'package:get/get.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 
+import '../profile/profile_screen.dart';
+
 class DashboardScreen extends StatefulWidget {
   final int pageIndex;
   DashboardScreen({@required this.pageIndex});
@@ -44,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // FavouriteScreen(),
       // CartScreen(fromNav: true),
       // OrderScreen(),
-      Container(),
+      ProfileScreen(),
     ];
 
     Future.delayed(Duration(seconds: 1), () {
@@ -92,7 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             : DotNavigationBar(
                 enablePaddingAnimation: false,
                 // enableFloatingNavBar: false,
-                borderRadius: 10,
+                borderRadius: 22,
                 // itemPadding: EdgeInsets.only(
                 //     left: getProportionateScreenWidth(0),
                 //     right: getProportionateScreenWidth(10)),
@@ -102,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     right: 0),
                 dotIndicatorColor: Colors.transparent,
                 backgroundColor: Colors.white,
-                marginR: EdgeInsets.symmetric(horizontal: 18, vertical: (15)),
+                marginR: EdgeInsets.symmetric(horizontal: 18, vertical: (0)),
                 paddingR: EdgeInsets.only(bottom: 10, top: 10, right: 10),
 
                 boxShadow: [

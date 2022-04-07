@@ -330,7 +330,7 @@
   "we_are_under_maintenance": "We Are Under Maintenance",
   "we_will_be_right_back": "We Will Be Right Back",
   "are_you_sure_to_switch": "Are you sure you want to switch this order to Cash On Delivery?",
-  "search_location": "Search Location",
+  "search_location": "    Search Location",
   "profile_updated_successfully": "Profile updated successfully",
   "password_updated_successfully": "Password updated successfully",
   "new_address_added_successfully": "New address added successfully",
@@ -371,4 +371,5 @@
   "sent_the_code" : "We sent a code to",
   "please_enter_code" :  "Please enter the code below to verify your phone number.",
   "all_rest_desc": "Discover new tastes near you"
+
 }
