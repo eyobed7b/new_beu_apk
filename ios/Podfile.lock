@@ -10,11 +10,18 @@ PODS:
   - FBSDKCoreKit_Basics (12.1.0)
   - FBSDKLoginKit (12.1.0):
     - FBSDKCoreKit (= 12.1.0)
+  - Firebase/Auth (8.14.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 8.14.0)
   - Firebase/CoreOnly (8.14.0):
     - FirebaseCore (= 8.14.0)
   - Firebase/Messaging (8.14.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 8.14.0)
+  - firebase_auth (3.3.12):
+    - Firebase/Auth (= 8.14.0)
+    - firebase_core
+    - Flutter
   - firebase_core (1.14.0):
     - Firebase/CoreOnly (= 8.14.0)
     - Flutter
@@ -22,6 +29,11 @@ PODS:
     - Firebase/Messaging (= 8.14.0)
     - firebase_core
     - Flutter
+  - FirebaseAuth (8.14.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GTMSessionFetcher/Core (~> 1.5)
   - FirebaseCore (8.14.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
@@ -88,6 +100,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
+  - GTMSessionFetcher/Core (1.7.1)
   - image_picker (0.0.1):
     - Flutter
   - nanopb (2.30908.0):
@@ -115,6 +128,7 @@ PODS:
 
 DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
+  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
@@ -138,6 +152,7 @@ SPEC REPOS:
     - FBSDKCoreKit_Basics
     - FBSDKLoginKit
     - Firebase
+    - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseInstallations
@@ -146,6 +161,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleMaps
     - GoogleUtilities
+    - GTMSessionFetcher
     - nanopb
     - PhoneNumberKit
     - PromisesObjC
@@ -154,6 +170,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
+  firebase_auth:
+    :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -192,8 +210,10 @@ SPEC CHECKSUMS:
   FBSDKCoreKit_Basics: 39865aff97e5f6951a78fb3e89dc4460e35e1895
   FBSDKLoginKit: e993f97c7cc794c5da4056d8aec3c3d66033a727
   Firebase: 7e8fe528c161b9271d365217a74c16aaf834578e
+  firebase_auth: 363370737d33bad09a838cd109f7589bc48533cd
   firebase_core: b0b382f1497ab407aceb25e41e3036c8798c1609
   firebase_messaging: 34dd10d1aa6d8f40d03660eeacd0452d62eec7aa
+  FirebaseAuth: c5fde343630090253d3af7e2d35697b414b40202
   FirebaseCore: b84a44ee7ba999e0f9f76d198a9c7f60a797b848
   FirebaseCoreDiagnostics: fd0c8490f34287229c1d6c103d3a55f81ec85712
   FirebaseInstallations: 7d1d967a307c12f1aadd76844fc321cef699b1ce
@@ -208,6 +228,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleMaps: eb03e327edfd70b06de1e6e321653f73712df7ad
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  GTMSessionFetcher: 4577a4cc914a5a07c40a8a0ad0acc22080418c2d
   image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
