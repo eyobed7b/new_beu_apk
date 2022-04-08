@@ -1,4 +1,5 @@
 import 'package:efood_multivendor/controller/auth_controller.dart';
+import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/restaurant_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/controller/wishlist_controller.dart';
@@ -142,8 +143,8 @@ class ProductWidget extends StatelessWidget {
                     image:
                         '${isCampaign ? _baseUrls.campaignImageUrl : isRestaurant ? UtilFunctions.startsWitHTTP(restaurant.logo) ? "" : "${_baseUrls.restaurantImageUrl}/" : UtilFunctions.startsWitHTTP(product.image) ? "" : "${_baseUrls.productImageUrl}/"}'
                         '${isRestaurant ? restaurant.logo : product.image}',
-                    height: _desktop ? 120 : 15.h,
-                    width: _desktop ? 120 : 15.h,
+                    height: _desktop ? 120 : 12.h,
+                    width: _desktop ? 120 : 12.h,
                     fit: BoxFit.cover,
                   ),
                   isRestaurant
@@ -170,8 +171,10 @@ class ProductWidget extends StatelessWidget {
                       Text(
                         isRestaurant ? restaurant.name : product.name,
                         style: sfBold.copyWith(
-                            fontSize: Dimensions.fontSizeDefault),
-                        maxLines: _desktop ? 2 : 1,
+                            fontSize: isRestaurant
+                                ? Dimensions.fontSizeDefault
+                                : Dimensions.fontSizeLarge),
+                        maxLines: _desktop ? 3 : 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(
@@ -199,26 +202,10 @@ class ProductWidget extends StatelessWidget {
                                 ),
                               ],
                             )
-                          : Text(
-                              product.restaurantName ?? '',
-                              style: sfRegular.copyWith(
-                                fontSize: Dimensions.fontSizeExtraSmall,
-                                color: Theme.of(context).disabledColor,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          : SizedBox(),
                       SizedBox(height: (_desktop || isRestaurant) ? 5 : 0),
                       !isRestaurant
-                          ? RatingBar(
-                              rating: isRestaurant
-                                  ? restaurant.avgRating
-                                  : product.avgRating,
-                              size: _desktop ? 15 : 12,
-                              ratingCount: isRestaurant
-                                  ? restaurant.ratingCount
-                                  : product.ratingCount,
-                            )
+                          ? Expanded(child: SizedBox())
                           : Row(
                               children: [
                                 Icon(
@@ -277,7 +264,7 @@ class ProductWidget extends StatelessWidget {
                                     discount: _discount,
                                     discountType: _discountType),
                                 style: sfMedium.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraSmall),
+                                    fontSize: Dimensions.fontSizeLarge),
                               ),
                               SizedBox(
                                   width: _discount > 0
@@ -295,56 +282,43 @@ class ProductWidget extends StatelessWidget {
                                     )
                                   : SizedBox(),
                             ]),
+                      Expanded(child: SizedBox())
                     ]),
               ),
-              Column(
-                  mainAxisAlignment: isRestaurant
-                      ? MainAxisAlignment.center
-                      : MainAxisAlignment.spaceBetween,
-                  children: [
-                    !isRestaurant
-                        ? Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: _desktop
-                                    ? Dimensions.PADDING_SIZE_SMALL
-                                    : 0),
-                            child: Icon(Icons.add, size: _desktop ? 30 : 25),
-                          )
-                        : SizedBox(),
-                    // GetBuilder<WishListController>(builder: (wishController) {
-                    //   bool _isWished = isRestaurant
-                    //       ? wishController.wishRestIdList
-                    //           .contains(restaurant.id)
-                    //       : wishController.wishProductIdList
-                    //           .contains(product.id);
-                    //   return InkWell(
-                    //     onTap: () {
-                    //       if (Get.find<AuthController>().isLoggedIn()) {
-                    //         _isWished
-                    //             ? wishController.removeFromWishList(
-                    //                 isRestaurant ? restaurant.id : product.id,
-                    //                 isRestaurant)
-                    //             : wishController.addToWishList(
-                    //                 product, restaurant, isRestaurant);
-                    //       } else {
-                    //         showCustomSnackBar('you_are_not_logged_in'.tr);
-                    //       }
-                    //     },
-                    //     child: Padding(
-                    //       padding: EdgeInsets.symmetric(
-                    //           vertical:
-                    //               _desktop ? Dimensions.PADDING_SIZE_SMALL : 0),
-                    //       child: Icon(
-                    //         _isWished ? Icons.favorite : Icons.favorite_border,
-                    //         size: _desktop ? 30 : 25,
-                    //         color: _isWished
-                    //             ? Theme.of(context).primaryColor
-                    //             : Theme.of(context).disabledColor,
-                    //       ),
-                    //     ),
-                    //   );
-                    // }),
-                  ]),
+
+              !isRestaurant
+                  ?
+                  // padding: EdgeInsets.symmetric(
+                  //     vertical:
+                  //         _desktop ? Dimensions.PADDING_SIZE_SMALL : 0,
+                  //     horizontal: Dimensions.PADDING_SIZE_SMALL),
+                  Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              Dimensions.PADDING_SIZE_EXTRA_SMALL)),
+                          border: Border.all(
+                              color: Theme.of(context).primaryColor)),
+                      width: 18.w,
+                      height: 3.5.h,
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add,
+                              size: _desktop ? 30 : 25,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            Text("add".tr,
+                                style: sfRegular.copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                ))
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
             ]),
           )),
           _desktop
