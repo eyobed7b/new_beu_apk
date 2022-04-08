@@ -59,4 +59,5 @@ class Images {
   static const String illustration = 'assets/image/illustration.png';
   static const String setLocation = 'assets/image/Set_Location.png';
   static const String location_gps = 'assets/icons/location.svg';
+  static const String exit = 'assets/image/exit.png';
 }
