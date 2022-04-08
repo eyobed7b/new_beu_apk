@@ -310,6 +310,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             // : SizedBox(),
                             : RestaurantDescriptionView(
                                 restaurant: _restaurant),
+                        // SliverToBoxAdapter(
+                        //   child: SizedBox(height: 5.h),
+                        // ),
                         _restaurant.discount != null
                             ? Container(
                                 width: context.width,
@@ -412,6 +415,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             ))),
                           )
                         : SliverToBoxAdapter(child: SizedBox()),
+                    SliverToBoxAdapter(
+                        child: SizedBox(
+                      height: 2.h,
+                    )),
                     SliverToBoxAdapter(
                         child: Center(
                             child: Container(
