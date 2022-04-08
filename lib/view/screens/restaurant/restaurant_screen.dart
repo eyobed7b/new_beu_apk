@@ -87,7 +87,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               restController.restaurant.name != null &&
               categoryController.categoryList != null) {
             _restaurant = restController.restaurant;
+
+            DateConverter.isAvailable(
+                _restaurant.openingTime, _restaurant.closeingTime);
           }
+
           restController.setCategoryList();
 
           return (restController.restaurant != null &&
@@ -144,15 +148,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             floating: false,
                             backgroundColor: Theme.of(context).primaryColor,
                             leading: IconButton(
-                              icon: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Theme.of(context).primaryColor),
-                                alignment: Alignment.center,
-                                child: Icon(Icons.chevron_left,
-                                    color: Theme.of(context).cardColor),
+                              icon: Icon(
+                                Icons.chevron_left,
+                                color: Theme.of(context).cardColor,
+                                size: 5.h,
                               ),
                               onPressed: () => Get.back(),
                             ),
@@ -186,6 +185,34 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                           Colors.black.withOpacity(0.5),
                                         ],
                                       ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 2.w,
+                                  top: 4.h,
+                                  child: Container(
+                                    padding: EdgeInsets.all(7),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.topRight,
+                                        colors: [
+                                          Theme.of(context).primaryColor,
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ],
+                                      ),
+                                    ),
+                                    // width: 10.w,
+                                    // height: 3.w,
+                                    child: Text(
+                                      "Open now",
+                                      style:
+                                          sfBold.copyWith(color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -252,24 +279,24 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                 )
                               ]),
                             ),
-                            actions: [
-                              IconButton(
-                                onPressed: () =>
-                                    Get.toNamed(RouteHelper.getCartRoute()),
-                                icon: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Theme.of(context).primaryColor),
-                                  alignment: Alignment.center,
-                                  child: CartWidget(
-                                      color: Theme.of(context).cardColor,
-                                      size: 15,
-                                      fromRestaurant: true),
-                                ),
-                              )
-                            ],
+                            // actions: [
+                            //   IconButton(
+                            //     onPressed: () =>
+                            //         Get.toNamed(RouteHelper.getCartRoute()),
+                            //     icon: Container(
+                            //       height: 50,
+                            //       width: 50,
+                            //       decoration: BoxDecoration(
+                            //           shape: BoxShape.circle,
+                            //           color: Theme.of(context).primaryColor),
+                            //       alignment: Alignment.center,
+                            //       child: CartWidget(
+                            //           color: Theme.of(context).cardColor,
+                            //           size: 15,
+                            //           fromRestaurant: true),
+                            //     ),
+                            //   )
+                            // ],
                           ),
                     SliverToBoxAdapter(
                         child: Center(

@@ -7,6 +7,7 @@ import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
@@ -61,6 +62,10 @@ class RestaurantDescriptionView extends StatelessWidget {
             ]),
           ]),
         ),
+        Container(
+          color: Colors.black,
+          width: 2.w,
+        ),
         Expanded(child: SizedBox()),
         Column(children: [
           Text(
@@ -80,11 +85,15 @@ class RestaurantDescriptionView extends StatelessWidget {
             ),
           ])
         ]),
+        Container(
+          color: Colors.black,
+          width: 2.w,
+        ),
         Expanded(child: SizedBox()),
         Column(children: [
           Text('delivery_time'.tr,
               style: sfRegular.copyWith(
-                  fontSize: Dimensions.fontSizeSmall, color: _textColor)),
+                  fontSize: Dimensions.fontSizeSmall, color: Colors.grey)),
           SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
           Row(children: [
             Icon(FeatherIcons.truck,
@@ -93,7 +102,7 @@ class RestaurantDescriptionView extends StatelessWidget {
             Text(
               '${restaurant.deliveryTime} ${'min'.tr}',
               style: sfMedium.copyWith(
-                  fontSize: Dimensions.fontSizeSmall, color: _textColor),
+                  fontSize: Dimensions.fontSizeSmall, color: Colors.black),
             ),
           ]),
         ]),
