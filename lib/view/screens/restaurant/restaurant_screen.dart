@@ -17,6 +17,7 @@ import 'package:efood_multivendor/view/base/cart_widget.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/product_view.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
+import 'package:efood_multivendor/view/screens/restaurant/widget/category_list.dart';
 import 'package:efood_multivendor/view/screens/restaurant/widget/restaurant_description_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -32,7 +33,6 @@ class RestaurantScreen extends StatefulWidget {
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
   final ScrollController scrollController = ScrollController();
-  final bool _ltr = Get.find<LocalizationController>().isLtr;
 
   @override
   void initState() {
@@ -364,7 +364,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             delegate: SliverDelegate(
                                 child: Center(
                                     child: Container(
-                              height: 50,
+                              height: 40,
                               width: Dimensions.WEB_MAX_WIDTH,
                               color: Theme.of(context).cardColor,
                               padding: EdgeInsets.symmetric(
@@ -377,94 +377,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                     left: Dimensions.PADDING_SIZE_SMALL),
                                 physics: BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () =>
-                                        restController.setCategoryIndex(index),
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                        left: index == 0
-                                            ? Dimensions.PADDING_SIZE_LARGE
-                                            : Dimensions.PADDING_SIZE_SMALL,
-                                        right: index ==
-                                                restController
-                                                        .categoryList.length -
-                                                    1
-                                            ? Dimensions.PADDING_SIZE_LARGE
-                                            : Dimensions.PADDING_SIZE_SMALL,
-                                        top: Dimensions.PADDING_SIZE_SMALL,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.horizontal(
-                                          left: Radius.circular(
-                                            _ltr
-                                                ? index == 0
-                                                    ? Dimensions
-                                                        .RADIUS_EXTRA_LARGE
-                                                    : 0
-                                                : index ==
-                                                        restController
-                                                                .categoryList
-                                                                .length -
-                                                            1
-                                                    ? Dimensions
-                                                        .RADIUS_EXTRA_LARGE
-                                                    : 0,
-                                          ),
-                                          right: Radius.circular(
-                                            _ltr
-                                                ? index ==
-                                                        restController
-                                                                .categoryList
-                                                                .length -
-                                                            1
-                                                    ? Dimensions
-                                                        .RADIUS_EXTRA_LARGE
-                                                    : 0
-                                                : index == 0
-                                                    ? Dimensions
-                                                        .RADIUS_EXTRA_LARGE
-                                                    : 0,
-                                          ),
-                                        ),
-                                        color: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.1),
-                                      ),
-                                      child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              restController
-                                                  .categoryList[index].name,
-                                              style: index ==
-                                                      restController
-                                                          .categoryIndex
-                                                  ? sfMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeSmall,
-                                                      color: Theme.of(context)
-                                                          .primaryColor)
-                                                  : sfRegular.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeSmall,
-                                                      color: Theme.of(context)
-                                                          .disabledColor),
-                                            ),
-                                            index ==
-                                                    restController.categoryIndex
-                                                ? Container(
-                                                    height: 5,
-                                                    width: 5,
-                                                    decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                        shape: BoxShape.circle),
-                                                  )
-                                                : SizedBox(height: 5, width: 5),
-                                          ]),
-                                    ),
-                                  );
+                                  return CategoryTabItem(
+                                      index: index,
+                                      restController: restController);
                                 },
                               ),
                             ))),
