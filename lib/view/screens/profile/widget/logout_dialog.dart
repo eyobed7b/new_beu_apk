@@ -10,10 +10,12 @@ import '../../../../util/images.dart';
 import '../../../base/custom_button.dart';
 
 void showCustomDialog(BuildContext context) {
-  showDialog(
+  showGeneralDialog(
+    barrierLabel: "Barrier",
     barrierDismissible: true,
+    transitionDuration: const Duration(milliseconds: 400),
     context: context,
-    builder: (BuildContext cxt) {
+    pageBuilder: (_, __, ___) {
       return Align(
         alignment: Alignment.center,
         child: Padding(
@@ -79,6 +81,13 @@ void showCustomDialog(BuildContext context) {
             ),
           ),
         ),
+      );
+    },
+    transitionBuilder: (_, anim, __, child) {
+      return SlideTransition(
+        position: Tween(begin: const Offset(0.5, 0), end: const Offset(0, 0))
+            .animate(anim),
+        child: child,
       );
     },
   );
