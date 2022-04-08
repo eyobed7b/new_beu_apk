@@ -146,7 +146,9 @@ class ProductWidget extends StatelessWidget {
                     width: _desktop ? 120 : 15.h,
                     fit: BoxFit.cover,
                   ),
-                  RatingTag(rating: restaurant.avgRating),
+                  isRestaurant
+                      ? RatingTag(rating: restaurant.avgRating)
+                      : SizedBox(),
                   _isAvailable
                       ? SizedBox()
                       : NotAvailableWidget(isRestaurant: isRestaurant),

@@ -9,6 +9,7 @@ import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
@@ -18,6 +19,7 @@ import 'package:efood_multivendor/view/base/product_view.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/restaurant/widget/restaurant_description_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
 class RestaurantScreen extends StatefulWidget {
@@ -155,12 +157,100 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                               onPressed: () => Get.back(),
                             ),
                             flexibleSpace: FlexibleSpaceBar(
-                              background: CustomImage(
-                                fit: BoxFit.cover,
-                                placeholder: Images.restaurant_cover,
-                                image:
-                                    '${Get.find<SplashController>().configModel.baseUrls.restaurantCoverPhotoUrl}/${_restaurant.coverPhoto}',
-                              ),
+                              background: Stack(children: [
+                                Container(
+                                  decoration:
+                                      BoxDecoration(color: Colors.white),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.vertical(
+                                          bottom: Radius.circular(10)),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: CustomImage(
+                                        height: 35.h,
+                                        fit: BoxFit.cover,
+                                        placeholder: Images.restaurant_cover,
+                                        image: '${_restaurant.coverPhoto}',
+                                      )),
+                                ),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Container(
+                                    height: 35.h,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(0.5),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 5,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 5.w, bottom: 1.h),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(2.h),
+                                          clipBehavior: Clip.hardEdge,
+                                          child: CustomImage(
+                                              image: _restaurant.logo,
+                                              height: 8.h,
+                                              width: 8.h),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 0.7.h),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                _restaurant.name,
+                                                style: sfBlack.copyWith(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ),
+                                              SizedBox(
+                                                height: 0.6.h,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    FeatherIcons.mapPin,
+                                                    color: Colors.white,
+                                                    size: 2.h,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    _restaurant.address ??
+                                                        "No address set",
+                                                    style: sfRegular.copyWith(
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ]),
                             ),
                             actions: [
                               IconButton(
@@ -190,6 +280,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                       child: Column(children: [
                         ResponsiveHelper.isDesktop(context)
                             ? SizedBox()
+                            // : SizedBox(),
                             : RestaurantDescriptionView(
                                 restaurant: _restaurant),
                         _restaurant.discount != null

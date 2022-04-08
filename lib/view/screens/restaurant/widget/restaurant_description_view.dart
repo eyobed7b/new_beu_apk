@@ -12,7 +12,11 @@ import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+
+import 'package:intl/intl.dart';
 
 import '../../../../util/functions.dart';
 
@@ -24,105 +28,11 @@ class RestaurantDescriptionView extends StatelessWidget {
   Widget build(BuildContext context) {
     Color _textColor =
         ResponsiveHelper.isDesktop(context) ? Colors.white : null;
+    // String openingtime =
+    //     DateFormat("hh:mm a").format(Time(restaurant.openingTime));
+    // String closingtime =
+    //     DateFormat("hh:mm a").format(Time.parse(restaurant.closeingTime));
     return Column(children: [
-      Row(children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-          child: CustomImage(
-            image: UtilFunctions.startsWitHTTP(restaurant.logo)
-                ? restaurant.logo
-                : '${Get.find<SplashController>().configModel.baseUrls.restaurantImageUrl}/${restaurant.logo}',
-            height: ResponsiveHelper.isDesktop(context) ? 80 : 60,
-            width: ResponsiveHelper.isDesktop(context) ? 100 : 70,
-            fit: BoxFit.cover,
-          ),
-        ),
-        SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-        Expanded(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            restaurant.name,
-            style: sfMedium.copyWith(
-                fontSize: Dimensions.fontSizeLarge, color: _textColor),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(
-              height: ResponsiveHelper.isDesktop(context)
-                  ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                  : 0),
-          Text(
-            restaurant.address ?? '',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: sfRegular.copyWith(
-                fontSize: Dimensions.fontSizeSmall,
-                color: Theme.of(context).disabledColor),
-          ),
-          SizedBox(
-              height: ResponsiveHelper.isDesktop(context)
-                  ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                  : 0),
-          restaurant.openingTime != null
-              ? Row(children: [
-                  Text('daily_time'.tr,
-                      style: sfRegular.copyWith(
-                        fontSize: Dimensions.fontSizeExtraSmall,
-                        color: Theme.of(context).disabledColor,
-                      )),
-                  SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  Text(
-                    '${DateConverter.convertTimeToTime(restaurant.openingTime)}'
-                    ' - ${DateConverter.convertTimeToTime(restaurant.closeingTime)}',
-                    style: sfMedium.copyWith(
-                        fontSize: Dimensions.fontSizeExtraSmall,
-                        color: Theme.of(context).primaryColor),
-                  ),
-                ])
-              : SizedBox(),
-          SizedBox(
-              height: ResponsiveHelper.isDesktop(context)
-                  ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                  : 0),
-          Row(children: [
-            Text('minimum_order'.tr,
-                style: sfRegular.copyWith(
-                  fontSize: Dimensions.fontSizeExtraSmall,
-                  color: Theme.of(context).disabledColor,
-                )),
-            SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-            Text(
-              PriceConverter.convertPrice(restaurant.minimumOrder),
-              style: sfMedium.copyWith(
-                  fontSize: Dimensions.fontSizeExtraSmall,
-                  color: Theme.of(context).primaryColor),
-            ),
-          ]),
-        ])),
-        SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-        GetBuilder<WishListController>(builder: (wishController) {
-          bool _isWished =
-              wishController.wishRestIdList.contains(restaurant.id);
-          return InkWell(
-            onTap: () {
-              if (Get.find<AuthController>().isLoggedIn()) {
-                _isWished
-                    ? wishController.removeFromWishList(restaurant.id, true)
-                    : wishController.addToWishList(null, restaurant, true);
-              } else {
-                showCustomSnackBar('you_are_not_logged_in'.tr);
-              }
-            },
-            child: Icon(
-              _isWished ? Icons.favorite : Icons.favorite_border,
-              color: _isWished
-                  ? Theme.of(context).primaryColor
-                  : Theme.of(context).disabledColor,
-            ),
-          );
-        }),
-      ]),
       SizedBox(
           height: ResponsiveHelper.isDesktop(context)
               ? 30
@@ -133,8 +43,15 @@ class RestaurantDescriptionView extends StatelessWidget {
           onTap: () =>
               Get.toNamed(RouteHelper.getRestaurantReviewRoute(restaurant.id)),
           child: Column(children: [
+            Text(
+              'rating'.tr,
+              style: sfRegular.copyWith(
+                  fontSize: Dimensions.fontSizeSmall, color: _textColor),
+            ),
+            SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Row(children: [
-              Icon(Icons.star, color: Theme.of(context).primaryColor, size: 20),
+              Icon(FeatherIcons.star,
+                  color: Theme.of(context).primaryColor, size: 20),
               SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
               Text(
                 restaurant.avgRating.toStringAsFixed(1),
@@ -142,41 +59,36 @@ class RestaurantDescriptionView extends StatelessWidget {
                     fontSize: Dimensions.fontSizeSmall, color: _textColor),
               ),
             ]),
-            SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-            Text(
-              '${restaurant.ratingCount} ${'ratings'.tr}',
-              style: sfRegular.copyWith(
-                  fontSize: Dimensions.fontSizeSmall, color: _textColor),
-            ),
-          ]),
-        ),
-        Expanded(child: SizedBox()),
-        InkWell(
-          onTap: () => Get.toNamed(RouteHelper.getMapRoute(
-            AddressModel(
-              id: restaurant.id,
-              address: restaurant.address,
-              latitude: restaurant.latitude,
-              longitude: restaurant.longitude,
-              contactPersonNumber: '',
-              contactPersonName: '',
-              addressType: '',
-            ),
-            'restaurant',
-          )),
-          child: Column(children: [
-            Icon(Icons.location_on,
-                color: Theme.of(context).primaryColor, size: 20),
-            SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-            Text('location'.tr,
-                style: sfRegular.copyWith(
-                    fontSize: Dimensions.fontSizeSmall, color: _textColor)),
           ]),
         ),
         Expanded(child: SizedBox()),
         Column(children: [
+          Text(
+            'working_hours'.tr,
+            style: sfRegular.copyWith(
+                fontSize: Dimensions.fontSizeSmall, color: _textColor),
+          ),
+          SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
           Row(children: [
-            Icon(Icons.timer, color: Theme.of(context).primaryColor, size: 20),
+            Icon(FeatherIcons.clock,
+                color: Theme.of(context).primaryColor, size: 20),
+            SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+            Text(
+              "${restaurant.openingTime.toString()} - ${restaurant.closeingTime.toString()}",
+              style: sfMedium.copyWith(
+                  fontSize: Dimensions.fontSizeSmall, color: _textColor),
+            ),
+          ])
+        ]),
+        Expanded(child: SizedBox()),
+        Column(children: [
+          Text('delivery_time'.tr,
+              style: sfRegular.copyWith(
+                  fontSize: Dimensions.fontSizeSmall, color: _textColor)),
+          SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+          Row(children: [
+            Icon(FeatherIcons.truck,
+                color: Theme.of(context).primaryColor, size: 20),
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(
               '${restaurant.deliveryTime} ${'min'.tr}',
@@ -184,10 +96,6 @@ class RestaurantDescriptionView extends StatelessWidget {
                   fontSize: Dimensions.fontSizeSmall, color: _textColor),
             ),
           ]),
-          SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-          Text('delivery_time'.tr,
-              style: sfRegular.copyWith(
-                  fontSize: Dimensions.fontSizeSmall, color: _textColor)),
         ]),
         (restaurant.delivery && restaurant.freeDelivery)
             ? Expanded(child: SizedBox())
