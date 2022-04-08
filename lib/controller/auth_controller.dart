@@ -250,6 +250,7 @@ class AuthController extends GetxController implements GetxService {
   void sendOTP(
       TextEditingController phoneController, String countryDialCode) async {
     _isLoading = true;
+    update();
     String _phone = phoneController.text.trim();
     String _numberWithCountryCode = countryDialCode + _phone;
     bool _isValid = GetPlatform.isWeb ? true : false;
@@ -382,12 +383,15 @@ class AuthController extends GetxController implements GetxService {
       authRepo.saveUserToken(res.body['token']);
       if (res.body['userName'] == null) {
         responseModel = ResponseModel(true, "newuser");
+        Get.toNamed(RouteHelper.signUp);
       } else {
         responseModel = ResponseModel(true, res.body['userName']);
+        Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
       }
     } else {
       responseModel = ResponseModel(false, res.statusText);
     }
+
     return responseModel;
   }
 

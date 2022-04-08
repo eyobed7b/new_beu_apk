@@ -8,7 +8,9 @@ class AppConstants {
   static const int DIGITS_AFTER_POINT = 2;
 
   static const String BASE_URL = 'http://157.175.121.60';
+
   // 'http://192.168.43.159/beu';
+
   static const String CATEGORY_URI = '/api/v1/categories';
   static const String BANNER_URI = '/api/v1/banners';
   static const String RESTAURANT_PRODUCT_URI = '/api/v1/products/latest';

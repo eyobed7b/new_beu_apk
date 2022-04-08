@@ -9,6 +9,7 @@ import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/functions.dart';
 import 'package:efood_multivendor/util/styles.dart';
@@ -21,6 +22,7 @@ import 'package:efood_multivendor/view/base/rating_bar.dart';
 import 'package:efood_multivendor/view/screens/restaurant/restaurant_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
 class ProductWidget extends StatelessWidget {
@@ -47,6 +49,8 @@ class ProductWidget extends StatelessWidget {
     double _discount;
     String _discountType;
     bool _isAvailable;
+    int _avgPrice = 147;
+    int distance = 500;
     String imageExecuted =
         '${isCampaign ? _baseUrls.campaignImageUrl : isRestaurant ? UtilFunctions.startsWitHTTP(restaurant.logo) ? "" : "${_baseUrls.restaurantImageUrl}/" : UtilFunctions.startsWitHTTP(product.image) ? "" : "${_baseUrls.productImageUrl}/"}'
         '${isRestaurant ? restaurant.logo : product.image}';
@@ -106,6 +110,7 @@ class ProductWidget extends StatelessWidget {
         }
       },
       child: Container(
+        height: 20.h,
         padding: ResponsiveHelper.isDesktop(context)
             ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL)
             : null,
@@ -130,27 +135,30 @@ class ProductWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(
                 vertical: _desktop ? 0 : Dimensions.PADDING_SIZE_EXTRA_SMALL),
             child: Row(children: [
-              Stack(children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                  child: CustomImage(
+              ClipRRect(
+                borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                child: Stack(children: [
+                  CustomImage(
                     image:
                         '${isCampaign ? _baseUrls.campaignImageUrl : isRestaurant ? UtilFunctions.startsWitHTTP(restaurant.logo) ? "" : "${_baseUrls.restaurantImageUrl}/" : UtilFunctions.startsWitHTTP(product.image) ? "" : "${_baseUrls.productImageUrl}/"}'
                         '${isRestaurant ? restaurant.logo : product.image}',
-                    height: _desktop ? 120 : 65,
-                    width: _desktop ? 120 : 80,
+                    height: _desktop ? 120 : 15.h,
+                    width: _desktop ? 120 : 15.h,
                     fit: BoxFit.cover,
                   ),
-                ),
-                DiscountTag(
-                  discount: _discount,
-                  discountType: _discountType,
-                  freeDelivery: isRestaurant ? restaurant.freeDelivery : false,
-                ),
-                _isAvailable
-                    ? SizedBox()
-                    : NotAvailableWidget(isRestaurant: isRestaurant),
-              ]),
+                  RatingTag(rating: restaurant.avgRating),
+                  _isAvailable
+                      ? SizedBox()
+                      : NotAvailableWidget(isRestaurant: isRestaurant),
+                ]),
+              ),
+
+              // DiscountTag(
+              //   discount: _discount,
+              //   discountType: _discountType,
+              //   freeDelivery: isRestaurant ? restaurant.freeDelivery : false,
+              // ),
+
               SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
               Expanded(
                 child: Column(
@@ -159,8 +167,8 @@ class ProductWidget extends StatelessWidget {
                     children: [
                       Text(
                         isRestaurant ? restaurant.name : product.name,
-                        style: sfMedium.copyWith(
-                            fontSize: Dimensions.fontSizeSmall),
+                        style: sfBold.copyWith(
+                            fontSize: Dimensions.fontSizeDefault),
                         maxLines: _desktop ? 2 : 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -168,19 +176,36 @@ class ProductWidget extends StatelessWidget {
                           height: isRestaurant
                               ? Dimensions.PADDING_SIZE_EXTRA_SMALL
                               : 0),
-                      Text(
-                        isRestaurant
-                            ? (restaurant.address == null)
-                                ? " No Address"
-                                : restaurant.address
-                            : product.restaurantName ?? '',
-                        style: sfRegular.copyWith(
-                          fontSize: Dimensions.fontSizeExtraSmall,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      isRestaurant
+                          ? Row(
+                              children: [
+                                Icon(
+                                  FeatherIcons.dollarSign,
+                                  size: 1.5.h,
+                                  color: Colors.deepOrange,
+                                ),
+                                SizedBox(
+                                    width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                Text(
+                                  "Avg $_avgPrice Br.",
+                                  style: sfRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeExtraSmall,
+                                    color: Colors.black,
+                                  ),
+                                  maxLines: _desktop ? 2 : 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            )
+                          : Text(
+                              product.restaurantName ?? '',
+                              style: sfRegular.copyWith(
+                                fontSize: Dimensions.fontSizeExtraSmall,
+                                color: Theme.of(context).disabledColor,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                       SizedBox(height: (_desktop || isRestaurant) ? 5 : 0),
                       !isRestaurant
                           ? RatingBar(
@@ -192,20 +217,57 @@ class ProductWidget extends StatelessWidget {
                                   ? restaurant.ratingCount
                                   : product.ratingCount,
                             )
-                          : SizedBox(),
-                      SizedBox(
-                          height: (!isRestaurant && _desktop)
-                              ? Dimensions.PADDING_SIZE_EXTRA_SMALL
-                              : 0),
+                          : Row(
+                              children: [
+                                Icon(
+                                  FeatherIcons.clock,
+                                  color: Colors.deepOrange,
+                                  size: 1.5.h,
+                                ),
+                                SizedBox(
+                                    width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                Text(
+                                  "${restaurant.deliveryTime} Min",
+                                  style: sfRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeExtraSmall,
+                                    color: Colors.black,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                      SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                       isRestaurant
-                          ? RatingBar(
-                              rating: isRestaurant
-                                  ? restaurant.avgRating
-                                  : product.avgRating,
-                              size: _desktop ? 15 : 12,
-                              ratingCount: isRestaurant
-                                  ? restaurant.ratingCount
-                                  : product.ratingCount,
+                          ?
+                          // ? RatingBar(
+                          //     rating: isRestaurant
+                          //         ? restaurant.avgRating
+                          //         : product.avgRating,
+                          //     size: _desktop ? 15 : 12,
+                          //     ratingCount: isRestaurant
+                          //         ? restaurant.ratingCount
+                          //         : product.ratingCount,
+                          //   )
+                          Row(
+                              children: [
+                                Icon(
+                                  FeatherIcons.mapPin,
+                                  color: Colors.deepOrange,
+                                  size: 1.5.h,
+                                ),
+                                SizedBox(
+                                    width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                Text(
+                                  "$distance m",
+                                  style: sfRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeExtraSmall,
+                                    color: Colors.black,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
                             )
                           : Row(children: [
                               Text(
@@ -213,7 +275,7 @@ class ProductWidget extends StatelessWidget {
                                     discount: _discount,
                                     discountType: _discountType),
                                 style: sfMedium.copyWith(
-                                    fontSize: Dimensions.fontSizeSmall),
+                                    fontSize: Dimensions.fontSizeExtraSmall),
                               ),
                               SizedBox(
                                   width: _discount > 0
@@ -247,39 +309,39 @@ class ProductWidget extends StatelessWidget {
                             child: Icon(Icons.add, size: _desktop ? 30 : 25),
                           )
                         : SizedBox(),
-                    GetBuilder<WishListController>(builder: (wishController) {
-                      bool _isWished = isRestaurant
-                          ? wishController.wishRestIdList
-                              .contains(restaurant.id)
-                          : wishController.wishProductIdList
-                              .contains(product.id);
-                      return InkWell(
-                        onTap: () {
-                          if (Get.find<AuthController>().isLoggedIn()) {
-                            _isWished
-                                ? wishController.removeFromWishList(
-                                    isRestaurant ? restaurant.id : product.id,
-                                    isRestaurant)
-                                : wishController.addToWishList(
-                                    product, restaurant, isRestaurant);
-                          } else {
-                            showCustomSnackBar('you_are_not_logged_in'.tr);
-                          }
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical:
-                                  _desktop ? Dimensions.PADDING_SIZE_SMALL : 0),
-                          child: Icon(
-                            _isWished ? Icons.favorite : Icons.favorite_border,
-                            size: _desktop ? 30 : 25,
-                            color: _isWished
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).disabledColor,
-                          ),
-                        ),
-                      );
-                    }),
+                    // GetBuilder<WishListController>(builder: (wishController) {
+                    //   bool _isWished = isRestaurant
+                    //       ? wishController.wishRestIdList
+                    //           .contains(restaurant.id)
+                    //       : wishController.wishProductIdList
+                    //           .contains(product.id);
+                    //   return InkWell(
+                    //     onTap: () {
+                    //       if (Get.find<AuthController>().isLoggedIn()) {
+                    //         _isWished
+                    //             ? wishController.removeFromWishList(
+                    //                 isRestaurant ? restaurant.id : product.id,
+                    //                 isRestaurant)
+                    //             : wishController.addToWishList(
+                    //                 product, restaurant, isRestaurant);
+                    //       } else {
+                    //         showCustomSnackBar('you_are_not_logged_in'.tr);
+                    //       }
+                    //     },
+                    //     child: Padding(
+                    //       padding: EdgeInsets.symmetric(
+                    //           vertical:
+                    //               _desktop ? Dimensions.PADDING_SIZE_SMALL : 0),
+                    //       child: Icon(
+                    //         _isWished ? Icons.favorite : Icons.favorite_border,
+                    //         size: _desktop ? 30 : 25,
+                    //         color: _isWished
+                    //             ? Theme.of(context).primaryColor
+                    //             : Theme.of(context).disabledColor,
+                    //       ),
+                    //     ),
+                    //   );
+                    // }),
                   ]),
             ]),
           )),
@@ -293,6 +355,57 @@ class ProductWidget extends StatelessWidget {
                           : Theme.of(context).disabledColor),
                 ),
         ]),
+      ),
+    );
+  }
+}
+
+class RatingTag extends StatefulWidget {
+  final double rating;
+  RatingTag({Key key, @required this.rating}) : super(key: key);
+
+  @override
+  State<RatingTag> createState() => _RatingTagState();
+}
+
+class _RatingTagState extends State<RatingTag> {
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 0,
+      left: 0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 2, vertical: 0),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Theme.of(context).primaryColor,
+                Theme.of(context).colorScheme.secondary
+              ]),
+        ),
+        child: Center(
+          child: Row(
+            children: [
+              Icon(
+                Icons.star,
+                size: 1.6.h,
+                color: Colors.yellow,
+              ),
+              SizedBox(
+                width: 1.w,
+              ),
+              Text(
+                widget.rating.toString(),
+                style: sfRegular.copyWith(
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

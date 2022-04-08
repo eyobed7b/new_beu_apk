@@ -372,5 +372,6 @@
   "please_enter_code": "Please enter the code below to verify your phone number.",
   "logout_msg": "Oh no! You’re leaving ...\nAre you Sure?",
   "logout_no_btn": "Naah,Just Kidding",
-  "logout_yes_btn": "Yes ,Log me Out "
+  "logout_yes_btn": "Yes ,Log me Out ",
+  "all_rest_desc": "Discover new tastes near you"
 }
