@@ -20,6 +20,7 @@ import 'package:efood_multivendor/view/base/discount_tag.dart';
 import 'package:efood_multivendor/view/base/not_available_widget.dart';
 import 'package:efood_multivendor/view/base/product_bottom_sheet.dart';
 import 'package:efood_multivendor/view/base/rating_bar.dart';
+import 'package:efood_multivendor/view/screens/product/prdouct_screen.dart';
 import 'package:efood_multivendor/view/screens/restaurant/restaurant_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -92,22 +93,26 @@ class ProductWidget extends StatelessWidget {
           Get.toNamed(RouteHelper.getRestaurantRoute(restaurant.id),
               arguments: RestaurantScreen(restaurant: restaurant));
         } else {
-          ResponsiveHelper.isMobile(context)
-              ? Get.bottomSheet(
-                  ProductBottomSheet(
-                      product: product,
-                      inRestaurantPage: inRestaurant,
-                      isCampaign: isCampaign),
-                  backgroundColor: Colors.transparent,
-                  isScrollControlled: true,
-                )
-              : Get.dialog(
-                  Dialog(
-                      child: ProductBottomSheet(
-                          product: product,
-                          inRestaurantPage: inRestaurant,
-                          isCampaign: isCampaign)),
-                );
+          Get.toNamed(RouteHelper.getProductRoute(product.id),
+              arguments: ProductScreen(
+                product: product,
+              ));
+          // ResponsiveHelper.isMobile(context)
+          //     ? Get.bottomSheet(
+          //         ProductBottomSheet(
+          //             product: product,
+          //             inRestaurantPage: inRestaurant,
+          //             isCampaign: isCampaign),
+          //         backgroundColor: Colors.transparent,
+          //         isScrollControlled: true,
+          //       )
+          //     : Get.dialog(
+          //         Dialog(
+          //             child: ProductBottomSheet(
+          //                 product: product,
+          //                 inRestaurantPage: inRestaurant,
+          //                 isCampaign: isCampaign)),
+          //       );
         }
       },
       child: Container(
