@@ -4,6 +4,7 @@ import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/controller/user_controller.dart';
 import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
@@ -15,6 +16,7 @@ import 'package:efood_multivendor/view/base/not_logged_in_screen.dart';
 import 'package:efood_multivendor/view/screens/location/pick_map_screen.dart';
 import 'package:efood_multivendor/view/screens/location/widget/permission_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
@@ -86,7 +88,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               } else if (userController.userInfoModel != null &&
                   _contactPersonNameController.text.isEmpty) {
                 _contactPersonNameController.text =
-                    '${userController.userInfoModel.fName} ${userController.userInfoModel.lName}';
+                    '${userController.userInfoModel.fName}';
                 _contactPersonNumberController.text =
                     userController.userInfoModel.phone;
               }
@@ -272,76 +274,116 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                   SizedBox(
                                       height: Dimensions.PADDING_SIZE_SMALL),
                                   SizedBox(
-                                      height: 50,
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: locationController
-                                            .addressTypeList.length,
-                                        itemBuilder: (context, index) =>
-                                            InkWell(
-                                          onTap: () {
-                                            locationController
-                                                .setAddressTypeIndex(index);
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: Dimensions
-                                                    .PADDING_SIZE_LARGE,
-                                                vertical: Dimensions
-                                                    .PADDING_SIZE_SMALL),
-                                            margin: EdgeInsets.only(
-                                                right: Dimensions
-                                                    .PADDING_SIZE_SMALL),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions.RADIUS_SMALL),
-                                              color:
-                                                  Theme.of(context).cardColor,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.grey[
-                                                        Get.isDarkMode
-                                                            ? 800
-                                                            : 200],
-                                                    spreadRadius: 1,
-                                                    blurRadius: 5)
-                                              ],
+                                      height: 13.h,
+                                      // width: 10.h,
+                                      child: Center(
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: locationController
+                                              .addressTypeList.length,
+                                          itemBuilder: (context, index) =>
+                                              InkWell(
+                                            onTap: () {
+                                              locationController
+                                                  .setAddressTypeIndex(index);
+                                            },
+                                            child: Center(
+                                              child: Container(
+                                                width: 12.h,
+                                                height: 12.h,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: Dimensions
+                                                        .PADDING_SIZE_LARGE,
+                                                    vertical: Dimensions
+                                                        .PADDING_SIZE_SMALL),
+                                                margin: EdgeInsets.only(
+                                                    right: Dimensions
+                                                        .PADDING_SIZE_SMALL),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          Dimensions
+                                                              .RADIUS_SMALL),
+                                                  // color:
+                                                  //     Theme.of(context).cardColor,
+                                                  gradient: locationController
+                                                              .addressTypeIndex ==
+                                                          index
+                                                      ? LinearGradient(
+                                                          colors: [
+                                                            Theme.of(context)
+                                                                .primaryColor,
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .secondary
+                                                          ],
+                                                        )
+                                                      : LinearGradient(
+                                                          colors: [
+                                                            Colors.white,
+                                                            Colors.white
+                                                          ],
+                                                        ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors.grey[
+                                                            Get.isDarkMode
+                                                                ? 800
+                                                                : 200],
+                                                        spreadRadius: 1,
+                                                        blurRadius: 5)
+                                                  ],
+                                                ),
+                                                child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                          index == 0
+                                                              ? FeatherIcons
+                                                                  .home
+                                                              : index == 1
+                                                                  ? FeatherIcons
+                                                                      .briefcase
+                                                                  : FeatherIcons
+                                                                      .flag,
+                                                          size: 36,
+                                                          color: locationController
+                                                                      .addressTypeIndex ==
+                                                                  index
+                                                              ? Colors.white
+                                                              : Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyText1
+                                                                  .color),
+                                                      SizedBox(
+                                                          width: Dimensions
+                                                              .PADDING_SIZE_EXTRA_SMALL),
+                                                      Text(
+                                                        locationController
+                                                            .addressTypeList[
+                                                                index]
+                                                            .tr,
+                                                        style: sfRegular.copyWith(
+                                                            color: locationController
+                                                                        .addressTypeIndex ==
+                                                                    index
+                                                                ? Colors.white
+                                                                : Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    .color,
+                                                            fontSize: Dimensions
+                                                                    .fontSizeExtraLarge *
+                                                                1.2),
+                                                      ),
+                                                    ]),
+                                              ),
                                             ),
-                                            child: Row(children: [
-                                              Icon(
-                                                index == 0
-                                                    ? Icons.home_filled
-                                                    : index == 1
-                                                        ? Icons.work
-                                                        : Icons.location_on,
-                                                color: locationController
-                                                            .addressTypeIndex ==
-                                                        index
-                                                    ? Theme.of(context)
-                                                        .primaryColor
-                                                    : Theme.of(context)
-                                                        .disabledColor,
-                                              ),
-                                              SizedBox(
-                                                  width: Dimensions
-                                                      .PADDING_SIZE_EXTRA_SMALL),
-                                              Text(
-                                                locationController
-                                                    .addressTypeList[index].tr,
-                                                style: sfRegular.copyWith(
-                                                    color: locationController
-                                                                .addressTypeIndex ==
-                                                            index
-                                                        ? Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1
-                                                            .color
-                                                        : Theme.of(context)
-                                                            .disabledColor),
-                                              ),
-                                            ]),
                                           ),
                                         ),
                                       )),
