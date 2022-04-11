@@ -3,6 +3,7 @@ import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
 class AddressWidget extends StatelessWidget {
@@ -48,12 +49,12 @@ class AddressWidget extends StatelessWidget {
           child: Row(children: [
             Icon(
               address.addressType == 'home'
-                  ? Icons.home_filled
+                  ? FeatherIcons.home
                   : address.addressType == 'office'
-                      ? Icons.work
-                      : Icons.location_on,
-              size: ResponsiveHelper.isDesktop(context) ? 50 : 40,
-              color: Theme.of(context).primaryColor,
+                      ? FeatherIcons.briefcase
+                      : FeatherIcons.flag,
+              size: ResponsiveHelper.isDesktop(context) ? 50 : 30,
+              color: Theme.of(context).textTheme.bodyText1.color,
             ),
             SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
             Expanded(
@@ -62,14 +63,15 @@ class AddressWidget extends StatelessWidget {
                   children: [
                     Text(
                       address.addressType.tr,
-                      style:
-                          sfMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                      style: sfMedium.copyWith(
+                          fontSize: Dimensions.fontSizeSmall * 1.5,
+                          fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     Text(
                       address.address,
                       style: sfRegular.copyWith(
-                          fontSize: Dimensions.fontSizeExtraSmall,
+                          fontSize: Dimensions.fontSizeExtraSmall * 1.4,
                           color: Theme.of(context).disabledColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -82,8 +84,8 @@ class AddressWidget extends StatelessWidget {
             // ) : SizedBox(),
             fromAddress
                 ? IconButton(
-                    icon: Icon(Icons.delete,
-                        color: Colors.red,
+                    icon: Icon(FeatherIcons.trash,
+                        color: Color.fromARGB(255, 0, 0, 0),
                         size: ResponsiveHelper.isDesktop(context) ? 35 : 25),
                     onPressed: onRemovePressed,
                   )
