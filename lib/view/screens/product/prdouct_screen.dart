@@ -1,6 +1,8 @@
 import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/size_config.dart';
+import 'package:efood_multivendor/util/styles.dart';
+import 'package:efood_multivendor/view/base/quantity_button.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -139,24 +141,230 @@ class _ProductScreenState extends State<ProductScreen> {
           widget.product,
         );
         //bool isExistInCart = Get.find<CartController>().isExistInCart(_cartModel, fromCart, cartIndex);
-
+        Product product = widget.product;
+        bool _hasVars = (product.variations.length > 0);
+        if (kDebugMode) {
+          print("HasVars: ${product.variations.length}");
+        }
+        bool _hasAddons = product.addOns.length > 0;
+        final LinearGradient linearGradient = LinearGradient(
+          colors: <Color>[
+            Theme.of(context).primaryColor,
+            Theme.of(context).colorScheme.secondary
+          ],
+        );
         return SingleChildScrollView(
-          child: Column(children: [
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                  child: CustomImage(
-                    image:
-                        '${widget.isCampaign ? Get.find<SplashController>().configModel.baseUrls.campaignImageUrl : widget.product.image}',
-                    width: ResponsiveHelper.isMobile(context) ? 100 : 140,
-                    height: ResponsiveHelper.isMobile(context) ? 40.h : 140,
-                    fit: BoxFit.cover,
+          child: SizedBox(
+            height: 100.h,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  ClipRRect(
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(33)),
+                    child: CustomImage(
+                      image:
+                          '${widget.isCampaign ? Get.find<SplashController>().configModel.baseUrls.campaignImageUrl : widget.product.image}',
+                      height: ResponsiveHelper.isMobile(context) ? 40.h : 140,
+                      width: ResponsiveHelper.isMobile(context) ? 100.w : 200,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-              ],
-            )
-          ]),
+                  Positioned(
+                    bottom: -5.h,
+                    left: 5.w,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.05),
+                                  spreadRadius: 3,
+                                  blurRadius: 5,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(3.h)),
+                          width: 90.w,
+                          height: 10.h,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 65.w,
+                                  child: Text(
+                                    product.name,
+                                    style: sfBold.copyWith(fontSize: 5.w),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return linearGradient.createShader(
+                                        Offset.zero & bounds.size);
+                                  },
+                                  child: Text(
+                                    "${product.price.toStringAsFixed(0)} ${"birr".tr}",
+                                    style: sfBlack.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 5.w,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 5.h),
+              _hasVars
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: widget.product.choiceOptions.length,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(widget.product.choiceOptions[index].title,
+                                    style: sfBold.copyWith(fontSize: 7.w)),
+                                SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                                SizedBox(
+                                  height: 4.5.h,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: widget.product
+                                        .choiceOptions[index].options.length,
+                                    itemBuilder: (context, i) {
+                                      bool isSelected = productController
+                                              .variationIndex[index] ==
+                                          i;
+                                      return InkWell(
+                                        onTap: () {
+                                          productController
+                                              .setCartVariationIndex(index, i);
+                                        },
+                                        child: Container(
+                                          height: 10.h,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: Dimensions
+                                                  .PADDING_SIZE_EXTRA_SMALL),
+                                          // padding: EdgeInsets.only(
+                                          //   left: index == 0
+                                          //       ? Dimensions.PADDING_SIZE_LARGE
+                                          //       : Dimensions.PADDING_SIZE_SMALL,
+                                          //   right: index == restController.categoryList.length - 1
+                                          //       ? Dimensions.PADDING_SIZE_LARGE
+                                          //       : Dimensions.PADDING_SIZE_SMALL,
+                                          //   top: Dimensions.PADDING_SIZE_SMALL,
+                                          // ),
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                Dimensions.PADDING_SIZE_DEFAULT,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            border: isSelected
+                                                ? Border.all(
+                                                    color: Theme.of(context)
+                                                        .primaryColor)
+                                                : Border.all(
+                                                    color: Colors.grey),
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions
+                                                    .PADDING_SIZE_EXTRA_SMALL),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              product.choiceOptions[index]
+                                                  .options[i]
+                                                  .trim(),
+                                              style: isSelected
+                                                  ? sfBold.copyWith(
+                                                      fontSize: Dimensions
+                                                          .fontSizeDefault,
+                                                      color: Theme.of(context)
+                                                          .primaryColor)
+                                                  : sfBold.copyWith(
+                                                      fontSize: Dimensions
+                                                          .fontSizeDefault,
+                                                      color: Theme.of(context)
+                                                          .disabledColor),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                    height: index !=
+                                            widget.product.choiceOptions
+                                                    .length -
+                                                1
+                                        ? Dimensions.PADDING_SIZE_LARGE
+                                        : 0),
+                              ]);
+                        },
+                      ),
+                    )
+                  : SizedBox(),
+              SizedBox(
+                height: 2.h,
+              ),
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  child: Text(
+                    product.description ?? " ",
+                    style: sfRegular,
+                    maxLines: 3,
+                  )),
+              Spacer(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Row(children: [
+                  Text('quantity'.tr,
+                      style: sfMedium.copyWith(
+                          fontSize: Dimensions.fontSizeExtraLarge * 1.4)),
+                  Expanded(child: SizedBox()),
+                  Row(children: [
+                    QuantityButton(
+                      onTap: () {
+                        if (productController.quantity > 1) {
+                          productController.setQuantity(false);
+                        }
+                      },
+                      isIncrement: false,
+                    ),
+                    Text(productController.quantity.toString(),
+                        style: sfMedium.copyWith(
+                            fontSize: Dimensions.fontSizeExtraLarge)),
+                    QuantityButton(
+                      onTap: () => productController.setQuantity(true),
+                      isIncrement: true,
+                    ),
+                  ]),
+                ]),
+              ),
+              SizedBox(
+                height: 12.h,
+              )
+            ]),
+          ),
         );
       }),
     );
