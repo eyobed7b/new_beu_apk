@@ -38,6 +38,7 @@ import 'package:efood_multivendor/view/screens/notification/notification_screen.
 import 'package:efood_multivendor/view/screens/onboard/onboarding_screen.dart';
 import 'package:efood_multivendor/view/screens/order/order_details_screen.dart';
 import 'package:efood_multivendor/view/screens/order/order_tracking_screen.dart';
+import 'package:efood_multivendor/view/screens/product/prdouct_screen.dart';
 import 'package:efood_multivendor/view/screens/profile/profile_screen.dart';
 import 'package:efood_multivendor/view/screens/profile/update_profile_screen.dart';
 import 'package:efood_multivendor/view/screens/restaurant/all_restaurant_screen.dart';
@@ -50,6 +51,8 @@ import 'package:efood_multivendor/view/screens/support/support_screen.dart';
 import 'package:efood_multivendor/view/screens/update/update_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../data/model/response/product_model.dart';
 
 class RouteHelper {
   static const String initial = '/';
@@ -93,6 +96,7 @@ class RouteHelper {
   static const String restaurantReview = '/restaurant-review';
   static const String allRestaurants = '/restaurants';
   static const String searchLocationScreen = '/SearchLocationScreen';
+  static const String product = '/product';
 
   static String getInitialRoute() => '$initial';
   static String getSplashRoute(int orderID) => '$splash?id=$orderID';
@@ -126,6 +130,7 @@ class RouteHelper {
           String phone, String token, String page) =>
       '$resetPassword?phone=$phone&token=$token&page=$page';
   static String getSearchRoute() => '$search';
+  static String getProductRoute(int id) => '$product?id=$id';
   static String getRestaurantRoute(int id) => '$restaurant?id=$id';
   static String getOrderDetailsRoute(int orderID) {
     return '$orderDetails?id=$orderID';
@@ -294,6 +299,14 @@ class RouteHelper {
               ? Get.arguments
               : RestaurantScreen(
                   restaurant: Restaurant(id: int.parse(Get.parameters['id']))));
+        }),
+    GetPage(
+        name: product,
+        page: () {
+          return getRoute(Get.arguments != null
+              ? Get.arguments
+              : ProductScreen(
+                  product: Product(id: int.parse(Get.parameters['id']))));
         }),
     GetPage(
         name: orderDetails,

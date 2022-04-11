@@ -373,5 +373,6 @@
   "logout_msg": "Oh no! You’re leaving ...\nAre you Sure?",
   "logout_no_btn": "Naah,Just Kidding",
   "logout_yes_btn": "Yes ,Log me Out ",
-  "all_rest_desc": "Discover new tastes near you"
+  "all_rest_desc": "Discover new tastes near you",
+  "working_hours": "Working Hours"
 }

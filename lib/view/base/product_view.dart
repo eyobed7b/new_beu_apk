@@ -55,9 +55,9 @@ class ProductView extends StatelessWidget {
     }
 
     return Column(children: [
-      type != null
-          ? VegFilterWidget(type: type, onSelected: onVegFilterTap)
-          : SizedBox(),
+      // type != null
+      //     ? VegFilterWidget(type: type, onSelected: onVegFilterTap)
+      //     : SizedBox(),
       !_isNull
           ? _length > 0
               ? GridView.builder(

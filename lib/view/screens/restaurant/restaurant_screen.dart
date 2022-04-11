@@ -9,6 +9,7 @@ import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
@@ -16,8 +17,10 @@ import 'package:efood_multivendor/view/base/cart_widget.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/product_view.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
+import 'package:efood_multivendor/view/screens/restaurant/widget/category_list.dart';
 import 'package:efood_multivendor/view/screens/restaurant/widget/restaurant_description_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
 class RestaurantScreen extends StatefulWidget {
@@ -30,7 +33,6 @@ class RestaurantScreen extends StatefulWidget {
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
   final ScrollController scrollController = ScrollController();
-  final bool _ltr = Get.find<LocalizationController>().isLtr;
 
   @override
   void initState() {
@@ -85,7 +87,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               restController.restaurant.name != null &&
               categoryController.categoryList != null) {
             _restaurant = restController.restaurant;
+
+            DateConverter.isAvailable(
+                _restaurant.openingTime, _restaurant.closeingTime);
           }
+
           restController.setCategoryList();
 
           return (restController.restaurant != null &&
@@ -142,44 +148,155 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             floating: false,
                             backgroundColor: Theme.of(context).primaryColor,
                             leading: IconButton(
-                              icon: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Theme.of(context).primaryColor),
-                                alignment: Alignment.center,
-                                child: Icon(Icons.chevron_left,
-                                    color: Theme.of(context).cardColor),
+                              icon: Icon(
+                                Icons.chevron_left,
+                                color: Theme.of(context).cardColor,
+                                size: 5.h,
                               ),
                               onPressed: () => Get.back(),
                             ),
                             flexibleSpace: FlexibleSpaceBar(
-                              background: CustomImage(
-                                fit: BoxFit.cover,
-                                placeholder: Images.restaurant_cover,
-                                image:
-                                    '${Get.find<SplashController>().configModel.baseUrls.restaurantCoverPhotoUrl}/${_restaurant.coverPhoto}',
-                              ),
-                            ),
-                            actions: [
-                              IconButton(
-                                onPressed: () =>
-                                    Get.toNamed(RouteHelper.getCartRoute()),
-                                icon: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Theme.of(context).primaryColor),
-                                  alignment: Alignment.center,
-                                  child: CartWidget(
-                                      color: Theme.of(context).cardColor,
-                                      size: 15,
-                                      fromRestaurant: true),
+                              background: Stack(children: [
+                                Container(
+                                  decoration:
+                                      BoxDecoration(color: Colors.white),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.vertical(
+                                          bottom: Radius.circular(10)),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: CustomImage(
+                                        height: 35.h,
+                                        fit: BoxFit.cover,
+                                        placeholder: Images.restaurant_cover,
+                                        image: '${_restaurant.coverPhoto}',
+                                      )),
                                 ),
-                              )
-                            ],
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Container(
+                                    height: 35.h,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(0.5),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 2.w,
+                                  top: 4.h,
+                                  child: Container(
+                                    padding: EdgeInsets.all(7),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.topRight,
+                                        colors: [
+                                          Theme.of(context).primaryColor,
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ],
+                                      ),
+                                    ),
+                                    // width: 10.w,
+                                    // height: 3.w,
+                                    child: Text(
+                                      "Open now",
+                                      style:
+                                          sfBold.copyWith(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 5,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 5.w, bottom: 1.h),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(2.h),
+                                          clipBehavior: Clip.hardEdge,
+                                          child: CustomImage(
+                                              image: _restaurant.logo,
+                                              height: 8.h,
+                                              width: 8.h),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 0.7.h),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                _restaurant.name,
+                                                style: sfBlack.copyWith(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ),
+                                              SizedBox(
+                                                height: 0.6.h,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    FeatherIcons.mapPin,
+                                                    color: Colors.white,
+                                                    size: 2.h,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    _restaurant.address ??
+                                                        "No address set",
+                                                    style: sfRegular.copyWith(
+                                                        color: Colors.white),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ]),
+                            ),
+                            // actions: [
+                            //   IconButton(
+                            //     onPressed: () =>
+                            //         Get.toNamed(RouteHelper.getCartRoute()),
+                            //     icon: Container(
+                            //       height: 50,
+                            //       width: 50,
+                            //       decoration: BoxDecoration(
+                            //           shape: BoxShape.circle,
+                            //           color: Theme.of(context).primaryColor),
+                            //       alignment: Alignment.center,
+                            //       child: CartWidget(
+                            //           color: Theme.of(context).cardColor,
+                            //           size: 15,
+                            //           fromRestaurant: true),
+                            //     ),
+                            //   )
+                            // ],
                           ),
                     SliverToBoxAdapter(
                         child: Center(
@@ -190,8 +307,12 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                       child: Column(children: [
                         ResponsiveHelper.isDesktop(context)
                             ? SizedBox()
+                            // : SizedBox(),
                             : RestaurantDescriptionView(
                                 restaurant: _restaurant),
+                        // SliverToBoxAdapter(
+                        //   child: SizedBox(height: 5.h),
+                        // ),
                         _restaurant.discount != null
                             ? Container(
                                 width: context.width,
@@ -273,7 +394,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                             delegate: SliverDelegate(
                                 child: Center(
                                     child: Container(
-                              height: 50,
+                              height: 40,
                               width: Dimensions.WEB_MAX_WIDTH,
                               color: Theme.of(context).cardColor,
                               padding: EdgeInsets.symmetric(
@@ -286,99 +407,18 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                     left: Dimensions.PADDING_SIZE_SMALL),
                                 physics: BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () =>
-                                        restController.setCategoryIndex(index),
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                        left: index == 0
-                                            ? Dimensions.PADDING_SIZE_LARGE
-                                            : Dimensions.PADDING_SIZE_SMALL,
-                                        right: index ==
-                                                restController
-                                                        .categoryList.length -
-                                                    1
-                                            ? Dimensions.PADDING_SIZE_LARGE
-                                            : Dimensions.PADDING_SIZE_SMALL,
-                                        top: Dimensions.PADDING_SIZE_SMALL,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.horizontal(
-                                          left: Radius.circular(
-                                            _ltr
-                                                ? index == 0
-                                                    ? Dimensions
-                                                        .RADIUS_EXTRA_LARGE
-                                                    : 0
-                                                : index ==
-                                                        restController
-                                                                .categoryList
-                                                                .length -
-                                                            1
-                                                    ? Dimensions
-                                                        .RADIUS_EXTRA_LARGE
-                                                    : 0,
-                                          ),
-                                          right: Radius.circular(
-                                            _ltr
-                                                ? index ==
-                                                        restController
-                                                                .categoryList
-                                                                .length -
-                                                            1
-                                                    ? Dimensions
-                                                        .RADIUS_EXTRA_LARGE
-                                                    : 0
-                                                : index == 0
-                                                    ? Dimensions
-                                                        .RADIUS_EXTRA_LARGE
-                                                    : 0,
-                                          ),
-                                        ),
-                                        color: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.1),
-                                      ),
-                                      child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              restController
-                                                  .categoryList[index].name,
-                                              style: index ==
-                                                      restController
-                                                          .categoryIndex
-                                                  ? sfMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeSmall,
-                                                      color: Theme.of(context)
-                                                          .primaryColor)
-                                                  : sfRegular.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeSmall,
-                                                      color: Theme.of(context)
-                                                          .disabledColor),
-                                            ),
-                                            index ==
-                                                    restController.categoryIndex
-                                                ? Container(
-                                                    height: 5,
-                                                    width: 5,
-                                                    decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                        shape: BoxShape.circle),
-                                                  )
-                                                : SizedBox(height: 5, width: 5),
-                                          ]),
-                                    ),
-                                  );
+                                  return CategoryTabItem(
+                                      index: index,
+                                      restController: restController);
                                 },
                               ),
                             ))),
                           )
                         : SliverToBoxAdapter(child: SizedBox()),
+                    SliverToBoxAdapter(
+                        child: SizedBox(
+                      height: 2.h,
+                    )),
                     SliverToBoxAdapter(
                         child: Center(
                             child: Container(

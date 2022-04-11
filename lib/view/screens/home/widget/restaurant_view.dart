@@ -13,32 +13,46 @@ class RestaurantView extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.find<RestaurantController>().setOffset(1);
     scrollController?.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent
-          && Get.find<RestaurantController>().restaurantList != null
-          && !Get.find<RestaurantController>().isLoading) {
-        int pageSize = (Get.find<RestaurantController>().popularPageSize / 10).ceil();
+      if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent &&
+          Get.find<RestaurantController>().restaurantList != null &&
+          !Get.find<RestaurantController>().isLoading) {
+        int pageSize =
+            (Get.find<RestaurantController>().popularPageSize / 10).ceil();
         if (Get.find<RestaurantController>().offset < pageSize) {
-          Get.find<RestaurantController>().setOffset(Get.find<RestaurantController>().offset+1);
+          Get.find<RestaurantController>()
+              .setOffset(Get.find<RestaurantController>().offset + 1);
           print('end of the page');
           Get.find<RestaurantController>().showBottomLoader();
-          Get.find<RestaurantController>().getRestaurantList(Get.find<RestaurantController>().offset.toString(), false);
+          Get.find<RestaurantController>().getRestaurantList(
+              Get.find<RestaurantController>().offset.toString(), false);
         }
       }
     });
     return GetBuilder<RestaurantController>(builder: (restController) {
       return Column(children: [
         ProductView(
-          isRestaurant: true, products: null, restaurants: restController.restaurantList,
+          isRestaurant: true,
+          products: null,
+          restaurants: restController.restaurantList,
           padding: EdgeInsets.symmetric(
-            horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_SMALL,
-            vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0,
+            horizontal: ResponsiveHelper.isDesktop(context)
+                ? Dimensions.PADDING_SIZE_EXTRA_SMALL
+                : Dimensions.PADDING_SIZE_SMALL,
+            vertical: ResponsiveHelper.isDesktop(context)
+                ? Dimensions.PADDING_SIZE_EXTRA_SMALL
+                : 0,
           ),
         ),
-
-        restController.isLoading ? Center(child: Padding(
-          padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-          child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)),
-        )) : SizedBox(),
+        restController.isLoading
+            ? Center(
+                child: Padding(
+                padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+                child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).primaryColor)),
+              ))
+            : SizedBox(),
       ]);
     });
   }
