@@ -97,6 +97,8 @@ class ProfileScreen extends StatelessWidget {
                                     iconColor: const Color(0xff0DEA8D),
                                     onTap: () {
                                       // doNavigationWithAuthCheck(1);
+                                      Get.toNamed(
+                                          RouteHelper.getAddressRoute());
                                     },
                                     icons: FeatherIcons.mapPin,
                                     showArrow: true,
@@ -114,6 +116,7 @@ class ProfileScreen extends StatelessWidget {
                           iconColor: const Color(0xffFA4EFE),
                           onTap: () {
                             // doNavigationWithAuthCheck(1);
+                            Get.toNamed(RouteHelper.getLanguageRoute('menu'));
                           },
                           icons: Icons.translate_sharp,
                           showArrow: true,
@@ -143,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
                           title: 'help_support'.tr,
                           iconColor: Color.fromARGB(255, 187, 239, 47),
                           onTap: () {
-                            RouteHelper.getSupportRoute();
+                            Get.toNamed(RouteHelper.getSupportRoute());
                           },
                           icons: FeatherIcons.lifeBuoy,
                           showArrow: true,
@@ -153,7 +156,9 @@ class ProfileScreen extends StatelessWidget {
                           title: 'privacy_policy'.tr,
                           iconColor: Color.fromARGB(255, 0, 162, 237),
                           onTap: () {
-                            RouteHelper.getHtmlRoute('privacy-policy');
+                            Get.toNamed(
+                                RouteHelper.getHtmlRoute('privacy-policy'));
+                            ;
                           },
                           icons: FeatherIcons.shield,
                           showArrow: true,
@@ -163,7 +168,9 @@ class ProfileScreen extends StatelessWidget {
                           title: 'terms_conditions'.tr,
                           iconColor: Color.fromARGB(255, 134, 231, 219),
                           onTap: () {
-                            RouteHelper.getHtmlRoute('terms-and-condition');
+                            Get.toNamed(RouteHelper.getHtmlRoute(
+                                'terms-and-condition'));
+                            ;
                           },
                           icons: FeatherIcons.fileText,
                           showArrow: true,
