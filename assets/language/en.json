@@ -374,5 +374,12 @@
   "logout_no_btn": "Naah,Just Kidding",
   "logout_yes_btn": "Yes ,Log me Out ",
   "all_rest_desc": "Discover new tastes near you",
-  "working_hours": "Working Hours"
+  "working_hours": "Working Hours",
+  "price_range": "Price Range",
+  "distance_range": "Distance Range",
+  "sort": "Sort",
+  "sort_and_filter": "Sort and Filter",
+  "cost_high_to_low": "Cost (High to Low)",
+  "cost_low_to_high": "Cost (Low to High)",
+  "from_beu": "From BeU"
 }

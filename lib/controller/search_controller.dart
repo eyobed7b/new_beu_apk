@@ -23,6 +23,7 @@ class SearchController extends GetxController implements GetxService {
   List<String> _historyList = [];
   bool _isSearchMode = true;
   List<String> _sortList = ['ascending'.tr, 'descending'.tr];
+  int _selectedIndex = 0;
   int _sortIndex = -1;
   int _rating = -1;
   bool _isRestaurant = false;
@@ -30,7 +31,12 @@ class SearchController extends GetxController implements GetxService {
   bool _isDiscountedFoods = false;
   bool _veg = false;
   bool _nonVeg = false;
+  List<bool> _activeFilters = [false, false];
+  List<String> _filters = ["Top Rated", "Trending now"];
 
+  List<bool> get activeFilters => _activeFilters;
+  List<String> get filters => _filters;
+  int get selectedIndex => _selectedIndex;
   List<Product> get searchProductList => _searchProductList;
   List<Product> get allProductList => _allProductList;
   List<Product> get suggestedFoodList => _suggestedFoodList;
@@ -48,6 +54,11 @@ class SearchController extends GetxController implements GetxService {
   bool get isDiscountedFoods => _isDiscountedFoods;
   bool get veg => _veg;
   bool get nonVeg => _nonVeg;
+
+  void setSelectedIndex(int i) {
+    _selectedIndex = i;
+    update();
+  }
 
   void toggleVeg() {
     _veg = !_veg;
@@ -76,7 +87,7 @@ class SearchController extends GetxController implements GetxService {
 
   void setSearchMode(bool isSearchMode) {
     _isSearchMode = isSearchMode;
-    if(isSearchMode) {
+    if (isSearchMode) {
       _searchText = '';
       _prodResultText = '';
       _restResultText = '';
@@ -103,33 +114,37 @@ class SearchController extends GetxController implements GetxService {
   }
 
   void sortFoodSearchList() {
-    _searchProductList= [];
+    _searchProductList = [];
     _searchProductList.addAll(_allProductList);
-    if(_upperValue > 0) {
-      _searchProductList.removeWhere((product) => (product.price) <= _lowerValue || (product.price) > _upperValue);
+    if (_upperValue > 0) {
+      _searchProductList.removeWhere((product) =>
+          (product.price) <= _lowerValue || (product.price) > _upperValue);
     }
-    if(_rating != -1) {
+    if (_rating != -1) {
       _searchProductList.removeWhere((product) => product.avgRating < _rating);
     }
-    if(!_veg && _nonVeg) {
+    if (!_veg && _nonVeg) {
       _searchProductList.removeWhere((product) => product.veg == 1);
     }
-    if(!_nonVeg && _veg) {
+    if (!_nonVeg && _veg) {
       _searchProductList.removeWhere((product) => product.veg == 0);
     }
-    if(_isAvailableFoods || _isDiscountedFoods) {
-      if(_isAvailableFoods) {
-        _searchProductList.removeWhere((product) => !DateConverter.isAvailable(product.availableTimeStarts, product.availableTimeEnds));
+    if (_isAvailableFoods || _isDiscountedFoods) {
+      if (_isAvailableFoods) {
+        _searchProductList.removeWhere((product) => !DateConverter.isAvailable(
+            product.availableTimeStarts, product.availableTimeEnds));
       }
-      if(_isDiscountedFoods) {
+      if (_isDiscountedFoods) {
         _searchProductList.removeWhere((product) => product.discount == 0);
       }
     }
-    if(_sortIndex != -1) {
-      if(_sortIndex == 0) {
-        _searchProductList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-      }else {
-        _searchProductList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    if (_sortIndex != -1) {
+      if (_sortIndex == 0) {
+        _searchProductList.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      } else {
+        _searchProductList.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         Iterable iterable = _searchProductList.reversed;
         _searchProductList = iterable.toList();
       }
@@ -140,32 +155,42 @@ class SearchController extends GetxController implements GetxService {
   void sortRestSearchList() {
     _searchRestList = [];
     _searchRestList.addAll(_allRestList);
-    if(_rating != -1) {
-      _searchRestList.removeWhere((restaurant) => restaurant.avgRating < _rating);
+    if (_rating != -1) {
+      _searchRestList
+          .removeWhere((restaurant) => restaurant.avgRating < _rating);
     }
-    if(!_veg && _nonVeg) {
+    if (!_veg && _nonVeg) {
       _searchRestList.removeWhere((product) => product.nonVeg == 0);
     }
-    if(!_nonVeg && _veg) {
+    if (!_nonVeg && _veg) {
       _searchRestList.removeWhere((product) => product.veg == 0);
     }
-    if(_isAvailableFoods || _isDiscountedFoods) {
-      if(_isAvailableFoods) {
-        _searchRestList.removeWhere((restaurant) => !DateConverter.isAvailable(restaurant.openingTime, restaurant.closeingTime));
+    if (_isAvailableFoods || _isDiscountedFoods) {
+      if (_isAvailableFoods) {
+        _searchRestList.removeWhere((restaurant) => !DateConverter.isAvailable(
+            restaurant.openingTime, restaurant.closeingTime));
       }
-      if(_isDiscountedFoods) {
-        _searchRestList.removeWhere((restaurant) => restaurant.discount == null);
+      if (_isDiscountedFoods) {
+        _searchRestList
+            .removeWhere((restaurant) => restaurant.discount == null);
       }
     }
-    if(_sortIndex != -1) {
-      if(_sortIndex == 0) {
-        _searchRestList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-      }else {
-        _searchRestList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    if (_sortIndex != -1) {
+      if (_sortIndex == 0) {
+        _searchRestList.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      } else {
+        _searchRestList.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
         Iterable iterable = _searchRestList.reversed;
         _searchRestList = iterable.toList();
       }
     }
+    update();
+  }
+
+  void setFilter(index, value) {
+    _activeFilters[index] = value;
     update();
   }
 
@@ -176,17 +201,19 @@ class SearchController extends GetxController implements GetxService {
 
   void getSuggestedFoods() async {
     Response response = await searchRepo.getSuggestedFoods();
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       _suggestedFoodList = [];
-      response.body.forEach((suggestedFood) => _suggestedFoodList.add(Product.fromJson(suggestedFood)));
-    }else {
+      response.body.forEach((suggestedFood) =>
+          _suggestedFoodList.add(Product.fromJson(suggestedFood)));
+    } else {
       ApiChecker.checkApi(response);
     }
     update();
   }
 
   void searchData(String query) async {
-    if((_isRestaurant && query.isNotEmpty && query != _restResultText) || (!_isRestaurant && query.isNotEmpty && query != _prodResultText)) {
+    if ((_isRestaurant && query.isNotEmpty && query != _restResultText) ||
+        (!_isRestaurant && query.isNotEmpty && query != _prodResultText)) {
       _searchText = query;
       _rating = -1;
       _upperValue = 0;
@@ -218,14 +245,18 @@ class SearchController extends GetxController implements GetxService {
             _restResultText = query;
             _searchRestList = [];
             _allRestList = [];
-            _searchRestList.addAll(RestaurantModel.fromJson(response.body).restaurants);
-            _allRestList.addAll(RestaurantModel.fromJson(response.body).restaurants);
+            _searchRestList
+                .addAll(RestaurantModel.fromJson(response.body).restaurants);
+            _allRestList
+                .addAll(RestaurantModel.fromJson(response.body).restaurants);
           } else {
             _prodResultText = query;
             _searchProductList = [];
             _allProductList = [];
-            _searchProductList.addAll(ProductModel.fromJson(response.body).products);
-            _allProductList.addAll(ProductModel.fromJson(response.body).products);
+            _searchProductList
+                .addAll(ProductModel.fromJson(response.body).products);
+            _allProductList
+                .addAll(ProductModel.fromJson(response.body).products);
           }
         }
       } else {
@@ -274,5 +305,4 @@ class SearchController extends GetxController implements GetxService {
     _sortIndex = -1;
     update();
   }
-
 }

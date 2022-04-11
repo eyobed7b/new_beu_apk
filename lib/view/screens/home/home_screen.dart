@@ -24,6 +24,8 @@ import 'package:efood_multivendor/view/screens/home/widget/category_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../search/widget/filter_widget.dart';
+
 class HomeScreen extends StatelessWidget {
   static Future<void> loadData(bool reload) async {
     Get.find<BannerController>().getBannerList(reload);
@@ -405,88 +407,109 @@ class HomeScreen extends StatelessWidget {
                                               restaurantController
                                                           .restaurantList !=
                                                       null
-                                                  ? PopupMenuButton(
-                                                      itemBuilder: (context) {
-                                                        return [
-                                                          PopupMenuItem(
-                                                              value: 'all',
-                                                              child: Text(
-                                                                  'all'.tr),
-                                                              textStyle:
-                                                                  sfMedium
-                                                                      .copyWith(
-                                                                color: restaurantController
-                                                                            .restaurantType ==
-                                                                        'all'
-                                                                    ? Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyText1
-                                                                        .color
-                                                                    : Theme.of(
-                                                                            context)
-                                                                        .disabledColor,
-                                                              )),
-                                                          PopupMenuItem(
-                                                              value:
-                                                                  'take_away',
-                                                              child: Text(
-                                                                  'take_away'
-                                                                      .tr),
-                                                              textStyle:
-                                                                  sfMedium
-                                                                      .copyWith(
-                                                                color: restaurantController
-                                                                            .restaurantType ==
-                                                                        'take_away'
-                                                                    ? Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyText1
-                                                                        .color
-                                                                    : Theme.of(
-                                                                            context)
-                                                                        .disabledColor,
-                                                              )),
-                                                          PopupMenuItem(
-                                                              value: 'delivery',
-                                                              child: Text(
-                                                                  'delivery'
-                                                                      .tr),
-                                                              textStyle:
-                                                                  sfMedium
-                                                                      .copyWith(
-                                                                color: restaurantController
-                                                                            .restaurantType ==
-                                                                        'delivery'
-                                                                    ? Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyText1
-                                                                        .color
-                                                                    : Theme.of(
-                                                                            context)
-                                                                        .disabledColor,
-                                                              )),
-                                                        ];
+                                                  ? IconButton(
+                                                      onPressed: () {
+                                                        Get.bottomSheet(
+                                                          FilterWidget(
+                                                              maxValue: 1000,
+                                                              isRestaurant:
+                                                                  true),
+                                                          isScrollControlled:
+                                                              true,
+                                                          shape: const RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.vertical(
+                                                                      top: Radius
+                                                                          .circular(
+                                                                              25.0))),
+                                                        );
                                                       },
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius
-                                                              .circular(Dimensions
-                                                                  .RADIUS_SMALL)),
-                                                      child: Padding(
-                                                        padding: EdgeInsets.symmetric(
-                                                            horizontal: Dimensions
-                                                                .PADDING_SIZE_SMALL),
-                                                        child: Icon(
-                                                            Icons.filter_list),
-                                                      ),
-                                                      onSelected: (value) =>
-                                                          restaurantController
-                                                              .setRestaurantType(
-                                                                  value),
-                                                    )
-                                                  : SizedBox(),
+                                                      icon: Icon(
+                                                          Icons.filter_list))
+                                                  // ? PopupMenuButton(
+                                                  //     itemBuilder: (context) {
+                                                  //       return [
+                                                  //         PopupMenuItem(
+                                                  //             value: 'all',
+                                                  //             child: Text(
+                                                  //                 'all'.tr),
+                                                  //             textStyle:
+                                                  //                 sfMedium
+                                                  //                     .copyWith(
+                                                  //               color: restaurantController
+                                                  //                           .restaurantType ==
+                                                  //                       'all'
+                                                  //                   ? Theme.of(
+                                                  //                           context)
+                                                  //                       .textTheme
+                                                  //                       .bodyText1
+                                                  //                       .color
+                                                  //                   : Theme.of(
+                                                  //                           context)
+                                                  //                       .disabledColor,
+                                                  //             )),
+                                                  //         PopupMenuItem(
+                                                  //             value:
+                                                  //                 'take_away',
+                                                  //             child: Text(
+                                                  //                 'take_away'
+                                                  //                     .tr),
+                                                  //             textStyle:
+                                                  //                 sfMedium
+                                                  //                     .copyWith(
+                                                  //               color: restaurantController
+                                                  //                           .restaurantType ==
+                                                  //                       'take_away'
+                                                  //                   ? Theme.of(
+                                                  //                           context)
+                                                  //                       .textTheme
+                                                  //                       .bodyText1
+                                                  //                       .color
+                                                  //                   : Theme.of(
+                                                  //                           context)
+                                                  //                       .disabledColor,
+                                                  //             )),
+                                                  //         PopupMenuItem(
+                                                  //             value: 'delivery',
+                                                  //             child: Text(
+                                                  //                 'delivery'
+                                                  //                     .tr),
+                                                  //             textStyle:
+                                                  //                 sfMedium
+                                                  //                     .copyWith(
+                                                  //               color: restaurantController
+                                                  //                           .restaurantType ==
+                                                  //                       'delivery'
+                                                  //                   ? Theme.of(
+                                                  //                           context)
+                                                  //                       .textTheme
+                                                  //                       .bodyText1
+                                                  //                       .color
+                                                  //                   : Theme.of(
+                                                  //                           context)
+                                                  //                       .disabledColor,
+                                                  //             )),
+                                                  //       ];
+                                                  //     },
+                                                  //     shape: RoundedRectangleBorder(
+                                                  //         borderRadius: BorderRadius
+                                                  //             .circular(Dimensions
+                                                  //                 .RADIUS_SMALL)),
+                                                  //     child: Padding(
+                                                  //       padding: EdgeInsets.symmetric(
+                                                  //           horizontal: Dimensions
+                                                  //               .PADDING_SIZE_SMALL),
+                                                  //       child: Icon(
+                                                  //           Icons.filter_list),
+                                                  //     ),
+                                                  //     onSelected: (value) =>
+                                                  //         restaurantController
+                                                  //             .setRestaurantType(
+                                                  //                 value),
+                                                  //   )
+                                                  // : SizedBox(),
+                                                  //
+                                                  : SizedBox()
                                             ]),
                                             Text(
                                               "all_rest_desc".tr,

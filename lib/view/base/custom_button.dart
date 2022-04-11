@@ -75,7 +75,7 @@ class CustomButton extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: sfBold.copyWith(
                                 color: transparent
-                                    ? Theme.of(context).primaryColor
+                                    ? Theme.of(context).colorScheme.secondary
                                     : Theme.of(context).cardColor,
                                 fontSize: fontSize != null
                                     ? fontSize

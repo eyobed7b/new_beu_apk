@@ -60,4 +60,7 @@ class Images {
   static const String setLocation = 'assets/image/Set_Location.png';
   static const String location_gps = 'assets/icons/location.svg';
   static const String exit = 'assets/image/exit.png';
+  static const String checkboxOutlined = 'assets/image/square_checkbox.png';
+  static const String checkboxTicked =
+      'assets/image/square_checkbox_ticked.png';
 }
