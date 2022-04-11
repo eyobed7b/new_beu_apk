@@ -44,7 +44,8 @@ class LanguageWidget extends StatelessWidget {
             width: 90.w,
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+              borderRadius:
+                  BorderRadius.circular(Dimensions.RADIUS_SMALL * 2.4),
               boxShadow: [
                 BoxShadow(
                     color: Colors.grey[Get.isDarkMode ? 800 : 200],
@@ -58,13 +59,20 @@ class LanguageWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Radio<LanguageModel>(
-                        fillColor: MaterialStateProperty.all(
-                            Theme.of(context).primaryColor),
-                        value: localizationController.languages[index],
-                        groupValue: AppConstants
-                            .languages[localizationController.selectedIndex],
-                        onChanged: onChanged),
+                    ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return LinearGradient(
+                          colors: [Color(0xffff8022), Color(0xffff2222)],
+                        ).createShader(bounds);
+                      },
+                      child: Radio<LanguageModel>(
+                          fillColor: MaterialStateProperty.all(
+                              Theme.of(context).primaryColor),
+                          value: localizationController.languages[index],
+                          groupValue: AppConstants
+                              .languages[localizationController.selectedIndex],
+                          onChanged: onChanged),
+                    ),
                     SizedBox(
                       width: 1.w,
                     ),
@@ -77,7 +85,8 @@ class LanguageWidget extends StatelessWidget {
                 Spacer(),
                 Image.asset(
                   languageModel.imageUrl,
-                  fit: BoxFit.fitHeight,
+                  // fit: BoxFit.fitWidth,
+                  // height: 100,
                 ),
               ],
             )
