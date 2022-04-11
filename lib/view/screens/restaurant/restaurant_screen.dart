@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:efood_multivendor/controller/category_controller.dart';
 import 'package:efood_multivendor/controller/localization_controller.dart';
 import 'package:efood_multivendor/controller/restaurant_controller.dart';
@@ -23,6 +25,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
+const _cardColor = LinearGradient(colors: [
+  Color(0xffff8022),
+  Color(0xffff2222),
+]);
+const _cardColor2 = LinearGradient(colors: [
+  Color.fromARGB(255, 201, 201, 201),
+  Color.fromARGB(255, 194, 194, 194),
+]);
+const _maxHeight = 350.0;
+const _minHeight = 65.0;
+
 class RestaurantScreen extends StatefulWidget {
   final Restaurant restaurant;
   RestaurantScreen({@required this.restaurant});
@@ -31,8 +44,12 @@ class RestaurantScreen extends StatefulWidget {
   State<RestaurantScreen> createState() => _RestaurantScreenState();
 }
 
-class _RestaurantScreenState extends State<RestaurantScreen> {
+class _RestaurantScreenState extends State<RestaurantScreen>
+    with SingleTickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
+  AnimationController _controller;
+  bool _expanded = false;
+  double _currentHeight = _minHeight;
 
   @override
   void initState() {
@@ -66,6 +83,11 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
         }
       }
     });
+    _controller = AnimationController(
+      animationBehavior: AnimationBehavior.preserve,
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
   }
 
   @override
@@ -73,10 +95,13 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     super.dispose();
 
     scrollController?.dispose();
+    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final menuWidth = size.width / 1.05;
     return Scaffold(
       appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
       backgroundColor: Theme.of(context).cardColor,
@@ -461,6 +486,228 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               : Center(child: CircularProgressIndicator());
         });
       }),
+      extendBody: true,
+
+      /// offstage is used to hide the body while the app is loading
+      bottomNavigationBar: Offstage(
+        offstage: true,
+        child: GestureDetector(
+          onVerticalDragUpdate: _expanded
+              ? (value) {
+                  setState(() {
+                    final newHeight = _currentHeight - value.delta.dy;
+                    _controller.value = _currentHeight / _maxHeight;
+                    _currentHeight = newHeight.clamp(_minHeight, _maxHeight);
+                  });
+                }
+              : null,
+          onVerticalDragEnd: (value) {
+            if (_currentHeight < _maxHeight / 2) {
+              _controller.reverse();
+              _expanded = false;
+            } else {
+              _expanded = true;
+              _controller.forward(from: _currentHeight / _maxHeight);
+              _currentHeight = _maxHeight;
+            }
+          },
+          child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, snapshot) {
+                final value =
+                    const ElasticInOutCurve(0.7).transform(_controller.value);
+                return Stack(
+                  children: [
+                    Positioned(
+                        height: lerpDouble(_minHeight, _currentHeight, value),
+                        // width: lerpDouble(menuWidth, menuWidth, value),
+                        left: lerpDouble(size.width / 2 - menuWidth / 2,
+                            (size.width - menuWidth) / 2, value),
+                        right: lerpDouble(size.width / 2 - menuWidth / 2,
+                            (size.width - menuWidth) / 2, value),
+                        bottom: lerpDouble(40.0, 40.0, value),
+                        child: Container(
+                            decoration: BoxDecoration(
+                              gradient: _cardColor.lerpTo(_cardColor2, value),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(lerpDouble(
+                                      size.width * 1.0,
+                                      size.width * 0.04,
+                                      value)),
+                                  topRight: Radius.circular(lerpDouble(
+                                      size.width * 1.0,
+                                      size.width * 0.04,
+                                      value)),
+                                  bottomLeft: Radius.circular(lerpDouble(
+                                      size.width * 1.0,
+                                      size.width * 0.08,
+                                      value)),
+                                  bottomRight: Radius.circular(lerpDouble(
+                                      size.width * 1.0,
+                                      size.width * 0.08,
+                                      value))),
+                            ),
+                            child: _expanded
+                                ? Opacity(
+                                    opacity: _controller.value,
+                                    child: _buildExpandedContent())
+                                : Center(child: _buildMeanuContent()))),
+                  ],
+                );
+              }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExpandedContent() {
+    final size = MediaQuery.of(context).size;
+    return Padding(
+        padding: const EdgeInsets.all(0),
+        child: Stack(
+          children: [
+            ClipRect(
+              child: ListView.builder(
+                  itemCount: 3,
+                  shrinkWrap: true,
+                  itemBuilder: (ctx, index) {
+                    return Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Container(
+                          height: size.height / 12.5,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors
+                                  .primaries[index % Colors.primaries.length]),
+                        ));
+                  }),
+            ),
+            Positioned(
+              // alignment: Alignment.bottomCenter,
+              bottom: 0,
+              child: Container(
+                  height: _minHeight,
+                  width: size.width / 1.05,
+                  decoration: BoxDecoration(
+                    gradient: _cardColor,
+                    borderRadius: BorderRadius.circular(size.width * 1),
+                  ),
+                  child: _buildMeanuContent()),
+            )
+          ],
+        ));
+  }
+
+  Widget _buildMeanuContent() {
+    final size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                if (!_expanded) {
+                  _expanded = true;
+                  _currentHeight = _maxHeight;
+                  _controller.forward(from: 0.0);
+                  // _controller.reverse();
+                } else {
+                  _expanded = false;
+                  // _currentHeight = _maxHeight;
+                  // _controller.forward(from: 0.0);
+                  _controller.reverse(from: 0.5);
+                }
+              });
+            },
+            child: SizedBox(
+              height: size.width * 1,
+              width: size.width * 0.2,
+              child: Stack(
+                children: [
+                  Container(
+                    width: size.width * 0.13,
+                    height: size.width * 0.13,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(100)),
+                  ),
+                  SizedBox(
+                    width: size.width * 0.11,
+                    height: size.width * 0.11,
+                    child: Image.network(
+                      "https://firebasestorage.googleapis.com/v0/b/pickme-551111.appspot.com/o/Vector.png?alt=media&token=2de07201-3680-4b63-b205-546f5a6df256",
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 40,
+                    child: Container(
+                      width: size.width * 0.08,
+                      height: size.width * 0.08,
+                      decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Color(0xffff8022), Color(0xffff2222)]),
+                          borderRadius: BorderRadius.circular(100)),
+                      child: const Center(
+                        child: Text(
+                          "1",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Put your child her
+                Text(
+                  " 1000 Birr",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "+15 birr derlivery fee",
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w300),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            width: 25,
+          ),
+          Container(
+            width: size.width * 0.3,
+            height: size.width * 0.12,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(100)),
+            child: const Center(
+              child: Text(
+                "Buy Now",
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
