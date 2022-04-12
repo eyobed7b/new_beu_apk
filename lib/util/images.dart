@@ -60,4 +60,7 @@ class Images {
   static const String setLocation = 'assets/image/Set_Location.png';
   static const String location_gps = 'assets/icons/location.svg';
   static const String exit = 'assets/image/exit.png';
+  static const String coupons = 'assets/image/coupons.png';
+  static const String coup1 = 'assets/image/coup1.png';
+  static const String patterncard = 'assets/image/Pattern_card.png';
 }
