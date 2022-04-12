@@ -63,4 +63,7 @@ class Images {
   static const String checkboxOutlined = 'assets/image/square_checkbox.png';
   static const String checkboxTicked =
       'assets/image/square_checkbox_ticked.png';
+  static const String coupons = 'assets/image/coupons.png';
+  static const String coup1 = 'assets/image/coup1.png';
+  static const String patterncard = 'assets/image/Pattern_card.png';
 }

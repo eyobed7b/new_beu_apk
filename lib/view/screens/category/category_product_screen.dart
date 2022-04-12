@@ -174,18 +174,46 @@ class _CategoryProductScreenState extends State<CategoryProductScreen>
                         color: Theme.of(context).textTheme.bodyText1.color,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
-                      icon: CartWidget(
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          size: 25),
-                    ),
+                    // IconButton(
+                    //   onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
+                    //   icon: CartWidget(
+                    //       color: Theme.of(context).textTheme.bodyText1.color,
+                    //       size: 25),
+                    // ),
                   ],
                 ),
           body: Center(
               child: SizedBox(
             width: Dimensions.WEB_MAX_WIDTH,
             child: Column(children: [
+              Center(
+                  child: Container(
+                width: Dimensions.WEB_MAX_WIDTH,
+                color: Theme.of(context).cardColor,
+                child: TabBar(
+                  controller: _tabController,
+                  indicatorColor: Theme.of(context).colorScheme.secondary,
+                  indicatorWeight: 3,
+                  indicator: UnderlineTabIndicator(
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.secondary,
+                        width: 3.0),
+                    insets: EdgeInsets.fromLTRB(50.0, 40.0, 50.0, 0.0),
+                  ),
+                  labelColor: Theme.of(context).colorScheme.secondary,
+                  unselectedLabelColor: Theme.of(context).disabledColor,
+                  unselectedLabelStyle: sfRegular.copyWith(
+                      color: Theme.of(context).disabledColor,
+                      fontSize: Dimensions.fontSizeSmall),
+                  labelStyle: sfBold.copyWith(
+                      fontSize: Dimensions.fontSizeSmall,
+                      color: Theme.of(context).primaryColor),
+                  tabs: [
+                    Tab(text: 'food'.tr),
+                    Tab(text: 'restaurants'.tr),
+                  ],
+                ),
+              )),
               (catController.subCategoryList != null &&
                       !catController.isSearching)
                   ? Center(
@@ -205,144 +233,103 @@ class _CategoryProductScreenState extends State<CategoryProductScreen>
                           return InkWell(
                             onTap: () => catController.setSubCategoryIndex(
                                 index, widget.categoryID),
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                left: index == 0
-                                    ? Dimensions.PADDING_SIZE_LARGE
-                                    : Dimensions.PADDING_SIZE_SMALL,
-                                right: index ==
-                                        catController.subCategoryList.length - 1
-                                    ? Dimensions.PADDING_SIZE_LARGE
-                                    : Dimensions.PADDING_SIZE_SMALL,
-                                top: Dimensions.PADDING_SIZE_SMALL,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(
-                                    _ltr
-                                        ? index == 0
-                                            ? Dimensions.RADIUS_EXTRA_LARGE
-                                            : 0
-                                        : index ==
-                                                catController.subCategoryList
-                                                        .length -
-                                                    1
-                                            ? Dimensions.RADIUS_EXTRA_LARGE
-                                            : 0,
-                                  ),
-                                  right: Radius.circular(
-                                    _ltr
-                                        ? index ==
-                                                catController.subCategoryList
-                                                        .length -
-                                                    1
-                                            ? Dimensions.RADIUS_EXTRA_LARGE
-                                            : 0
-                                        : index == 0
-                                            ? Dimensions.RADIUS_EXTRA_LARGE
-                                            : 0,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Center(
+                                child: Container(
+                                  //
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          Dimensions.PADDING_SIZE_SMALL * 4,
+                                      vertical:
+                                          Dimensions.PADDING_SIZE_SMALL * 1.2),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color: index ==
+                                                  catController.subCategoryIndex
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary
+                                              : Theme.of(context).disabledColor,
+                                          width: 1)),
+                                  child: ShaderMask(
+                                    shaderCallback: (rect) {
+                                      return LinearGradient(
+                                        colors: index ==
+                                                catController.subCategoryIndex
+                                            ? [
+                                                Color(0xffff8022),
+                                                Color(0xffff2222)
+                                              ]
+                                            : [
+                                                Theme.of(context).disabledColor,
+                                                Theme.of(context).disabledColor,
+                                              ],
+                                        tileMode: TileMode.mirror,
+                                      ).createShader(rect);
+                                    },
+                                    child: Text(
+                                      catController.subCategoryList[index].name,
+                                      style: sfBold.copyWith(
+                                          color: Colors.white,
+                                          fontSize: Dimensions.fontSizeSmall),
+                                    ),
                                   ),
                                 ),
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.1),
                               ),
-                              child: Column(children: [
-                                SizedBox(height: 3),
-                                Text(
-                                  catController.subCategoryList[index].name,
-                                  style: index == catController.subCategoryIndex
-                                      ? sfMedium.copyWith(
-                                          fontSize: Dimensions.fontSizeSmall,
-                                          color: Theme.of(context).primaryColor)
-                                      : sfRegular.copyWith(
-                                          fontSize: Dimensions.fontSizeSmall,
-                                          color:
-                                              Theme.of(context).disabledColor),
-                                ),
-                                index == catController.subCategoryIndex
-                                    ? Container(
-                                        height: 5,
-                                        width: 5,
-                                        decoration: BoxDecoration(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            shape: BoxShape.circle),
-                                      )
-                                    : SizedBox(height: 5, width: 5),
-                              ]),
                             ),
                           );
                         },
                       ),
                     ))
                   : SizedBox(),
-              Center(
-                  child: Container(
-                width: Dimensions.WEB_MAX_WIDTH,
-                color: Theme.of(context).cardColor,
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorColor: Theme.of(context).primaryColor,
-                  indicatorWeight: 3,
-                  labelColor: Theme.of(context).primaryColor,
-                  unselectedLabelColor: Theme.of(context).disabledColor,
-                  unselectedLabelStyle: sfRegular.copyWith(
-                      color: Theme.of(context).disabledColor,
-                      fontSize: Dimensions.fontSizeSmall),
-                  labelStyle: sfBold.copyWith(
-                      fontSize: Dimensions.fontSizeSmall,
-                      color: Theme.of(context).primaryColor),
-                  tabs: [
-                    Tab(text: 'food'.tr),
-                    Tab(text: 'restaurants'.tr),
-                  ],
-                ),
-              )),
-              VegFilterWidget(
-                  type: catController.type,
-                  onSelected: (String type) {
-                    if (catController.isSearching) {
-                      catController.searchData(
-                        catController.subCategoryIndex == 0
-                            ? widget.categoryID
-                            : catController
-                                .subCategoryList[catController.subCategoryIndex]
-                                .id
-                                .toString(),
-                        '1',
-                        type,
-                      );
-                    } else {
-                      if (catController.isRestaurant) {
-                        catController.getCategoryRestaurantList(
-                          catController.subCategoryIndex == 0
-                              ? widget.categoryID
-                              : catController
-                                  .subCategoryList[
-                                      catController.subCategoryIndex]
-                                  .id
-                                  .toString(),
-                          1,
-                          type,
-                          true,
-                        );
-                      } else {
-                        catController.getCategoryProductList(
-                          catController.subCategoryIndex == 0
-                              ? widget.categoryID
-                              : catController
-                                  .subCategoryList[
-                                      catController.subCategoryIndex]
-                                  .id
-                                  .toString(),
-                          1,
-                          type,
-                          true,
-                        );
-                      }
-                    }
-                  }),
+
+              // VegFilterWidget(
+              //     type: catController.type,
+              //     onSelected: (String type) {
+              //       if (catController.isSearching) {
+              //         catController.searchData(
+              //           catController.subCategoryIndex == 0
+              //               ? widget.categoryID
+              //               : catController
+              //                   .subCategoryList[catController.subCategoryIndex]
+              //                   .id
+              //                   .toString(),
+              //           '1',
+              //           type,
+              //         );
+              //       } else {
+              //         if (catController.isRestaurant) {
+              //           catController.getCategoryRestaurantList(
+              //             catController.subCategoryIndex == 0
+              //                 ? widget.categoryID
+              //                 : catController
+              //                     .subCategoryList[
+              //                         catController.subCategoryIndex]
+              //                     .id
+              //                     .toString(),
+              //             1,
+              //             type,
+              //             true,
+              //           );
+              //         } else {
+              //           catController.getCategoryProductList(
+              //             catController.subCategoryIndex == 0
+              //                 ? widget.categoryID
+              //                 : catController
+              //                     .subCategoryList[
+              //                         catController.subCategoryIndex]
+              //                     .id
+              //                     .toString(),
+              //             1,
+              //             type,
+              //             true,
+              //           );
+              //         }
+              //       }
+              //     }),
               Expanded(
                   child: NotificationListener(
                 onNotification: (scrollNotification) {
