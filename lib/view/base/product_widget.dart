@@ -3,6 +3,7 @@ import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/restaurant_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/controller/wishlist_controller.dart';
+import 'package:efood_multivendor/data/model/response/cart_model.dart';
 import 'package:efood_multivendor/data/model/response/config_model.dart';
 import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/data/model/response/restaurant_model.dart';
@@ -19,6 +20,7 @@ import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/discount_tag.dart';
 import 'package:efood_multivendor/view/base/not_available_widget.dart';
 import 'package:efood_multivendor/view/base/product_bottom_sheet.dart';
+import 'package:efood_multivendor/view/base/quantity_button.dart';
 import 'package:efood_multivendor/view/base/rating_bar.dart';
 import 'package:efood_multivendor/view/screens/product/prdouct_screen.dart';
 import 'package:efood_multivendor/view/screens/restaurant/restaurant_screen.dart';
@@ -26,6 +28,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
+
+import '../../util/images.dart';
+import 'confirmation_dialog.dart';
 
 class ProductWidget extends StatelessWidget {
   final Product product;
@@ -62,6 +67,7 @@ class ProductWidget extends StatelessWidget {
         print("Restaurant address is: ${restaurant.address}");
       } catch (e) {}
     }
+    CartModel _cartModel = null;
     if (isRestaurant) {
       bool _isClosedToday = Get.find<RestaurantController>()
           .isRestaurantClosed(true, restaurant.active, restaurant.offDay);
@@ -85,6 +91,17 @@ class ProductWidget extends StatelessWidget {
               product.availableTimeStarts, product.availableTimeEnds) &&
           DateConverter.isAvailable(
               product.restaurantOpeningTime, product.restaurantClosingTime);
+      _cartModel = CartModel(
+        product.price,
+        product.price - product.discount,
+        [],
+        product.discount,
+        1,
+        [],
+        [],
+        false,
+        product,
+      );
     }
 
     return InkWell(
@@ -210,7 +227,7 @@ class ProductWidget extends StatelessWidget {
                           : SizedBox(),
                       SizedBox(height: (_desktop || isRestaurant) ? 5 : 0),
                       !isRestaurant
-                          ? Expanded(child: SizedBox())
+                          ? Spacer()
                           : Row(
                               children: [
                                 Icon(
@@ -231,7 +248,7 @@ class ProductWidget extends StatelessWidget {
                                 ),
                               ],
                             ),
-                      SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                      Spacer(),
                       isRestaurant
                           ?
                           // ? RatingBar(
@@ -297,32 +314,112 @@ class ProductWidget extends StatelessWidget {
                   //     vertical:
                   //         _desktop ? Dimensions.PADDING_SIZE_SMALL : 0,
                   //     horizontal: Dimensions.PADDING_SIZE_SMALL),
-                  Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(
-                              Dimensions.PADDING_SIZE_EXTRA_SMALL)),
-                          border: Border.all(
-                              color: Theme.of(context).primaryColor)),
-                      width: 18.w,
-                      height: 3.5.h,
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.add,
-                              size: _desktop ? 30 : 25,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            Text("add".tr,
-                                style: sfRegular.copyWith(
-                                  color: Theme.of(context).primaryColor,
-                                ))
-                          ],
-                        ),
-                      ),
-                    )
+                  GetBuilder<CartController>(builder: (cartController) {
+                      int qty = cartController.getQuantity(product);
+
+                      return qty == 0
+                          ? GestureDetector(
+                              onTap: () {
+                                if (Get.find<CartController>()
+                                    .existAnotherRestaurantProduct(
+                                        _cartModel.product.restaurantId)) {
+                                  Get.dialog(
+                                      ConfirmationDialog(
+                                        icon: Images.warning,
+                                        title: 'are_you_sure_to_reset'.tr,
+                                        description: 'if_you_continue'.tr,
+                                        onYesPressed: () {
+                                          Get.back();
+                                          Get.find<CartController>()
+                                              .removeAllAndAddToCart(
+                                                  _cartModel);
+                                        },
+                                      ),
+                                      barrierDismissible: false);
+                                } else {
+                                  Get.find<CartController>()
+                                      .addToCart(_cartModel);
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(Dimensions
+                                            .PADDING_SIZE_EXTRA_SMALL)),
+                                    border: Border.all(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary)),
+                                width: 18.w,
+                                height: 3.5.h,
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: _desktop ? 30 : 20,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                      Text("add".tr,
+                                          style: sfRegular.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Row(
+                              children: [
+                                QuantityButton(
+                                  isIncrement: false,
+                                  onTap: () =>
+                                      cartController.removeFromCart(product),
+                                ),
+                                Text(
+                                    cartController
+                                        .getQuantity(product)
+                                        .toString(),
+                                    style: sfMedium.copyWith(
+                                        fontSize:
+                                            Dimensions.fontSizeExtraLarge)),
+                                QuantityButton(
+                                    isIncrement: true,
+                                    onTap: () {
+                                      if (Get.find<CartController>()
+                                          .existAnotherRestaurantProduct(
+                                              _cartModel
+                                                  .product.restaurantId)) {
+                                        Get.dialog(
+                                            ConfirmationDialog(
+                                              icon: Images.warning,
+                                              title: 'are_you_sure_to_reset'.tr,
+                                              description: 'if_you_continue'.tr,
+                                              onYesPressed: () {
+                                                Get.back();
+                                                Get.find<CartController>()
+                                                    .removeAllAndAddToCart(
+                                                        _cartModel);
+                                              },
+                                            ),
+                                            barrierDismissible: false);
+                                      } else {
+                                        Get.find<CartController>()
+                                            .addToCart(_cartModel);
+                                      }
+                                    }),
+                              ],
+                            );
+                      // : SizedBox();
+                    })
                   : SizedBox(),
             ]),
           )),

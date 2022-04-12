@@ -1,4 +1,5 @@
 import 'package:efood_multivendor/controller/cart_controller.dart';
+import 'package:efood_multivendor/data/model/body/place_order_body.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -381,5 +381,7 @@
   "sort_and_filter": "Sort and Filter",
   "cost_high_to_low": "Cost (High to Low)",
   "cost_low_to_high": "Cost (Low to High)",
-  "from_beu": "From BeU"
+  "from_beu": "From BeU",
+  "deliv_fee": "Delivery Fee",
+  "buy_now": "Buy now"
 }

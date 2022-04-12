@@ -823,8 +823,8 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                                             ),
                                             barrierDismissible: false);
                                       } else {
-                                        Get.find<CartController>().addToCart(
-                                            _cartModel, widget.cartIndex);
+                                        Get.find<CartController>()
+                                            .addToCart(_cartModel);
                                         _showCartSnackBar(context);
                                       }
                                     }
