@@ -95,7 +95,7 @@ class CartProductWidget extends StatelessWidget {
             Dismissible(
               key: UniqueKey(),
               onDismissed: (DismissDirection direction) =>
-                  Get.find<CartController>().removeFromCart(cartIndex),
+                  Get.find<CartController>().removeFromCart(cart.product),
               child: Container(
                 padding: EdgeInsets.symmetric(
                     vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL,
@@ -187,7 +187,7 @@ class CartProductWidget extends StatelessWidget {
                                   .setQuantity(false, cart);
                             } else {
                               Get.find<CartController>()
-                                  .removeFromCart(cartIndex);
+                                  .removeFromCart(cart.product);
                             }
                           },
                           isIncrement: false,
@@ -208,7 +208,7 @@ class CartProductWidget extends StatelessWidget {
                               child: IconButton(
                                 onPressed: () {
                                   Get.find<CartController>()
-                                      .removeFromCart(cartIndex);
+                                      .removeFromCart(cart.product);
                                 },
                                 icon: Icon(Icons.delete, color: Colors.red),
                               ),

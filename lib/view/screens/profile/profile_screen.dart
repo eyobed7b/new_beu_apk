@@ -132,6 +132,7 @@ class ProfileScreen extends StatelessWidget {
                           title: 'coupon'.tr,
                           iconColor: const Color(0xff12D3C8),
                           onTap: () {
+                            Get.toNamed(RouteHelper.getCouponRoute());
                             // doNavigationWithAuthCheck(1);
                           },
                           icons: FeatherIcons.gift,
