@@ -383,5 +383,7 @@
   "cost_low_to_high": "Cost (Low to High)",
   "from_beu": "From BeU",
   "deliv_fee": "Delivery Fee",
-  "buy_now": "Buy now"
+  "buy_now": "Buy now",
+  "popular_searches": "Popular Searches", 
+  "recent_searches": "Recent Searches"
 }
