@@ -226,7 +226,8 @@ class OrderView extends StatelessWidget {
                                                               .getOrderTrackingRoute(
                                                                   orderList[
                                                                           index]
-                                                                      .id)),
+                                                                      .id,
+                                                                  false)),
                                                       child: Container(
                                                         padding: EdgeInsets.symmetric(
                                                             horizontal: Dimensions
