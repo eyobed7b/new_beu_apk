@@ -26,7 +26,7 @@ class CategoryView extends StatelessWidget {
         Padding(
           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: TitleWidget(
-              title: 'categories'.tr,
+              title: ''.tr,
               onTap: () => Get.toNamed(RouteHelper.getCategoryRoute())),
         ),
         Row(

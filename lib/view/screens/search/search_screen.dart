@@ -2,6 +2,7 @@ import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/search_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
@@ -13,6 +14,7 @@ import 'package:efood_multivendor/view/screens/search/widget/filter_widget.dart'
 import 'package:efood_multivendor/view/screens/search/widget/search_field.dart';
 import 'package:efood_multivendor/view/screens/search/widget/search_result_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -59,7 +61,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: SizedBox(
                       width: Dimensions.WEB_MAX_WIDTH,
                       child: Row(children: [
-                        SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+                        IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () => Get.back(),
+                            icon: Icon(Icons.arrow_back_ios)),
+                        SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                         Expanded(
                             child: SearchField(
                           controller: _searchController,
@@ -94,113 +100,26 @@ class _SearchScreenState extends State<SearchScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        searchController.historyList.length > 0
-                                            ? Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                    Text('history'.tr,
-                                                        style: sfMedium.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeLarge)),
-                                                    InkWell(
-                                                      onTap: () => searchController
-                                                          .clearSearchAddress(),
-                                                      child: Padding(
-                                                        padding: EdgeInsets.symmetric(
-                                                            vertical: Dimensions
-                                                                .PADDING_SIZE_SMALL,
-                                                            horizontal: 4),
-                                                        child: Text(
-                                                            'clear_all'.tr,
-                                                            style: sfRegular
-                                                                .copyWith(
-                                                              fontSize: Dimensions
-                                                                  .fontSizeSmall,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .disabledColor,
-                                                            )),
-                                                      ),
-                                                    ),
-                                                  ])
-                                            : SizedBox(),
-                                        ListView.builder(
-                                          itemCount: searchController
-                                              .historyList.length,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index) {
-                                            return Column(children: [
-                                              Row(children: [
-                                                Expanded(
-                                                  child: InkWell(
-                                                    onTap: () => searchController
-                                                        .searchData(
-                                                            searchController
-                                                                    .historyList[
-                                                                index]),
-                                                    child: Padding(
-                                                      padding: EdgeInsets.symmetric(
-                                                          vertical: Dimensions
-                                                              .PADDING_SIZE_EXTRA_SMALL),
-                                                      child: Text(
-                                                        searchController
-                                                            .historyList[index],
-                                                        style: sfRegular.copyWith(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .disabledColor),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () => searchController
-                                                      .removeHistory(index),
-                                                  child: Padding(
-                                                    padding: EdgeInsets.symmetric(
-                                                        vertical: Dimensions
-                                                            .PADDING_SIZE_EXTRA_SMALL),
-                                                    child: Icon(Icons.close,
-                                                        color: Theme.of(context)
-                                                            .disabledColor,
-                                                        size: 20),
-                                                  ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 2.w),
+                                          child: (_isLoggedIn &&
+                                                  searchController
+                                                          .suggestedFoodList !=
+                                                      null)
+                                              ? Text(
+                                                  'popular_searches'.tr,
+                                                  style: sfMedium.copyWith(
+                                                      color: Colors.black
+                                                          .withOpacity(0.45),
+                                                      fontSize: Dimensions
+                                                          .fontSizeDefault),
                                                 )
-                                              ]),
-                                              index !=
-                                                      searchController
-                                                              .historyList
-                                                              .length -
-                                                          1
-                                                  ? Divider()
-                                                  : SizedBox(),
-                                            ]);
-                                          },
+                                              : SizedBox(),
                                         ),
                                         SizedBox(
-                                            height:
-                                                Dimensions.PADDING_SIZE_LARGE),
-                                        (_isLoggedIn &&
-                                                searchController
-                                                        .suggestedFoodList !=
-                                                    null)
-                                            ? Text(
-                                                'suggestions'.tr,
-                                                style: sfMedium.copyWith(
-                                                    fontSize: Dimensions
-                                                        .fontSizeLarge),
-                                              )
-                                            : SizedBox(),
-                                        SizedBox(
-                                            height:
-                                                Dimensions.PADDING_SIZE_SMALL),
+                                            height: Dimensions
+                                                .PADDING_SIZE_EXTRA_SMALL),
                                         (_isLoggedIn &&
                                                 searchController
                                                         .suggestedFoodList !=
@@ -215,15 +134,18 @@ class _SearchScreenState extends State<SearchScreen> {
                                                           ResponsiveHelper
                                                                   .isMobile(
                                                                       context)
-                                                              ? 2
+                                                              ? 4
                                                               : 4,
                                                       childAspectRatio:
-                                                          (1 / 0.4),
+                                                          (1 / 0.35),
                                                       mainAxisSpacing: Dimensions
                                                           .PADDING_SIZE_SMALL,
                                                       crossAxisSpacing: Dimensions
                                                           .PADDING_SIZE_SMALL,
                                                     ),
+                                                    padding: EdgeInsets.all(
+                                                        Dimensions
+                                                            .PADDING_SIZE_SMALL),
                                                     physics:
                                                         NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
@@ -256,54 +178,39 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                 );
                                                         },
                                                         child: Container(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 1),
                                                           decoration:
                                                               BoxDecoration(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .cardColor,
+                                                            color: Color(
+                                                                0x3DA8A8A8),
                                                             borderRadius:
                                                                 BorderRadius.circular(
                                                                     Dimensions
                                                                         .RADIUS_SMALL),
                                                           ),
-                                                          child: Row(children: [
-                                                            SizedBox(
-                                                                width: Dimensions
-                                                                    .PADDING_SIZE_SMALL),
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      Dimensions
-                                                                          .RADIUS_SMALL),
-                                                              child:
-                                                                  CustomImage(
-                                                                image:
-                                                                    '${Get.find<SplashController>().configModel.baseUrls.productImageUrl}'
-                                                                    '/${searchController.suggestedFoodList[index].image}',
-                                                                width: 45,
-                                                                height: 45,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                                width: Dimensions
-                                                                    .PADDING_SIZE_SMALL),
-                                                            Text(
+                                                          child: Center(
+                                                            child: Text(
                                                               searchController
                                                                   .suggestedFoodList[
                                                                       index]
                                                                   .name,
                                                               style: sfMedium.copyWith(
+                                                                  color: Colors
+                                                                      .black
+                                                                      .withOpacity(
+                                                                          0.7),
                                                                   fontSize:
                                                                       Dimensions
                                                                           .fontSizeSmall),
-                                                              maxLines: 2,
+                                                              maxLines: 1,
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
                                                             ),
-                                                          ]),
+                                                          ),
                                                         ),
                                                       );
                                                     },
@@ -315,6 +222,137 @@ class _SearchScreenState extends State<SearchScreen> {
                                                         'no_suggestions_available'
                                                             .tr))
                                             : SizedBox(),
+                                        SizedBox(
+                                            height:
+                                                Dimensions.PADDING_SIZE_LARGE),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 2.w),
+                                          child: searchController
+                                                      .historyList.length >
+                                                  0
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                      Text('recent_searches'.tr,
+                                                          style: sfMedium.copyWith(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.45),
+                                                              fontSize: Dimensions
+                                                                  .fontSizeDefault)),
+                                                      InkWell(
+                                                        onTap: () =>
+                                                            searchController
+                                                                .clearSearchAddress(),
+                                                        child: Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical:
+                                                                      Dimensions
+                                                                          .PADDING_SIZE_SMALL,
+                                                                  horizontal:
+                                                                      4),
+                                                          child: Text(
+                                                              'clear_all'.tr,
+                                                              style: sfRegular
+                                                                  .copyWith(
+                                                                fontSize: Dimensions
+                                                                    .fontSizeSmall,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .disabledColor,
+                                                              )),
+                                                        ),
+                                                      ),
+                                                    ])
+                                              : SizedBox(),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 2.w),
+                                          child: ListView.builder(
+                                            itemCount: searchController
+                                                .historyList.length,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              return Column(children: [
+                                                Row(children: [
+                                                  Expanded(
+                                                    child: InkWell(
+                                                      onTap: () => searchController
+                                                          .searchData(
+                                                              searchController
+                                                                      .historyList[
+                                                                  index]),
+                                                      child: Padding(
+                                                        padding: EdgeInsets.symmetric(
+                                                            vertical: Dimensions
+                                                                .PADDING_SIZE_EXTRA_SMALL),
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              FeatherIcons
+                                                                  .clock,
+                                                              size: 3.5.w,
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.45),
+                                                            ),
+                                                            SizedBox(
+                                                                width: 4.w),
+                                                            Text(
+                                                              searchController
+                                                                      .historyList[
+                                                                  index],
+                                                              style: sfRegular.copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .disabledColor),
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () =>
+                                                        searchController
+                                                            .removeHistory(
+                                                                index),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.symmetric(
+                                                          vertical: Dimensions
+                                                              .PADDING_SIZE_EXTRA_SMALL),
+                                                      child: Icon(Icons.close,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .disabledColor,
+                                                          size: 20),
+                                                    ),
+                                                  )
+                                                ]),
+                                                index !=
+                                                        searchController
+                                                                .historyList
+                                                                .length -
+                                                            1
+                                                    ? Divider()
+                                                    : SizedBox(),
+                                              ]);
+                                            },
+                                          ),
+                                        ),
                                       ]))),
                         )
                       : SearchResultWidget(

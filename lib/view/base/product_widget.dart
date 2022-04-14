@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/restaurant_controller.dart';
@@ -188,13 +190,14 @@ class ProductWidget extends StatelessWidget {
               Expanded(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
+                      Spacer(),
                       Text(
                         isRestaurant ? restaurant.name : product.name,
                         style: sfBold.copyWith(
                             fontSize: isRestaurant
-                                ? Dimensions.fontSizeDefault
+                                ? Dimensions.fontSizeLarge * 1.2
                                 : Dimensions.fontSizeLarge),
                         maxLines: _desktop ? 3 : 3,
                         overflow: TextOverflow.ellipsis,
@@ -216,7 +219,7 @@ class ProductWidget extends StatelessWidget {
                                 Text(
                                   "Avg $_avgPrice Br.",
                                   style: sfRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraSmall,
+                                    fontSize: Dimensions.fontSizeDefault,
                                     color: Colors.black,
                                   ),
                                   maxLines: _desktop ? 2 : 1,
@@ -225,9 +228,9 @@ class ProductWidget extends StatelessWidget {
                               ],
                             )
                           : SizedBox(),
-                      SizedBox(height: (_desktop || isRestaurant) ? 5 : 0),
+                      Spacer(),
                       !isRestaurant
-                          ? Spacer()
+                          ? SizedBox()
                           : Row(
                               children: [
                                 Icon(
@@ -240,7 +243,7 @@ class ProductWidget extends StatelessWidget {
                                 Text(
                                   "${restaurant.deliveryTime} Min",
                                   style: sfRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraSmall,
+                                    fontSize: Dimensions.fontSizeDefault,
                                     color: Colors.black,
                                   ),
                                   maxLines: 1,
@@ -272,7 +275,7 @@ class ProductWidget extends StatelessWidget {
                                 Text(
                                   "$distance m",
                                   style: sfRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraSmall,
+                                    fontSize: Dimensions.fontSizeDefault,
                                     color: Colors.black,
                                   ),
                                   maxLines: 1,

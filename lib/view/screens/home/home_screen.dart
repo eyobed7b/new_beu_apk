@@ -234,9 +234,7 @@ class HomeScreen extends StatelessWidget {
                               ],
                             ),
                             child: Row(children: [
-                              Icon(Icons.search,
-                                  size: 25,
-                                  color: Theme.of(context).primaryColor),
+                              Icon(Icons.search, size: 25, color: Colors.grey),
                               SizedBox(
                                   width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                               Expanded(
@@ -511,10 +509,10 @@ class HomeScreen extends StatelessWidget {
                                                   //
                                                   : SizedBox()
                                             ]),
-                                            Text(
-                                              "all_rest_desc".tr,
-                                              style: sfRegular,
-                                            )
+                                            // Text(
+                                            //   "all_rest_desc".tr,
+                                            //   style: sfRegular,
+                                            // )
                                           ],
                                         );
                                       }),
