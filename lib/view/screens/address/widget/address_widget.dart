@@ -47,14 +47,22 @@ class AddressWidget extends StatelessWidget {
                   ],
           ),
           child: Row(children: [
-            Icon(
-              address.addressType == 'home'
-                  ? FeatherIcons.home
-                  : address.addressType == 'office'
-                      ? FeatherIcons.briefcase
-                      : FeatherIcons.flag,
-              size: ResponsiveHelper.isDesktop(context) ? 50 : 30,
-              color: Theme.of(context).textTheme.bodyText1.color,
+            ShaderMask(
+              shaderCallback: (shade) {
+                return LinearGradient(
+                  colors: [Color(0xffff8022), Color(0xffff2222)],
+                  tileMode: TileMode.mirror,
+                ).createShader(shade);
+              },
+              child: Icon(
+                address.addressType == 'home'
+                    ? FeatherIcons.home
+                    : address.addressType == 'office'
+                        ? FeatherIcons.briefcase
+                        : FeatherIcons.flag,
+                size: ResponsiveHelper.isDesktop(context) ? 50 : 25,
+                color: Colors.white,
+              ),
             ),
             SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
             Expanded(
@@ -64,14 +72,14 @@ class AddressWidget extends StatelessWidget {
                     Text(
                       address.addressType.tr,
                       style: sfMedium.copyWith(
-                          fontSize: Dimensions.fontSizeSmall * 1.5,
+                          fontSize: Dimensions.fontSizeSmall * 1.3,
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     Text(
                       address.address,
                       style: sfRegular.copyWith(
-                          fontSize: Dimensions.fontSizeExtraSmall * 1.4,
+                          fontSize: Dimensions.fontSizeExtraSmall * 1.2,
                           color: Theme.of(context).disabledColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
