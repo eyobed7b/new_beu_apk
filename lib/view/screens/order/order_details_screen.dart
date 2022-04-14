@@ -543,7 +543,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         onPressed: () {
                                           Get.toNamed(
                                               RouteHelper.getOrderTrackingRoute(
-                                                  _order.id));
+                                                  _order.id, false));
                                         },
                                       ),
                                     )

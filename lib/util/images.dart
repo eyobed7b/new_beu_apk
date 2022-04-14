@@ -67,4 +67,5 @@ class Images {
   static const String coupons = 'assets/image/coupons.png';
   static const String coup1 = 'assets/image/coup1.png';
   static const String patterncard = 'assets/image/Pattern_card.png';
+  static const String order_placed = 'assets/image/op.png';
 }
