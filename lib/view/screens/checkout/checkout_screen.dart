@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/coupon_controller.dart';
@@ -17,10 +19,12 @@ import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
+import 'package:efood_multivendor/util/functions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_app_bar.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
+import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/custom_text_field.dart';
 import 'package:efood_multivendor/view/base/not_logged_in_screen.dart';
@@ -49,6 +53,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool _isDigitalPaymentActive;
   bool _isLoggedIn;
   List<CartModel> _cartList;
+  bool isPromoHide = true;
 
   @override
   void initState() {
@@ -275,28 +280,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         // Order type
-                                        Text('delivery_option'.tr,
-                                            style: sfMedium),
-                                        restController.restaurant.delivery
-                                            ? DeliveryOptionButton(
-                                                value: 'delivery',
-                                                title: 'home_delivery'.tr,
-                                                charge: _charge,
-                                                isFree: restController
-                                                    .restaurant.freeDelivery,
-                                              )
-                                            : SizedBox(),
-                                        restController.restaurant.takeAway
-                                            ? DeliveryOptionButton(
-                                                value: 'take_away',
-                                                title: 'take_away'.tr,
-                                                charge: _deliveryCharge,
-                                                isFree: true,
-                                              )
-                                            : SizedBox(),
-                                        SizedBox(
-                                            height:
-                                                Dimensions.PADDING_SIZE_LARGE),
+                                        // Text('delivery_option'.tr,
+                                        //     style: sfMedium),
+                                        // restController.restaurant.delivery
+                                        //     ? DeliveryOptionButton(
+                                        //         value: 'delivery',
+                                        //         title: 'home_delivery'.tr,
+                                        //         charge: _charge,
+                                        //         isFree: restController
+                                        //             .restaurant.freeDelivery,
+                                        //       )
+                                        //     : SizedBox(),
+                                        // restController.restaurant.takeAway
+                                        //     ? DeliveryOptionButton(
+                                        //         value: 'take_away',
+                                        //         title: 'take_away'.tr,
+                                        //         charge: _deliveryCharge,
+                                        //         isFree: true,
+                                        //       )
+                                        //     : SizedBox(),
+                                        // SizedBox(
+                                        //     height:
+                                        //         Dimensions.PADDING_SIZE_LARGE),
 
                                         orderController.orderType != 'take_away'
                                             ? Column(
@@ -310,20 +315,38 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                         children: [
                                                           Text('deliver_to'.tr,
                                                               style: sfMedium),
-                                                          TextButton.icon(
-                                                            onPressed: () => Get
-                                                                .toNamed(RouteHelper
-                                                                    .getAddAddressRoute(
-                                                                        true)),
-                                                            icon: Icon(
-                                                                Icons.add,
-                                                                size: 20),
-                                                            label: Text(
-                                                                'add'.tr,
-                                                                style: sfMedium.copyWith(
-                                                                    fontSize:
-                                                                        Dimensions
-                                                                            .fontSizeSmall)),
+                                                          ShaderMask(
+                                                            shaderCallback:
+                                                                (shade) {
+                                                              return LinearGradient(
+                                                                colors: [
+                                                                  Color(
+                                                                      0xffff8022),
+                                                                  Color(
+                                                                      0xffff2222)
+                                                                ],
+                                                                tileMode:
+                                                                    TileMode
+                                                                        .mirror,
+                                                              ).createShader(
+                                                                  shade);
+                                                            },
+                                                            child:
+                                                                TextButton.icon(
+                                                              onPressed: () => Get
+                                                                  .toNamed(RouteHelper
+                                                                      .getAddAddressRoute(
+                                                                          true)),
+                                                              icon: Icon(
+                                                                  Icons.add,
+                                                                  size: 20),
+                                                              label: Text(
+                                                                  'add'.tr,
+                                                                  style: sfMedium
+                                                                      .copyWith(
+                                                                          fontSize:
+                                                                              Dimensions.fontSizeSmall)),
+                                                            ),
                                                           ),
                                                         ]),
                                                     DropdownButton(
@@ -457,167 +480,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   ])
                                             : SizedBox(),
 
-                                        // Coupon
-                                        GetBuilder<CouponController>(
-                                          builder: (couponController) {
-                                            return Row(children: [
-                                              Expanded(
-                                                child: SizedBox(
-                                                  height: 50,
-                                                  child: TextField(
-                                                    controller:
-                                                        _couponController,
-                                                    style: sfRegular.copyWith(
-                                                        height: ResponsiveHelper
-                                                                .isMobile(
-                                                                    context)
-                                                            ? null
-                                                            : 2),
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          'enter_promo_code'.tr,
-                                                      hintStyle:
-                                                          sfRegular.copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .hintColor),
-                                                      isDense: true,
-                                                      filled: true,
-                                                      enabled: couponController
-                                                              .discount ==
-                                                          0,
-                                                      fillColor:
-                                                          Theme.of(context)
-                                                              .cardColor,
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .horizontal(
-                                                          left: Radius.circular(
-                                                              Get.find<LocalizationController>()
-                                                                      .isLtr
-                                                                  ? 10
-                                                                  : 0),
-                                                          right: Radius.circular(
-                                                              Get.find<LocalizationController>()
-                                                                      .isLtr
-                                                                  ? 0
-                                                                  : 10),
-                                                        ),
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  String _couponCode =
-                                                      _couponController.text
-                                                          .trim();
-                                                  if (couponController
-                                                              .discount <
-                                                          1 &&
-                                                      !couponController
-                                                          .freeDelivery) {
-                                                    if (_couponCode
-                                                            .isNotEmpty &&
-                                                        !couponController
-                                                            .isLoading) {
-                                                      couponController
-                                                          .applyCoupon(
-                                                              _couponCode,
-                                                              (_price -
-                                                                      _discount) +
-                                                                  _addOns,
-                                                              _deliveryCharge,
-                                                              restController
-                                                                  .restaurant
-                                                                  .id)
-                                                          .then((discount) {
-                                                        if (discount > 0) {
-                                                          showCustomSnackBar(
-                                                            '${'you_got_discount_of'.tr} ${PriceConverter.convertPrice(discount)}',
-                                                            isError: false,
-                                                          );
-                                                        }
-                                                      });
-                                                    } else if (_couponCode
-                                                        .isEmpty) {
-                                                      showCustomSnackBar(
-                                                          'enter_a_coupon_code'
-                                                              .tr);
-                                                    }
-                                                  } else {
-                                                    couponController
-                                                        .removeCouponData(true);
-                                                  }
-                                                },
-                                                child: Container(
-                                                  height: 50,
-                                                  width: 100,
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .primaryColor,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color: Colors.grey[
-                                                              Get.isDarkMode
-                                                                  ? 800
-                                                                  : 200],
-                                                          spreadRadius: 1,
-                                                          blurRadius: 5)
-                                                    ],
-                                                    borderRadius:
-                                                        BorderRadius.horizontal(
-                                                      left: Radius.circular(
-                                                          Get.find<LocalizationController>()
-                                                                  .isLtr
-                                                              ? 0
-                                                              : 10),
-                                                      right: Radius.circular(
-                                                          Get.find<LocalizationController>()
-                                                                  .isLtr
-                                                              ? 10
-                                                              : 0),
-                                                    ),
-                                                  ),
-                                                  child: (couponController
-                                                                  .discount <=
-                                                              0 &&
-                                                          !couponController
-                                                              .freeDelivery)
-                                                      ? !couponController
-                                                              .isLoading
-                                                          ? Text(
-                                                              'apply'.tr,
-                                                              style: sfMedium.copyWith(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .cardColor),
-                                                            )
-                                                          : CircularProgressIndicator(
-                                                              valueColor:
-                                                                  AlwaysStoppedAnimation<
-                                                                          Color>(
-                                                                      Colors
-                                                                          .white))
-                                                      : Icon(Icons.clear,
-                                                          color: Colors.white),
-                                                ),
-                                              ),
-                                            ]);
-                                          },
+                                        Row(
+                                          children: [
+                                            Text('choose_payment_method'.tr,
+                                                style: sfMedium),
+                                            Spacer(),
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  isPromoHide = !isPromoHide;
+                                                });
+                                              },
+                                              child: Text('apply_promo_code'.tr,
+                                                  style: sfMedium.copyWith(
+                                                      color: Color.fromARGB(
+                                                          255, 4, 129, 255))),
+                                            ),
+                                          ],
                                         ),
-                                        SizedBox(
-                                            height:
-                                                Dimensions.PADDING_SIZE_LARGE),
-
-                                        Text('choose_payment_method'.tr,
-                                            style: sfMedium),
                                         SizedBox(
                                             height:
                                                 Dimensions.PADDING_SIZE_SMALL),
@@ -646,6 +526,176 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             height:
                                                 Dimensions.PADDING_SIZE_LARGE),
 
+                                        // Coupon
+                                        Offstage(
+                                          offstage: isPromoHide,
+                                          child: GetBuilder<CouponController>(
+                                            builder: (couponController) {
+                                              return Row(children: [
+                                                Expanded(
+                                                  child: SizedBox(
+                                                    height: 50,
+                                                    child: TextField(
+                                                      controller:
+                                                          _couponController,
+                                                      style: sfRegular.copyWith(
+                                                          height: ResponsiveHelper
+                                                                  .isMobile(
+                                                                      context)
+                                                              ? null
+                                                              : 2),
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            'enter_promo_code'
+                                                                .tr,
+                                                        hintStyle:
+                                                            sfRegular.copyWith(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .hintColor),
+                                                        isDense: true,
+                                                        filled: true,
+                                                        enabled:
+                                                            couponController
+                                                                    .discount ==
+                                                                0,
+                                                        fillColor:
+                                                            Theme.of(context)
+                                                                .cardColor,
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .horizontal(
+                                                            left: Radius.circular(
+                                                                Get.find<LocalizationController>()
+                                                                        .isLtr
+                                                                    ? 10
+                                                                    : 0),
+                                                            right: Radius.circular(
+                                                                Get.find<LocalizationController>()
+                                                                        .isLtr
+                                                                    ? 0
+                                                                    : 10),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide.none,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    String _couponCode =
+                                                        _couponController.text
+                                                            .trim();
+                                                    if (couponController
+                                                                .discount <
+                                                            1 &&
+                                                        !couponController
+                                                            .freeDelivery) {
+                                                      if (_couponCode
+                                                              .isNotEmpty &&
+                                                          !couponController
+                                                              .isLoading) {
+                                                        couponController
+                                                            .applyCoupon(
+                                                                _couponCode,
+                                                                (_price -
+                                                                        _discount) +
+                                                                    _addOns,
+                                                                _deliveryCharge,
+                                                                restController
+                                                                    .restaurant
+                                                                    .id)
+                                                            .then((discount) {
+                                                          if (discount > 0) {
+                                                            showCustomSnackBar(
+                                                              '${'you_got_discount_of'.tr} ${PriceConverter.convertPrice(discount)}',
+                                                              isError: false,
+                                                            );
+                                                          }
+                                                        });
+                                                      } else if (_couponCode
+                                                          .isEmpty) {
+                                                        showCustomSnackBar(
+                                                            'enter_a_coupon_code'
+                                                                .tr);
+                                                      }
+                                                    } else {
+                                                      couponController
+                                                          .removeCouponData(
+                                                              true);
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    height: 50,
+                                                    width: 100,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                          colors: [
+                                                            Color(0xffff8022),
+                                                            Color(0xffff2222)
+                                                          ]),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color: Colors.grey[
+                                                                Get.isDarkMode
+                                                                    ? 800
+                                                                    : 200],
+                                                            spreadRadius: 1,
+                                                            blurRadius: 5)
+                                                      ],
+                                                      borderRadius: BorderRadius
+                                                          .horizontal(
+                                                        left: Radius.circular(
+                                                            Get.find<LocalizationController>()
+                                                                    .isLtr
+                                                                ? 0
+                                                                : 10),
+                                                        right: Radius.circular(
+                                                            Get.find<LocalizationController>()
+                                                                    .isLtr
+                                                                ? 10
+                                                                : 0),
+                                                      ),
+                                                    ),
+                                                    child: (couponController
+                                                                    .discount <=
+                                                                0 &&
+                                                            !couponController
+                                                                .freeDelivery)
+                                                        ? !couponController
+                                                                .isLoading
+                                                            ? Text(
+                                                                'apply'.tr,
+                                                                style: sfMedium.copyWith(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .cardColor),
+                                                              )
+                                                            : CircularProgressIndicator(
+                                                                valueColor:
+                                                                    AlwaysStoppedAnimation<
+                                                                            Color>(
+                                                                        Colors
+                                                                            .white))
+                                                        : Icon(Icons.clear,
+                                                            color:
+                                                                Colors.white),
+                                                  ),
+                                                ),
+                                              ]);
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            height:
+                                                Dimensions.PADDING_SIZE_LARGE),
+
                                         CustomTextField(
                                           controller: _noteController,
                                           hintText: 'additional_note'.tr,
@@ -658,6 +708,156 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         SizedBox(
                                             height:
                                                 Dimensions.PADDING_SIZE_LARGE),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'order'.tr,
+                                              style: sfMedium.copyWith(
+                                                fontSize:
+                                                    Dimensions.fontSizeLarge *
+                                                        1.8,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                            height:
+                                                Dimensions.PADDING_SIZE_LARGE),
+
+                                        GetBuilder<CartController>(
+                                            builder: (cartController) {
+                                          return cartController
+                                                      .cartList.length ==
+                                                  1
+                                              ? ExpansionTile(
+                                                  leading: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            Dimensions
+                                                                .RADIUS_SMALL),
+                                                    child: CustomImage(
+                                                      image: cartController
+                                                          .cartList[0]
+                                                          .product
+                                                          .image,
+                                                      height: 65,
+                                                      width: 70,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                  trailing: Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      color:
+                                                          Colors.transparent),
+                                                  title: Text(cartController
+                                                      .cartList[0]
+                                                      .product
+                                                      .name),
+                                                  subtitle: Text(cartController
+                                                      .cartList[0].product.price
+                                                      .toString()),
+                                                )
+                                              : ExpansionTile(
+                                                  title: Text(
+                                                    cartController
+                                                            .cartList.length
+                                                            .toString() +
+                                                        ' ' +
+                                                        'item'.tr,
+                                                    style: sfMedium.copyWith(
+                                                        fontSize: Dimensions
+                                                                .fontSizeLarge *
+                                                            1.3),
+                                                  ),
+                                                  subtitle: Text(
+                                                    PriceConverter.convertPrice(
+                                                        _subTotal),
+                                                  ),
+                                                  leading: Stack(
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius: BorderRadius
+                                                            .circular(Dimensions
+                                                                .RADIUS_SMALL),
+                                                        child: CustomImage(
+                                                          image: cartController
+                                                              .cartList[1]
+                                                              .product
+                                                              .image,
+                                                          height: 65,
+                                                          width: 70,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        height: 65,
+                                                        width: 70,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.black
+                                                              .withOpacity(0.7),
+                                                          borderRadius: BorderRadius
+                                                              .circular(Dimensions
+                                                                  .RADIUS_SMALL),
+                                                        ),
+                                                        child: Center(
+                                                            child: Text(
+                                                          '${cartController.cartList.length}',
+                                                          style:
+                                                              sfMedium.copyWith(
+                                                                  fontSize: 19,
+                                                                  color: Colors
+                                                                      .white),
+                                                        )),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  children: [
+                                                      ListView.builder(
+                                                          itemCount:
+                                                              cartController
+                                                                  .cartList
+                                                                  .length,
+                                                          shrinkWrap: true,
+                                                          itemBuilder:
+                                                              (ctx, index) {
+                                                            return ListTile(
+                                                              leading:
+                                                                  ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                        Dimensions
+                                                                            .RADIUS_SMALL),
+                                                                child:
+                                                                    CustomImage(
+                                                                  image: cartController
+                                                                      .cartList[
+                                                                          index]
+                                                                      .product
+                                                                      .image,
+                                                                  height: 65,
+                                                                  width: 70,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                              title: Text(
+                                                                  cartController
+                                                                      .cartList[
+                                                                          index]
+                                                                      .product
+                                                                      .name),
+                                                              subtitle: Text(
+                                                                  cartController
+                                                                      .cartList[
+                                                                          index]
+                                                                      .product
+                                                                      .price
+                                                                      .toString()),
+                                                            );
+                                                          })
+                                                    ]);
+                                        }),
 
                                         Row(
                                             mainAxisAlignment:
