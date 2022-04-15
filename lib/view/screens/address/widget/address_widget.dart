@@ -1,5 +1,6 @@
 import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
@@ -72,14 +73,14 @@ class AddressWidget extends StatelessWidget {
                     Text(
                       address.addressType.tr,
                       style: sfMedium.copyWith(
-                          fontSize: Dimensions.fontSizeSmall * 1.3,
+                          fontSize: Dimensions.fontSizeSmall * 0.35.w,
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     Text(
                       address.address,
                       style: sfRegular.copyWith(
-                          fontSize: Dimensions.fontSizeExtraSmall * 1.2,
+                          fontSize: Dimensions.fontSizeExtraSmall * 0.4.w,
                           color: Theme.of(context).disabledColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
