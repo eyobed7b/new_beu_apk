@@ -152,7 +152,8 @@ class RouteHelper {
   static String getPaymentRoute(String id, int user) =>
       '$payment?id=$id&user=$user';
   static String getCheckoutRoute(String page) => '$checkout?page=$page';
-  static String getOrderTrackingRoute(int id) => '$orderTracking?id=$id';
+  static String getOrderTrackingRoute(int id, bool fromComplete) =>
+      '$orderTracking?id=$id&fromComplete=$fromComplete';
   static String getBasicCampaignRoute(int id, String title, String image) =>
       '$basicCampaign?id=$id&image=$image&title=$title';
   static String getHtmlRoute(String page) => '$html?page=$page';
