@@ -349,7 +349,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                                                       .briefcase
                                                                   : FeatherIcons
                                                                       .flag,
-                                                          size: 36,
+                                                          size: 4.h,
                                                           color: locationController
                                                                       .addressTypeIndex ==
                                                                   index
@@ -379,7 +379,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                                                     .color,
                                                             fontSize: Dimensions
                                                                     .fontSizeExtraLarge *
-                                                                1.2),
+                                                                0.25.w),
                                                       ),
                                                     ]),
                                               ),
