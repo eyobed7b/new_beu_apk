@@ -837,9 +837,9 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(100)),
-                child: const Center(
+                child: Center(
                   child: Text(
-                    "Buy Now",
+                    'buy_now'.tr,
                     style: TextStyle(
                         color: Colors.red,
                         fontSize: 18,
