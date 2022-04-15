@@ -29,9 +29,10 @@ class AddressWidget extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
+          // height: 13.h,
           padding: EdgeInsets.all(ResponsiveHelper.isDesktop(context)
               ? Dimensions.PADDING_SIZE_DEFAULT
-              : Dimensions.PADDING_SIZE_SMALL),
+              : Dimensions.PADDING_SIZE_SMALL / 2),
           decoration: BoxDecoration(
             color: fromCheckout ? null : Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
@@ -76,11 +77,11 @@ class AddressWidget extends StatelessWidget {
                           fontSize: Dimensions.fontSizeSmall * 0.35.w,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                    SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL / 2),
                     Text(
                       address.address,
                       style: sfRegular.copyWith(
-                          fontSize: Dimensions.fontSizeExtraSmall * 0.4.w,
+                          fontSize: Dimensions.fontSizeExtraSmall * 0.3.w,
                           color: Theme.of(context).disabledColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
