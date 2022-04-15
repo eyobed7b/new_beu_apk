@@ -317,8 +317,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                             },
                                             child: Center(
                                               child: Container(
-                                                width: 12.h,
-                                                height: 12.h,
+                                                width: 13.h,
+                                                height: 13.h,
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: Dimensions
                                                         .PADDING_SIZE_LARGE,
