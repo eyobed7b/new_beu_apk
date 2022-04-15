@@ -197,9 +197,9 @@ class ProductWidget extends StatelessWidget {
                         isRestaurant ? restaurant.name : product.name,
                         style: sfBold.copyWith(
                             fontSize: isRestaurant
-                                ? Dimensions.fontSizeLarge * 1.2
+                                ? Dimensions.fontSizeLarge * 1.1
                                 : Dimensions.fontSizeLarge),
-                        maxLines: _desktop ? 3 : 3,
+                        maxLines: _desktop ? 3 : 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(
@@ -217,7 +217,7 @@ class ProductWidget extends StatelessWidget {
                                 SizedBox(
                                     width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                 Text(
-                                  "Avg $_avgPrice Br.",
+                                  "Avg ${restaurant.avgPrice} Br.",
                                   style: sfRegular.copyWith(
                                     fontSize: Dimensions.fontSizeDefault,
                                     color: Colors.black,
@@ -273,7 +273,7 @@ class ProductWidget extends StatelessWidget {
                                 SizedBox(
                                     width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                 Text(
-                                  "$distance m",
+                                  "${restaurant.distance}",
                                   style: sfRegular.copyWith(
                                     fontSize: Dimensions.fontSizeDefault,
                                     color: Colors.black,

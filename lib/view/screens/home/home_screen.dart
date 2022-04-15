@@ -30,13 +30,13 @@ class HomeScreen extends StatelessWidget {
   static Future<void> loadData(bool reload) async {
     Get.find<BannerController>().getBannerList(reload);
     Get.find<CategoryController>().getCategoryList(reload);
-    Get.find<RestaurantController>()
-        .getPopularRestaurantList(reload, 'all', false);
-    Get.find<CampaignController>().getItemCampaignList(reload);
-    Get.find<ProductController>().getPopularProductList(reload, 'all', false);
-    Get.find<RestaurantController>()
-        .getLatestRestaurantList(reload, 'all', false);
-    Get.find<ProductController>().getReviewedProductList(reload, 'all', false);
+    // Get.find<RestaurantController>()
+    // .getPopularRestaurantList(reload, 'all', false);
+    // Get.find<CampaignController>().getItemCampaignList(reload);
+    // Get.find<ProductController>().getPopularProductList(reload, 'all', false);
+    // Get.find<RestaurantController>()
+    // .getLatestRestaurantList(reload, 'all', false);
+    // Get.find<ProductController>().getReviewedProductList(reload, 'all', false);
     Get.find<RestaurantController>().getRestaurantList('1', reload);
     if (Get.find<AuthController>().isLoggedIn()) {
       Get.find<UserController>().getUserInfo();

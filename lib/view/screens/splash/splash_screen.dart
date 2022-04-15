@@ -14,10 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:efood_multivendor/helper/size_config.dart' as Size;
 
+import '../../../controller/filter_controller.dart';
+
 class SplashScreen extends StatefulWidget {
   final String orderID;
   SplashScreen({@required this.orderID});
-
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -29,7 +30,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     bool _firstTime = true;
     _onConnectivityChanged = Connectivity()
         .onConnectivityChanged
@@ -118,8 +118,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     Size.init(context);
+    Get.find<FilterController>().clearFilters();
 
     return Stack(children: <Widget>[
       Container(
