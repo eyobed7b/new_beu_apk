@@ -356,7 +356,7 @@ class ProductWidget extends StatelessWidget {
                                 width: 18.w,
                                 height: 3.5.h,
                                 child: Align(
-                                  alignment: Alignment.topCenter,
+                                  alignment: Alignment.center,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
