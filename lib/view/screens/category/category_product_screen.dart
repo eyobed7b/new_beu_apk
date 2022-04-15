@@ -4,12 +4,14 @@ import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/data/model/response/restaurant_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/cart_widget.dart';
 import 'package:efood_multivendor/view/base/product_view.dart';
 import 'package:efood_multivendor/view/base/veg_filter_widget.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
+import 'package:efood_multivendor/view/screens/restaurant/widget/category_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -174,12 +176,12 @@ class _CategoryProductScreenState extends State<CategoryProductScreen>
                         color: Theme.of(context).textTheme.bodyText1.color,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
-                      icon: CartWidget(
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          size: 25),
-                    ),
+                    // IconButton(
+                    //   onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
+                    //   icon: CartWidget(
+                    //       color: Theme.of(context).textTheme.bodyText1.color,
+                    //       size: 25),
+                    // ),
                   ],
                 ),
           body: Center(
@@ -214,76 +216,75 @@ class _CategoryProductScreenState extends State<CategoryProductScreen>
                   ],
                 ),
               )),
+              SizedBox(height: 1.h),
               (catController.subCategoryList != null &&
                       !catController.isSearching)
-                  ? Center(
-                      child: Container(
-                      height: 50,
+                  ? Container(
+                      height: 40,
                       width: Dimensions.WEB_MAX_WIDTH,
                       color: Theme.of(context).cardColor,
                       padding: EdgeInsets.symmetric(
                           vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                       child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: catController.subCategoryList.length,
-                        padding: EdgeInsets.only(
-                            left: Dimensions.PADDING_SIZE_SMALL),
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () => catController.setSubCategoryIndex(
-                                index, widget.categoryID),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Center(
-                                child: Container(
-                                  //
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal:
-                                          Dimensions.PADDING_SIZE_SMALL * 4,
-                                      vertical:
-                                          Dimensions.PADDING_SIZE_SMALL * 1.2),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: index ==
-                                                  catController.subCategoryIndex
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary
-                                              : Theme.of(context).disabledColor,
-                                          width: 1)),
-                                  child: ShaderMask(
-                                    shaderCallback: (rect) {
-                                      return LinearGradient(
-                                        colors: index ==
-                                                catController.subCategoryIndex
-                                            ? [
-                                                Color(0xffff8022),
-                                                Color(0xffff2222)
-                                              ]
-                                            : [
-                                                Theme.of(context).disabledColor,
-                                                Theme.of(context).disabledColor,
-                                              ],
-                                        tileMode: TileMode.mirror,
-                                      ).createShader(rect);
-                                    },
-                                    child: Text(
-                                      catController.subCategoryList[index].name,
-                                      style: sfBold.copyWith(
-                                          color: Colors.white,
-                                          fontSize: Dimensions.fontSizeSmall),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ))
+                          scrollDirection: Axis.horizontal,
+                          itemCount: catController.subCategoryList.length,
+                          padding: EdgeInsets.only(
+                              left: Dimensions.PADDING_SIZE_SMALL),
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return CategoryTabItem(
+                              index: index,
+                              catController: catController,
+                              categoryID: widget.categoryID,
+                              isSub: true,
+                            );
+                            // InkWell(
+                            //   onTap: () => catController.setSubCategoryIndex(
+                            //       index, widget.categoryID),
+                            //   child: ShaderMask(
+                            //     shaderCallback: (rect) {
+                            //       return LinearGradient(
+                            //         colors: index ==
+                            //                 catController.subCategoryIndex
+                            //             ? [Color(0xffff8022), Color(0xffff2222)]
+                            //             : [
+                            //                 Theme.of(context).disabledColor,
+                            //                 Theme.of(context).disabledColor,
+                            //               ],
+                            //         tileMode: TileMode.mirror,
+                            //       ).createShader(rect);
+                            //     },
+                            //     child: Container(
+                            //       height: 0.2.h,
+                            //       margin: EdgeInsets.symmetric(
+                            //           horizontal:
+                            //               Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                            //       padding: EdgeInsets.symmetric(
+                            //         horizontal: Dimensions.PADDING_SIZE_DEFAULT,
+                            //       ),
+                            //       decoration: BoxDecoration(
+                            //         border: catController.subCategoryIndex ==
+                            //                 index
+                            //             ? Border.all(
+                            //                 color:
+                            //                     Theme.of(context).primaryColor)
+                            //             : Border.all(color: Colors.grey),
+                            //         borderRadius: BorderRadius.circular(
+                            //             Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                            //       ),
+                            //       child: Center(
+                            //         child: Text(
+                            //           catController.subCategoryList[index].name,
+                            //           style: sfBold.copyWith(
+                            //               color: Colors.white,
+                            //               fontSize: Dimensions.fontSizeSmall),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
+                          }),
+                    )
                   : SizedBox(),
 
               // VegFilterWidget(

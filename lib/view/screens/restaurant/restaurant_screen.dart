@@ -196,14 +196,15 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                                   : SliverAppBar(
                                       expandedHeight: 230,
                                       toolbarHeight: 50,
+                                      elevation: 0,
                                       pinned: true,
                                       floating: false,
                                       backgroundColor:
-                                          Theme.of(context).primaryColor,
+                                          Theme.of(context).cardColor,
                                       leading: IconButton(
                                         icon: Icon(
                                           Icons.chevron_left,
-                                          color: Theme.of(context).cardColor,
+                                          color: Colors.black,
                                           size: 5.h,
                                         ),
                                         onPressed: () => Get.back(),
@@ -249,7 +250,7 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                                           ),
                                           Positioned(
                                             right: 2.w,
-                                            top: 4.h,
+                                            top: 5.h,
                                             child: Container(
                                               padding: EdgeInsets.all(7),
                                               decoration: BoxDecoration(
@@ -271,7 +272,7 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                                               // width: 10.w,
                                               // height: 3.w,
                                               child: Text(
-                                                "Open now",
+                                                "open_now",
                                                 style: sfBold.copyWith(
                                                     color: Colors.white),
                                               ),

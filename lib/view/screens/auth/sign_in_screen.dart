@@ -100,7 +100,10 @@ class _SignInScreenState extends State<SignInScreen> {
               : !widget.exitFromApp && !authController.isWaitingForOTP
                   ? AppBar(
                       leading: IconButton(
-                        onPressed: () => Get.back(),
+                        onPressed: () {
+                          authController.back();
+                          Get.back();
+                        },
                         icon: Icon(Icons.arrow_back_ios_rounded,
                             color: Theme.of(context).textTheme.bodyText1.color),
                       ),
@@ -271,131 +274,127 @@ class _SignInScreenState extends State<SignInScreen> {
                                     ])
                               : Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () =>
-                                              authController.waitForOTP(false),
-                                          child: Container(
-                                            width: 12.w,
-                                            height: 12.w,
+                                  child: Container(
+                                    height: widget.exitFromApp ? 100.h : 90.h,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () => authController
+                                                .waitForOTP(false),
+                                            child: Container(
+                                              width: 12.w,
+                                              height: 12.w,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          1.5.h),
+                                                  color: Theme.of(context)
+                                                      .primaryColor
+                                                      .withOpacity(0.3)),
+                                              child: Icon(
+                                                Icons.arrow_back,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5.h),
+                                          Text(
+                                            "enter_the_code".tr,
+                                            maxLines: 2,
+                                            style: sfRegular.copyWith(
+                                                fontSize: 30,
+                                                color: Color.fromARGB(
+                                                    255, 9, 5, 28)),
+                                          ),
+                                          SizedBox(height: 3.h),
+                                          Text(
+                                            "${"sent_the_code".tr} $_countryDialCode${_phoneController.text} ${"please_enter_code".tr}",
+                                            style: sfRegular.copyWith(
+                                                fontSize: 16),
+                                          ),
+                                          SizedBox(height: 3.h),
+                                          OTPTextField(
+                                              onChanged: (value) {},
+                                              length: 6,
+                                              width: 336,
+                                              fieldWidth: 50,
+                                              style:
+                                                  const TextStyle(fontSize: 17),
+                                              textFieldAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              fieldStyle: FieldStyle.underline,
+                                              onCompleted: (pin) async {
+                                                if (kDebugMode) {
+                                                  print("Completed: " + pin);
+                                                }
+                                                ResponseModel res =
+                                                    await authController
+                                                        .verifyOTP(pin);
+                                              }),
+                                          SizedBox(height: 3.h),
+                                          Align(
+                                              alignment: Alignment.center,
+                                              child: TimerButton(
+                                                label: "send_sms_again".tr,
+                                                buttonType:
+                                                    ButtonType.TextButton,
+                                                timeOutInSeconds: 90,
+                                                onPressed: () {
+                                                  authController.sendOTP(
+                                                      _phoneController,
+                                                      _countryDialCode);
+                                                },
+                                                disabledColor:
+                                                    Colors.transparent,
+                                                color: Colors.transparent,
+                                                disabledTextStyle:
+                                                    const TextStyle(
+                                                        fontSize: 16.0,
+                                                        color: Colors.grey),
+                                                activeTextStyle:
+                                                    const TextStyle(
+                                                        fontSize: 16.0,
+                                                        color:
+                                                            Colors.deepOrange),
+                                              )),
+                                          Spacer(),
+                                          Container(
+                                            height: 7.h,
+                                            width: 90.w,
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         1.5.h),
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(0.3)),
-                                            child: Icon(
-                                              Icons.arrow_back,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                            ),
+                                                gradient: LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      Theme.of(context)
+                                                          .primaryColor,
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary
+                                                    ])),
+                                            child: Center(
+                                                child: !authController.isLoading
+                                                    ? Text("next".tr,
+                                                        style: sfBold.copyWith(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.white))
+                                                    : CircularProgressIndicator
+                                                        .adaptive(
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                                Colors.white),
+                                                      )),
                                           ),
-                                        ),
-                                        SizedBox(height: 5.h),
-                                        Text(
-                                          "enter_the_code".tr,
-                                          maxLines: 2,
-                                          style: sfRegular.copyWith(
-                                              fontSize: 30,
-                                              color: Color.fromARGB(
-                                                  255, 9, 5, 28)),
-                                        ),
-                                        SizedBox(height: 3.h),
-                                        Text(
-                                          "sent_the_code".tr +
-                                              _countryDialCode +
-                                              _phoneController.text +
-                                              "please_enter_code".tr,
-                                          style:
-                                              sfRegular.copyWith(fontSize: 16),
-                                        ),
-                                        SizedBox(height: 3.h),
-                                        OTPTextField(
-                                            onChanged: (value) {},
-                                            length: 6,
-                                            width: 336,
-                                            fieldWidth: 50,
-                                            style:
-                                                const TextStyle(fontSize: 17),
-                                            textFieldAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            fieldStyle: FieldStyle.underline,
-                                            onCompleted: (pin) async {
-                                              if (kDebugMode) {
-                                                print("Completed: " + pin);
-                                              }
-                                              ResponseModel res =
-                                                  await authController
-                                                      .verifyOTP(pin);
-                                            }),
-                                        SizedBox(height: 3.h),
-                                        Align(
-                                            alignment: Alignment.center,
-                                            child: TimerButton(
-                                              label: "send_sms_again".tr,
-                                              buttonType: ButtonType.TextButton,
-                                              timeOutInSeconds: 20,
-                                              onPressed: () {
-                                                authController.sendOTP(
-                                                    _phoneController,
-                                                    _countryDialCode);
-                                              },
-                                              disabledColor: Colors.transparent,
-                                              color: Colors.transparent,
-                                              disabledTextStyle:
-                                                  const TextStyle(
-                                                      fontSize: 16.0,
-                                                      color: Colors.grey),
-                                              activeTextStyle: const TextStyle(
-                                                  fontSize: 16.0,
-                                                  color: Colors.deepOrange),
-                                            )),
-                                        SizedBox(
-                                          height: 38.h,
-                                        ),
-                                        Container(
-                                          height: 7.h,
-                                          width: 90.w,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(1.5.h),
-                                              gradient: LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                  colors: [
-                                                    Theme.of(context)
-                                                        .primaryColor,
-                                                    Theme.of(context)
-                                                        .colorScheme
-                                                        .secondary
-                                                  ])),
-                                          child: Center(
-                                            child: !authController.isLoading
-                                                ? Text("next".tr,
-                                                    style: sfBold.copyWith(
-                                                        fontSize: 18,
-                                                        color: Colors.white))
-                                                : ShaderMask(
-                                                    shaderCallback: (shade) {
-                                                      return LinearGradient(
-                                                        colors: [
-                                                          Color(0xffff8022),
-                                                          Color(0xffff2222)
-                                                        ],
-                                                        tileMode:
-                                                            TileMode.mirror,
-                                                      ).createShader(shade);
-                                                    },
-                                                    child:
-                                                        CircularProgressIndicator
-                                                            .adaptive()),
-                                          ),
-                                        )
-                                      ]),
+                                        ]),
+                                  ),
                                 ))))));
     }));
   }

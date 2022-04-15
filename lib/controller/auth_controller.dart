@@ -413,6 +413,7 @@ class AuthController extends GetxController implements GetxService {
     String token = await FirebaseAuth.instance.currentUser.getIdToken();
     await loginUser(token).then((value) {
       responseModel = value;
+      _isWaitingForOTP = false;
       _isLoading = false;
     });
     return responseModel;
@@ -420,6 +421,11 @@ class AuthController extends GetxController implements GetxService {
 
   void setVerificationId(String verificationId) {
     _verificationId = verificationId;
+    update();
+  }
+
+  void back() {
+    _isLoading = false;
     update();
   }
 }
