@@ -60,6 +60,7 @@ void showCustomDialog(BuildContext context) {
                   GestureDetector(
                     onTap: () {
                       Get.find<AuthController>().clearSharedData();
+
                       Get.find<CartController>().clearCartList();
 
                       Get.offAllNamed(RouteHelper.signIn);

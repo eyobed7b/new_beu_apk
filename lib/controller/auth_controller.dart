@@ -381,13 +381,8 @@ class AuthController extends GetxController implements GetxService {
     Response res = await authRepo.sendFirebaseToken(token);
     if (res.statusCode == 200) {
       authRepo.saveUserToken(res.body['token']);
-      if (res.body['userName'] == null) {
-        responseModel = ResponseModel(true, "newuser");
-        Get.toNamed(RouteHelper.signUp);
-      } else {
-        responseModel = ResponseModel(true, res.body['userName']);
-        Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
-      }
+      responseModel = ResponseModel(
+          true, '${res.body['is_phone_verified']}${res.body['token']}');
     } else {
       responseModel = ResponseModel(false, res.statusText);
     }
@@ -402,21 +397,17 @@ class AuthController extends GetxController implements GetxService {
     return _notification;
   }
 
-  verifyOTP(String pin) async {
+  void verifyOTP(String pin) {
     _isLoading = true;
     update();
-    ResponseModel responseModel;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: pin);
-    UserCredential pCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    String token = await FirebaseAuth.instance.currentUser.getIdToken();
-    await loginUser(token).then((value) {
-      responseModel = value;
-      _isWaitingForOTP = false;
-      _isLoading = false;
+    FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+      FirebaseAuth.instance.currentUser.getIdToken().then((token) {
+        loginUser(token);
+        _isLoading = false;
+      });
     });
-    return responseModel;
   }
 
   void setVerificationId(String verificationId) {
