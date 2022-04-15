@@ -1,6 +1,7 @@
 import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/order_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
+import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_app_bar.dart';
@@ -38,42 +39,47 @@ class _OrderScreenState extends State<OrderScreen>
           title: 'my_orders'.tr,
           isBackButtonExist: ResponsiveHelper.isDesktop(context)),
       body: _isLoggedIn
-          ? GetBuilder<OrderController>(
-              builder: (orderController) {
-                return Column(children: [
-                  Center(
-                    child: Container(
-                      width: Dimensions.WEB_MAX_WIDTH,
-                      color: Theme.of(context).cardColor,
-                      child: TabBar(
-                        controller: _tabController,
-                        indicatorColor: Theme.of(context).primaryColor,
-                        indicatorWeight: 3,
-                        labelColor: Theme.of(context).primaryColor,
-                        unselectedLabelColor: Theme.of(context).disabledColor,
-                        unselectedLabelStyle: sfRegular.copyWith(
-                            color: Theme.of(context).disabledColor,
-                            fontSize: Dimensions.fontSizeSmall),
-                        labelStyle: sfBold.copyWith(
-                            fontSize: Dimensions.fontSizeSmall,
-                            color: Theme.of(context).primaryColor),
-                        tabs: [
-                          Tab(text: 'running'.tr),
-                          Tab(text: 'history'.tr),
-                        ],
+          ? SingleChildScrollView(
+              child: GetBuilder<OrderController>(
+                builder: (orderController) {
+                  return Column(children: [
+                    Center(
+                      child: Container(
+                        width: Dimensions.WEB_MAX_WIDTH,
+                        color: Theme.of(context).cardColor,
+                        height: 100.h,
+                        child: OrderView(isRunning: true),
+
+                        // TabBar(
+                        //   controller: _tabController,
+                        //   indicatorColor: Theme.of(context).primaryColor,
+                        //   indicatorWeight: 3,
+                        //   labelColor: Theme.of(context).primaryColor,
+                        //   unselectedLabelColor: Theme.of(context).disabledColor,
+                        //   unselectedLabelStyle: sfRegular.copyWith(
+                        //       color: Theme.of(context).disabledColor,
+                        //       fontSize: Dimensions.fontSizeSmall),
+                        //   labelStyle: sfBold.copyWith(
+                        //       fontSize: Dimensions.fontSizeSmall,
+                        //       color: Theme.of(context).primaryColor),
+                        //   tabs: [
+                        //     Tab(text: 'running'.tr),
+                        //     Tab(text: 'history'.tr),
+                        //   ],
+                        // ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                      child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      OrderView(isRunning: true),
-                      OrderView(isRunning: false),
-                    ],
-                  )),
-                ]);
-              },
+                    // Expanded(
+                    //     child: TabBarView(
+                    //   controller: _tabController,
+                    //   children: [
+                    //     OrderView(isRunning: true),
+                    //     OrderView(isRunning: false),
+                    //   ],
+                    // )),
+                  ]);
+                },
+              ),
             )
           : NotLoggedInScreen(),
     );
