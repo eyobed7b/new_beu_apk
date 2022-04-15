@@ -285,7 +285,35 @@ class _ProductScreenState extends State<ProductScreen>
                                       ),
                                     )),
                               ),
-                            )
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              clipBehavior: Clip.antiAlias,
+                              child: Container(
+                                height: 35.h,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.black.withOpacity(0.5),
+                                      Colors.transparent,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 2.h,
+                              left: 1.w,
+                              child: IconButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                icon: Icon(Icons.arrow_back_ios_rounded,
+                                    color: Colors.white.withOpacity(0.8)),
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(height: 5.h),
