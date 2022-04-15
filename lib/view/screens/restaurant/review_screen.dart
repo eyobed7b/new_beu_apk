@@ -18,29 +18,58 @@ class ReviewScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: 'restaurant_reviews'.tr),
       body: GetBuilder<RestaurantController>(builder: (restController) {
-        return restController.restaurantReviewList != null ? restController.restaurantReviewList.length > 0 ? RefreshIndicator(
-          onRefresh: () async {
-            await restController.getRestaurantReviewList(restaurantID);
-          },
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
-                childAspectRatio: (1/0.2), crossAxisSpacing: 10, mainAxisSpacing: 10,
-              ),
-              itemCount: restController.restaurantReviewList.length,
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-              itemBuilder: (context, index) {
-                return ReviewWidget(
-                  review: restController.restaurantReviewList[index],
-                  hasDivider: index != restController.restaurantReviewList.length-1,
-                );
-              },
-            )))),
-        ) : Center(child: NoDataScreen(text: 'no_review_found'.tr)) : Center(child: CircularProgressIndicator());
+        return restController.restaurantReviewList != null
+            ? restController.restaurantReviewList.length > 0
+                ? RefreshIndicator(
+                    onRefresh: () async {
+                      await restController
+                          .getRestaurantReviewList(restaurantID);
+                    },
+                    child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Center(
+                            child: SizedBox(
+                                width: Dimensions.WEB_MAX_WIDTH,
+                                child: GridView.builder(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount:
+                                        ResponsiveHelper.isMobile(context)
+                                            ? 1
+                                            : 2,
+                                    childAspectRatio: (1 / 0.2),
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                  ),
+                                  itemCount: restController
+                                      .restaurantReviewList.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.all(
+                                      Dimensions.PADDING_SIZE_SMALL),
+                                  itemBuilder: (context, index) {
+                                    return ReviewWidget(
+                                      review: restController
+                                          .restaurantReviewList[index],
+                                      hasDivider: index !=
+                                          restController
+                                                  .restaurantReviewList.length -
+                                              1,
+                                    );
+                                  },
+                                )))),
+                  )
+                : Center(child: NoDataScreen(text: 'no_review_found'.tr))
+            : Center(
+                child: ShaderMask(
+                    shaderCallback: (shade) {
+                      return LinearGradient(
+                        colors: [Color(0xffff8022), Color(0xffff2222)],
+                        tileMode: TileMode.mirror,
+                      ).createShader(shade);
+                    },
+                    child: CircularProgressIndicator.adaptive()),
+              );
       }),
     );
   }

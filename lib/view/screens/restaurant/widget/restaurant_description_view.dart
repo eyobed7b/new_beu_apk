@@ -51,8 +51,15 @@ class RestaurantDescriptionView extends StatelessWidget {
             ),
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Row(children: [
-              Icon(FeatherIcons.star,
-                  color: Theme.of(context).primaryColor, size: 20),
+              ShaderMask(
+                  shaderCallback: (shade) {
+                    return LinearGradient(
+                      colors: [Color(0xffff8022), Color(0xffff2222)],
+                      tileMode: TileMode.mirror,
+                    ).createShader(shade);
+                  },
+                  child: Icon(FeatherIcons.star,
+                      color: Theme.of(context).primaryColor, size: 20)),
               SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
               Text(
                 restaurant.avgRating.toStringAsFixed(1),
@@ -75,8 +82,16 @@ class RestaurantDescriptionView extends StatelessWidget {
           ),
           SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
           Row(children: [
-            Icon(FeatherIcons.clock,
-                color: Theme.of(context).primaryColor, size: 20),
+            ShaderMask(
+              shaderCallback: (shade) {
+                return LinearGradient(
+                  colors: [Color(0xffff8022), Color(0xffff2222)],
+                  tileMode: TileMode.mirror,
+                ).createShader(shade);
+              },
+              child: Icon(FeatherIcons.clock,
+                  color: Theme.of(context).primaryColor, size: 20),
+            ),
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(
               "${restaurant.openingTime.toString()} - ${restaurant.closeingTime.toString()}",
@@ -96,8 +111,15 @@ class RestaurantDescriptionView extends StatelessWidget {
                   fontSize: Dimensions.fontSizeSmall, color: Colors.grey)),
           SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
           Row(children: [
-            Icon(FeatherIcons.truck,
-                color: Theme.of(context).primaryColor, size: 20),
+            ShaderMask(
+                shaderCallback: (shade) {
+                  return LinearGradient(
+                    colors: [Color(0xffff8022), Color(0xffff2222)],
+                    tileMode: TileMode.mirror,
+                  ).createShader(shade);
+                },
+                child: Icon(Icons.pedal_bike_outlined,
+                    color: Theme.of(context).primaryColor, size: 20)),
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(
               '${restaurant.deliveryTime} ${'min'.tr}',

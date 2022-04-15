@@ -161,7 +161,19 @@ class _DeliveryManReviewWidgetState extends State<DeliveryManReviewWidget> {
                                         },
                                       )
                                     : Center(
-                                        child: CircularProgressIndicator()),
+                                        child: ShaderMask(
+                                            shaderCallback: (shade) {
+                                              return LinearGradient(
+                                                colors: [
+                                                  Color(0xffff8022),
+                                                  Color(0xffff2222)
+                                                ],
+                                                tileMode: TileMode.mirror,
+                                              ).createShader(shade);
+                                            },
+                                            child: CircularProgressIndicator
+                                                .adaptive()),
+                                      ),
                               ],
                             ),
                           ),

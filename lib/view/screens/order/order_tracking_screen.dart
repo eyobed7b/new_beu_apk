@@ -133,7 +133,19 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                         },
                       ),
                       _isLoading
-                          ? Center(child: CircularProgressIndicator())
+                          ? Center(
+                              child: ShaderMask(
+                                  shaderCallback: (shade) {
+                                    return LinearGradient(
+                                      colors: [
+                                        Color(0xffff8022),
+                                        Color(0xffff2222)
+                                      ],
+                                      tileMode: TileMode.mirror,
+                                    ).createShader(shade);
+                                  },
+                                  child: CircularProgressIndicator.adaptive()),
+                            )
                           : SizedBox(),
                       Positioned(
                         top: Dimensions.PADDING_SIZE_SMALL,
@@ -150,7 +162,16 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                         child: TrackDetailsView(track: _track),
                       ),
                     ])))
-            : Center(child: CircularProgressIndicator());
+            : Center(
+                child: ShaderMask(
+                    shaderCallback: (shade) {
+                      return LinearGradient(
+                        colors: [Color(0xffff8022), Color(0xffff2222)],
+                        tileMode: TileMode.mirror,
+                      ).createShader(shade);
+                    },
+                    child: CircularProgressIndicator.adaptive()),
+              );
       }),
     );
   }
@@ -225,7 +246,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                   double.parse(restaurant.longitude)),
               infoWindow: InfoWindow(
                 title: 'restaurant'.tr,
-                snippet: restaurant.address,
+                snippet: restaurant.address.toString(),
               ),
               icon: GetPlatform.isWeb
                   ? BitmapDescriptor.defaultMarker

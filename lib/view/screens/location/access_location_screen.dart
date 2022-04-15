@@ -316,7 +316,19 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                 : !_isLoggedIn
                                     ? Container()
                                     : Center(
-                                        child: CircularProgressIndicator()),
+                                        child: ShaderMask(
+                                            shaderCallback: (shade) {
+                                              return LinearGradient(
+                                                colors: [
+                                                  Color(0xffff8022),
+                                                  Color(0xffff2222)
+                                                ],
+                                                tileMode: TileMode.mirror,
+                                              ).createShader(shade);
+                                            },
+                                            child: CircularProgressIndicator
+                                                .adaptive()),
+                                      ),
                             SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
                             // BottomButton(
                             //     locationController: locationController,
@@ -373,7 +385,14 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
       //                       )
       //                     : NoDataScreen(text: 'no_saved_address_found'.tr)
       //                 : Expanded(
-      //                     child: Center(child: CircularProgressIndicator())),
+      //                     child: Center(child: ShaderMask(
+      // shaderCallback: (shade) {
+      //   return LinearGradient(
+      //     colors: [Color(0xffff8022), Color(0xffff2222)],
+      //     tileMode: TileMode.mirror,
+      //   ).createShader(shade);
+      // },
+      // child: CircularProgressIndicator.adaptive()),)),
       //             SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
       //             BottomButton(
       //                 locationController: locationController,

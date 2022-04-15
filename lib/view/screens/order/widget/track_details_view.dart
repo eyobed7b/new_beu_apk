@@ -76,7 +76,7 @@ class TrackDetailsView extends StatelessWidget {
                 Expanded(
                     child: Text(
                   _takeAway
-                      ? track.restaurant.address
+                      ? track.restaurant.address.toString()
                       : track.deliveryAddress.address,
                   style: sfRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
                   maxLines: 2,
