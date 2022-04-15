@@ -13,8 +13,8 @@ class QuantityButton extends StatelessWidget {
       onTap: onTap,
       child: isIncrement
           ? Container(
-              height: 5.h,
-              width: 5.h,
+              height: 4.h,
+              width: 4.h,
               margin: EdgeInsets.symmetric(
                   horizontal: Dimensions.PADDING_SIZE_SMALL),
               decoration: BoxDecoration(
@@ -35,8 +35,8 @@ class QuantityButton extends StatelessWidget {
               ),
             )
           : Container(
-              height: 5.h,
-              width: 5.h,
+              height: 4.h,
+              width: 4.h,
               margin: EdgeInsets.symmetric(
                   horizontal: Dimensions.PADDING_SIZE_SMALL),
               decoration: BoxDecoration(

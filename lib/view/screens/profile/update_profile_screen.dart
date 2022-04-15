@@ -238,11 +238,33 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     bottom: Dimensions.PADDING_SIZE_SMALL),
                                 buttonText: 'update'.tr,
                               )
-                            : Center(child: CircularProgressIndicator()),
+                            : Center(
+                                child: ShaderMask(
+                                    shaderCallback: (shade) {
+                                      return LinearGradient(
+                                        colors: [
+                                          Color(0xffff8022),
+                                          Color(0xffff2222)
+                                        ],
+                                        tileMode: TileMode.mirror,
+                                      ).createShader(shade);
+                                    },
+                                    child:
+                                        CircularProgressIndicator.adaptive()),
+                              ),
                       ]),
                     ),
                   )
-                : Center(child: CircularProgressIndicator())
+                : Center(
+                    child: ShaderMask(
+                        shaderCallback: (shade) {
+                          return LinearGradient(
+                            colors: [Color(0xffff8022), Color(0xffff2222)],
+                            tileMode: TileMode.mirror,
+                          ).createShader(shade);
+                        },
+                        child: CircularProgressIndicator.adaptive()),
+                  )
             : NotLoggedInScreen();
       }),
     );

@@ -75,7 +75,16 @@ class ProfileScreen extends StatelessWidget {
       // backgroundColor: Theme.of(context).cardColor,
       body: GetBuilder<UserController>(builder: (userController) {
         return (_isLoggedIn && userController.userInfoModel == null)
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: ShaderMask(
+                    shaderCallback: (shade) {
+                      return LinearGradient(
+                        colors: [Color(0xffff8022), Color(0xffff2222)],
+                        tileMode: TileMode.mirror,
+                      ).createShader(shade);
+                    },
+                    child: CircularProgressIndicator.adaptive()),
+              )
             : SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Column(

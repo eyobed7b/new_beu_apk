@@ -64,44 +64,46 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async {
-          if (widget.exitFromApp) {
-            if (_canExit) {
-              if (GetPlatform.isAndroid) {
-                SystemNavigator.pop();
-              } else if (GetPlatform.isIOS) {
-                exit(0);
-              } else {
-                Navigator.pushNamed(context, RouteHelper.getInitialRoute());
-              }
-              return Future.value(false);
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('back_press_again_to_exit'.tr,
-                    style: TextStyle(color: Colors.white)),
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-                margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-              ));
-              _canExit = true;
-              Timer(Duration(seconds: 2), () {
-                _canExit = false;
-              });
-              return Future.value(false);
-            }
+    return WillPopScope(onWillPop: () async {
+      if (widget.exitFromApp) {
+        if (_canExit) {
+          if (GetPlatform.isAndroid) {
+            SystemNavigator.pop();
+          } else if (GetPlatform.isIOS) {
+            exit(0);
           } else {
-            return true;
+            Navigator.pushNamed(context, RouteHelper.getInitialRoute());
           }
-        },
-        child: Scaffold(
+          return Future.value(false);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('back_press_again_to_exit'.tr,
+                style: TextStyle(color: Colors.white)),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+            margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+          ));
+          _canExit = true;
+          Timer(Duration(seconds: 2), () {
+            _canExit = false;
+          });
+          return Future.value(false);
+        }
+      } else {
+        return true;
+      }
+    }, child: GetBuilder<AuthController>(builder: (authController) {
+      return Scaffold(
           appBar: ResponsiveHelper.isDesktop(context)
               ? WebMenuBar()
-              : !widget.exitFromApp
+              : !widget.exitFromApp && !authController.isWaitingForOTP
                   ? AppBar(
                       leading: IconButton(
-                        onPressed: () => Get.back(),
+                        onPressed: () {
+                          authController.back();
+                          Get.back();
+                        },
                         icon: Icon(Icons.arrow_back_ios_rounded,
                             color: Theme.of(context).textTheme.bodyText1.color),
                       ),
@@ -109,247 +111,291 @@ class _SignInScreenState extends State<SignInScreen> {
                       backgroundColor: Colors.transparent)
                   : null,
           body: SafeArea(
-            child: Scrollbar(
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-                child: Container(
-                  width: context.width > 700 ? 700 : context.width,
-                  padding: context.width > 700
-                      ? EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT)
-                      : null,
-                  decoration: context.width > 700
-                      ? BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          borderRadius:
-                              BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey[Get.isDarkMode ? 700 : 300],
-                                blurRadius: 5,
-                                spreadRadius: 1)
-                          ],
-                        )
-                      : null,
-                  child: GetBuilder<AuthController>(builder: (authController) {
-                    return !authController.isWaitingForOTP
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                                Stack(
-                                  children: [
-                                    Image.asset(Images.illustration,
-                                        width: 100.h),
-                                    Positioned(
-                                        bottom: 1.h,
-                                        child: Text(
-                                          "enter_phone_number".tr,
-                                          style:
-                                              sfBlack.copyWith(fontSize: 3.h),
-                                        ))
+              child: Scrollbar(
+                  child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+                      child: Container(
+                          width: context.width > 700 ? 700 : context.width,
+                          padding: context.width > 700
+                              ? EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT)
+                              : null,
+                          decoration: context.width > 700
+                              ? BoxDecoration(
+                                  color: Theme.of(context).cardColor,
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.RADIUS_SMALL),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors
+                                            .grey[Get.isDarkMode ? 700 : 300],
+                                        blurRadius: 5,
+                                        spreadRadius: 1)
                                   ],
-                                ),
-                                SizedBox(
-                                    height:
-                                        Dimensions.PADDING_SIZE_EXTRA_LARGE),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.RADIUS_SMALL),
-                                    color: Theme.of(context).cardColor,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors
-                                              .grey[Get.isDarkMode ? 800 : 200],
-                                          spreadRadius: 1,
-                                          blurRadius: 5)
-                                    ],
-                                  ),
-                                  child: Column(children: [
-                                    Row(children: [
-                                      CodePickerWidget(
-                                        alignLeft: true,
-                                        onChanged: (CountryCode countryCode) {
-                                          _countryDialCode =
-                                              countryCode.dialCode;
-                                        },
-                                        initialSelection: _countryDialCode !=
-                                                null
-                                            ? _countryDialCode
-                                            : Get.find<LocalizationController>()
-                                                .locale
-                                                .countryCode,
-                                        favorite: [_countryDialCode],
-                                        flagDecoration: BoxDecoration(
-                                            shape: BoxShape.circle),
-                                        showCountryOnly: true,
-                                        padding: EdgeInsets.zero,
-                                        showDropDownButton: true,
-                                        flagWidth: 50,
-                                        hideMainText: true,
-                                        textStyle: sfRegular.copyWith(
-                                          fontSize: Dimensions.fontSizeLarge,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              .color,
+                                )
+                              : null,
+                          child: !authController.isWaitingForOTP
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                      Stack(
+                                        children: [
+                                          Image.asset(Images.illustration,
+                                              width: 100.h),
+                                          Positioned(
+                                              bottom: 1.h,
+                                              child: Text(
+                                                "enter_phone_number".tr,
+                                                style: sfBlack.copyWith(
+                                                    fontSize: 3.h),
+                                              ))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height: Dimensions
+                                              .PADDING_SIZE_EXTRA_LARGE),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.RADIUS_SMALL),
+                                          color: Theme.of(context).cardColor,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey[
+                                                    Get.isDarkMode ? 800 : 200],
+                                                spreadRadius: 1,
+                                                blurRadius: 5)
+                                          ],
                                         ),
-                                      ),
-                                      Expanded(
-                                          flex: 100,
-                                          child: CustomTextField(
-                                            hintText: 'phone'.tr,
-                                            controller: _phoneController,
-                                            focusNode: _phoneFocus,
-                                            nextFocus: _passwordFocus,
-                                            inputType: TextInputType.phone,
-                                            divider: false,
-                                          )),
-                                      !authController.isLoading
-                                          ? GestureDetector(
-                                              onTap: () {
-                                                authController.sendOTP(
-                                                    _phoneController,
-                                                    _countryDialCode);
+                                        child: Column(children: [
+                                          Row(children: [
+                                            CodePickerWidget(
+                                              alignLeft: true,
+                                              onChanged:
+                                                  (CountryCode countryCode) {
+                                                _countryDialCode =
+                                                    countryCode.dialCode;
                                               },
-                                              child: Container(
-                                                height: 6.h,
-                                                width: 6.h,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2.w),
-                                                    gradient: LinearGradient(
-                                                        colors: [
-                                                          Theme.of(context)
-                                                              .primaryColor,
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .secondary
-                                                        ])),
-                                                child: Icon(
-                                                  Icons.arrow_forward,
-                                                  color: Colors.white,
-                                                  size: 3.h,
-                                                ),
+                                              initialSelection: _countryDialCode !=
+                                                      null
+                                                  ? _countryDialCode
+                                                  : Get.find<
+                                                          LocalizationController>()
+                                                      .locale
+                                                      .countryCode,
+                                              favorite: [_countryDialCode],
+                                              flagDecoration: BoxDecoration(
+                                                  shape: BoxShape.circle),
+                                              showCountryOnly: true,
+                                              padding: EdgeInsets.zero,
+                                              showDropDownButton: true,
+                                              flagWidth: 50,
+                                              hideMainText: true,
+                                              textStyle: sfRegular.copyWith(
+                                                fontSize:
+                                                    Dimensions.fontSizeLarge,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    .color,
                                               ),
-                                            )
-                                          : CircularProgressIndicator()
-                                    ]),
-                                  ]),
-                                ),
-                                GuestButton(),
-                              ])
-                        : Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () =>
-                                        authController.waitForOTP(false),
-                                    child: Container(
-                                      width: 12.w,
-                                      height: 12.w,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(1.5.h),
-                                          color: Theme.of(context)
-                                              .primaryColor
-                                              .withOpacity(0.3)),
-                                      child: Icon(
-                                        Icons.arrow_back,
-                                        color: Theme.of(context).primaryColor,
+                                            ),
+                                            Expanded(
+                                                flex: 100,
+                                                child: CustomTextField(
+                                                  hintText: 'phone'.tr,
+                                                  controller: _phoneController,
+                                                  focusNode: _phoneFocus,
+                                                  nextFocus: _passwordFocus,
+                                                  inputType:
+                                                      TextInputType.phone,
+                                                  divider: false,
+                                                )),
+                                            !authController.isLoading
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      authController.sendOTP(
+                                                          _phoneController,
+                                                          _countryDialCode);
+                                                    },
+                                                    child: Container(
+                                                      height: 6.h,
+                                                      width: 6.h,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      2.w),
+                                                          gradient:
+                                                              LinearGradient(
+                                                                  colors: [
+                                                                Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .secondary
+                                                              ])),
+                                                      child: Icon(
+                                                        Icons.arrow_forward,
+                                                        color: Colors.white,
+                                                        size: 3.h,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Padding(
+                                                    padding:
+                                                        EdgeInsets.all(1.w),
+                                                    child: ShaderMask(
+                                                        shaderCallback:
+                                                            (shade) {
+                                                          return LinearGradient(
+                                                            colors: [
+                                                              Color(0xffff8022),
+                                                              Color(0xffff2222)
+                                                            ],
+                                                            begin: Alignment
+                                                                .topLeft,
+                                                            end: Alignment
+                                                                .bottomRight,
+                                                            tileMode:
+                                                                TileMode.mirror,
+                                                          ).createShader(shade);
+                                                        },
+                                                        child:
+                                                            CircularProgressIndicator
+                                                                .adaptive()),
+                                                  ),
+                                          ]),
+                                        ]),
                                       ),
-                                    ),
+                                      GuestButton(),
+                                    ])
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: widget.exitFromApp ? 100.h : 90.h,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () => authController
+                                                .waitForOTP(false),
+                                            child: Container(
+                                              width: 12.w,
+                                              height: 12.w,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          1.5.h),
+                                                  color: Theme.of(context)
+                                                      .primaryColor
+                                                      .withOpacity(0.3)),
+                                              child: Icon(
+                                                Icons.arrow_back,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5.h),
+                                          Text(
+                                            "enter_the_code".tr,
+                                            maxLines: 2,
+                                            style: sfRegular.copyWith(
+                                                fontSize: 30,
+                                                color: Color.fromARGB(
+                                                    255, 9, 5, 28)),
+                                          ),
+                                          SizedBox(height: 3.h),
+                                          Text(
+                                            "${"sent_the_code".tr} $_countryDialCode${_phoneController.text} ${"please_enter_code".tr}",
+                                            style: sfRegular.copyWith(
+                                                fontSize: 16),
+                                          ),
+                                          SizedBox(height: 3.h),
+                                          OTPTextField(
+                                              onChanged: (value) {},
+                                              length: 6,
+                                              width: 336,
+                                              fieldWidth: 50,
+                                              style:
+                                                  const TextStyle(fontSize: 17),
+                                              textFieldAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              fieldStyle: FieldStyle.underline,
+                                              onCompleted: (pin) async {
+                                                if (kDebugMode) {
+                                                  print("Completed: " + pin);
+                                                }
+                                                ResponseModel res =
+                                                    await authController
+                                                        .verifyOTP(pin);
+                                              }),
+                                          SizedBox(height: 3.h),
+                                          Align(
+                                              alignment: Alignment.center,
+                                              child: TimerButton(
+                                                label: "send_sms_again".tr,
+                                                buttonType:
+                                                    ButtonType.TextButton,
+                                                timeOutInSeconds: 90,
+                                                onPressed: () {
+                                                  authController.sendOTP(
+                                                      _phoneController,
+                                                      _countryDialCode);
+                                                },
+                                                disabledColor:
+                                                    Colors.transparent,
+                                                color: Colors.transparent,
+                                                disabledTextStyle:
+                                                    const TextStyle(
+                                                        fontSize: 16.0,
+                                                        color: Colors.grey),
+                                                activeTextStyle:
+                                                    const TextStyle(
+                                                        fontSize: 16.0,
+                                                        color:
+                                                            Colors.deepOrange),
+                                              )),
+                                          Spacer(),
+                                          Container(
+                                            height: 7.h,
+                                            width: 90.w,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        1.5.h),
+                                                gradient: LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      Theme.of(context)
+                                                          .primaryColor,
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .secondary
+                                                    ])),
+                                            child: Center(
+                                                child: !authController.isLoading
+                                                    ? Text("next".tr,
+                                                        style: sfBold.copyWith(
+                                                            fontSize: 18,
+                                                            color:
+                                                                Colors.white))
+                                                    : CircularProgressIndicator
+                                                        .adaptive(
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                                Colors.white),
+                                                      )),
+                                          ),
+                                        ]),
                                   ),
-                                  SizedBox(height: 5.h),
-                                  Text(
-                                    "enter_the_code".tr,
-                                    maxLines: 2,
-                                    style: sfRegular.copyWith(
-                                        fontSize: 30,
-                                        color: Color.fromARGB(255, 9, 5, 28)),
-                                  ),
-                                  SizedBox(height: 3.h),
-                                  Text(
-                                    "sent_the_code".tr +
-                                        _countryDialCode +
-                                        _phoneController.text +
-                                        "please_enter_code".tr,
-                                    style: sfRegular.copyWith(fontSize: 16),
-                                  ),
-                                  SizedBox(height: 3.h),
-                                  OTPTextField(
-                                      onChanged: (value) {},
-                                      length: 6,
-                                      width: 336,
-                                      fieldWidth: 50,
-                                      style: const TextStyle(fontSize: 17),
-                                      textFieldAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      fieldStyle: FieldStyle.underline,
-                                      onCompleted: (pin) async {
-                                        if (kDebugMode) {
-                                          print("Completed: " + pin);
-                                        }
-                                        ResponseModel res =
-                                            await authController.verifyOTP(pin);
-                                      }),
-                                  SizedBox(height: 3.h),
-                                  Align(
-                                      alignment: Alignment.center,
-                                      child: TimerButton(
-                                        label: "send_sms_again".tr,
-                                        buttonType: ButtonType.TextButton,
-                                        timeOutInSeconds: 20,
-                                        onPressed: () {
-                                          authController.sendOTP(
-                                              _phoneController,
-                                              _countryDialCode);
-                                        },
-                                        disabledColor: Colors.transparent,
-                                        color: Colors.transparent,
-                                        disabledTextStyle: const TextStyle(
-                                            fontSize: 16.0, color: Colors.grey),
-                                        activeTextStyle: const TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.deepOrange),
-                                      )),
-                                  SizedBox(
-                                    height: 38.h,
-                                  ),
-                                  Container(
-                                    height: 7.h,
-                                    width: 90.w,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(1.5.h),
-                                        gradient: LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [
-                                              Theme.of(context).primaryColor,
-                                              Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary
-                                            ])),
-                                    child: Center(
-                                      child: !authController.isLoading
-                                          ? Text("next".tr,
-                                              style: sfBold.copyWith(
-                                                  fontSize: 18,
-                                                  color: Colors.white))
-                                          : CircularProgressIndicator(),
-                                    ),
-                                  )
-                                ]),
-                          );
-                  }),
-                ),
-              ),
-            ),
-          ),
-        ));
+                                ))))));
+    }));
   }
 }

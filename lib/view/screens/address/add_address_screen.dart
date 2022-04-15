@@ -172,17 +172,44 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                             ),
                                             locationController.loading
                                                 ? Center(
-                                                    child:
-                                                        CircularProgressIndicator())
+                                                    child: ShaderMask(
+                                                        shaderCallback:
+                                                            (shade) {
+                                                          return LinearGradient(
+                                                            colors: [
+                                                              Color(0xffff8022),
+                                                              Color(0xffff2222)
+                                                            ],
+                                                            tileMode:
+                                                                TileMode.mirror,
+                                                          ).createShader(shade);
+                                                        },
+                                                        child:
+                                                            CircularProgressIndicator
+                                                                .adaptive()),
+                                                  )
                                                 : SizedBox(),
                                             Center(
-                                                child: !locationController
-                                                        .loading
-                                                    ? Image.asset(
-                                                        Images.pick_marker,
-                                                        height: 50,
-                                                        width: 50)
-                                                    : CircularProgressIndicator()),
+                                              child: !locationController.loading
+                                                  ? Image.asset(
+                                                      Images.pick_marker,
+                                                      height: 50,
+                                                      width: 50)
+                                                  : ShaderMask(
+                                                      shaderCallback: (shade) {
+                                                        return LinearGradient(
+                                                          colors: [
+                                                            Color(0xffff8022),
+                                                            Color(0xffff2222)
+                                                          ],
+                                                          tileMode:
+                                                              TileMode.mirror,
+                                                        ).createShader(shade);
+                                                      },
+                                                      child:
+                                                          CircularProgressIndicator
+                                                              .adaptive()),
+                                            ),
                                             Positioned(
                                               bottom: 10,
                                               right: 0,
@@ -290,8 +317,8 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                             },
                                             child: Center(
                                               child: Container(
-                                                width: 12.h,
-                                                height: 12.h,
+                                                width: 13.h,
+                                                height: 13.h,
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: Dimensions
                                                         .PADDING_SIZE_LARGE,
@@ -511,7 +538,19 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                                     }
                                   },
                           )
-                        : Center(child: CircularProgressIndicator()),
+                        : Center(
+                            child: ShaderMask(
+                                shaderCallback: (shade) {
+                                  return LinearGradient(
+                                    colors: [
+                                      Color(0xffff8022),
+                                      Color(0xffff2222)
+                                    ],
+                                    tileMode: TileMode.mirror,
+                                  ).createShader(shade);
+                                },
+                                child: CircularProgressIndicator.adaptive()),
+                          ),
                   ),
                 ]);
               });

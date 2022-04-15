@@ -367,7 +367,7 @@
   "fill_in_info": "Fill in your info to get started",
   "fill_in_info_desc": "This data will be displayed in your account profile for security",
   "send_sms_again": "Send SMS again",
-  "enter_the_code": "Enter the \ncode the SMS",
+  "enter_the_code": "Enter the \ncode from SMS",
   "sent_the_code": "We sent a code to",
   "please_enter_code": "Please enter the code below to verify your phone number.",
   "logout_msg": "Oh no! You’re leaving ...\nAre you Sure?",
@@ -386,5 +386,6 @@
   "buy_now": "Buy now",
   "track_my_order": "Track My Order",
   "apply_promo_code": "Apply promo code",
-  "order": "Orders"
+  "order": "Orders",
+  "open_now": "Open now"
 }
