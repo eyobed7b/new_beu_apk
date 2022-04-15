@@ -174,12 +174,12 @@ class _CategoryProductScreenState extends State<CategoryProductScreen>
                         color: Theme.of(context).textTheme.bodyText1.color,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
-                      icon: CartWidget(
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          size: 25),
-                    ),
+                    // IconButton(
+                    //   onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
+                    //   icon: CartWidget(
+                    //       color: Theme.of(context).textTheme.bodyText1.color,
+                    //       size: 25),
+                    // ),
                   ],
                 ),
           body: Center(

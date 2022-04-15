@@ -754,8 +754,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                       .product
                                                       .name),
                                                   subtitle: Text(cartController
-                                                      .cartList[0].product.price
-                                                      .toString()),
+                                                          .cartList[0].quantity
+                                                          .toString() +
+                                                      " X " +
+                                                      cartController.cartList[0]
+                                                          .product.price
+                                                          .toString()),
                                                 )
                                               : ExpansionTile(
                                                   title: Text(
@@ -847,7 +851,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                                           index]
                                                                       .product
                                                                       .name),
-                                                              subtitle: Text(
+                                                              subtitle: Text(cartController
+                                                                      .cartList[
+                                                                          index]
+                                                                      .quantity
+                                                                      .toString() +
+                                                                  " X " +
                                                                   cartController
                                                                       .cartList[
                                                                           index]
