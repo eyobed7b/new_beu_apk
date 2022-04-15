@@ -507,7 +507,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                               child: Text('apply_promo_code'.tr,
                                                   style: sfMedium.copyWith(
                                                       color: Color.fromARGB(
-                                                          255, 4, 129, 255))),
+                                                          255, 160, 160, 160))),
                                             ),
                                           ],
                                         ),
