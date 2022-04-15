@@ -1,9 +1,12 @@
 import 'dart:ui';
 
+import 'package:efood_multivendor/controller/coupon_controller.dart';
 import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
+import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/styles.dart';
+import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/quantity_button.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:flutter/foundation.dart';
@@ -617,118 +620,156 @@ class _ProductScreenState extends State<ProductScreen>
 
   Widget _buildMeanuContent(CartController cartController) {
     final size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                if (!_expanded) {
-                  _expanded = true;
+    return GetBuilder<CartController>(builder: (cartController) {
+      List<List<AddOns>> _addOnsList = [];
+      List<bool> _availableList = [];
+      double _itemPrice = 0;
+      double _addOns = 0;
+      cartController.cartList.forEach((cartModel) {
+        List<AddOns> _addOnList = [];
+        cartModel.addOnIds.forEach((addOnId) {
+          for (AddOns addOns in cartModel.product.addOns) {
+            if (addOns.id == addOnId.id) {
+              _addOnList.add(addOns);
+              break;
+            }
+          }
+        });
+        _addOnsList.add(_addOnList);
+
+        _availableList.add(DateConverter.isAvailable(
+            cartModel.product.availableTimeStarts,
+            cartModel.product.availableTimeEnds));
+
+        for (int index = 0; index < _addOnList.length; index++) {
+          _addOns = _addOns +
+              (_addOnList[index].price * cartModel.addOnIds[index].quantity);
+        }
+        _itemPrice = _itemPrice + (cartModel.price * cartModel.quantity);
+      });
+      double _subTotal = _itemPrice + _addOns;
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                if (!cartController.isCartOpen) {
                   _currentHeight = _maxHeight;
                   _controller.forward(from: 0.0);
-                  setState(() => _isCartOpen = true);
+                  cartController.openCart();
                   // _controller.reverse();
                 } else {
-                  _expanded = false;
-                  setState(() => _isCartOpen = false);
-
+                  cartController.closeCart();
                   // _currentHeight = _maxHeight;
                   // _controller.forward(from: 0.0);
                   _controller.reverse(from: 0.5);
                 }
-              });
-            },
-            child: SizedBox(
-              height: size.width * 1,
-              width: size.width * 0.2,
-              child: Stack(
-                children: [
-                  Container(
-                    width: size.width * 0.13,
-                    height: size.width * 0.13,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100)),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.11,
-                    height: size.width * 0.11,
-                    child: Image.network(
-                      "https://firebasestorage.googleapis.com/v0/b/pickme-551111.appspot.com/o/Vector.png?alt=media&token=2de07201-3680-4b63-b205-546f5a6df256",
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 40,
-                    child: Container(
-                      width: size.width * 0.08,
-                      height: size.width * 0.08,
+              },
+              child: SizedBox(
+                height: size.width * 1,
+                width: size.width * 0.2,
+                child: Stack(
+                  children: [
+                    Container(
+                      width: size.width * 0.13,
+                      height: size.width * 0.13,
                       decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [Color(0xffff8022), Color(0xffff2222)]),
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(100)),
-                      child: Center(
-                        child: Text(
-                          cartController.cartList.length.toString(),
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.11,
+                      height: size.width * 0.11,
+                      child: Image.network(
+                        "https://firebasestorage.googleapis.com/v0/b/pickme-551111.appspot.com/o/Vector.png?alt=media&token=2de07201-3680-4b63-b205-546f5a6df256",
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 40,
+                      child: Container(
+                        width: size.width * 0.08,
+                        height: size.width * 0.08,
+                        decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [Color(0xffff8022), Color(0xffff2222)]),
+                            borderRadius: BorderRadius.circular(100)),
+                        child: Center(
+                          child: Text(
+                            cartController.cartList.length.toString(),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// Put your child her
+                  Text(
+                    cartController.amount.toString() + "birr".tr,
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "15 ${"birr".tr} ${"deliv_fee".tr}",
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300),
                   ),
                 ],
               ),
             ),
-          ),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// Put your child her
-                Text(
-                  cartController.amount.toString() + "birr".tr,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  "15 ${"birr".tr} ${"deliv_fee".tr}",
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w300),
-                ),
-              ],
+            const SizedBox(
+              width: 25,
             ),
-          ),
-          const SizedBox(
-            width: 25,
-          ),
-          Container(
-            width: size.width * 0.3,
-            height: size.width * 0.12,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(100)),
-            child: const Center(
-              child: Text(
-                "Buy Now",
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
+            GestureDetector(
+              onTap: () {
+                // Get.toNamed(RouteHelper.getCartRoute())
+
+                if (!cartController.cartList.first.product.scheduleOrder &&
+                    _availableList.contains(false)) {
+                  showCustomSnackBar('one_or_more_product_unavailable'.tr);
+                } else {
+                  Get.find<CouponController>().removeCouponData(false);
+                  Get.toNamed(RouteHelper.getCheckoutRoute('cart'));
+                }
+              },
+              child: Container(
+                width: size.width * 0.3,
+                height: size.width * 0.12,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(100)),
+                child: Center(
+                  child: Text(
+                    'buy_now'.tr,
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
-            ),
-          )
-        ],
-      ),
-    );
+            )
+          ],
+        ),
+      );
+    });
   }
 
   @override
