@@ -174,7 +174,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             style: sfBold.copyWith(
                                                 fontSize: 18,
                                                 color: Colors.white))
-                                        : CircularProgressIndicator(),
+                                        : ShaderMask(
+                                            shaderCallback: (shade) {
+                                              return LinearGradient(
+                                                colors: [
+                                                  Color(0xffff8022),
+                                                  Color(0xffff2222)
+                                                ],
+                                                tileMode: TileMode.mirror,
+                                              ).createShader(shade);
+                                            },
+                                            child: CircularProgressIndicator
+                                                .adaptive()),
                                   ),
                                 ),
                               )

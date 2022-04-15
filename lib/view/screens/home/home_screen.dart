@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
     Get.find<CategoryController>().getCategoryList(reload);
     // Get.find<RestaurantController>()
     // .getPopularRestaurantList(reload, 'all', false);
-    // Get.find<CampaignController>().getItemCampaignList(reload);
+    Get.find<CampaignController>().getItemCampaignList(reload);
     // Get.find<ProductController>().getPopularProductList(reload, 'all', false);
     // Get.find<RestaurantController>()
     // .getLatestRestaurantList(reload, 'all', false);
@@ -61,15 +61,15 @@ class HomeScreen extends StatelessWidget {
           onRefresh: () async {
             await Get.find<BannerController>().getBannerList(true);
             await Get.find<CategoryController>().getCategoryList(true);
-            await Get.find<RestaurantController>()
-                .getPopularRestaurantList(true, 'all', false);
+            // await Get.find<RestaurantController>()
+            //     .getPopularRestaurantList(true, 'all', false);
             await Get.find<CampaignController>().getItemCampaignList(true);
-            await Get.find<ProductController>()
-                .getPopularProductList(true, 'all', false);
-            await Get.find<RestaurantController>()
-                .getLatestRestaurantList(true, 'all', false);
-            await Get.find<ProductController>()
-                .getReviewedProductList(true, 'all', false);
+            // await Get.find<ProductController>()
+            //     .getPopularProductList(true, 'all', false);
+            // await Get.find<RestaurantController>()
+            //     .getLatestRestaurantList(true, 'all', false);
+            // await Get.find<ProductController>()
+            //     .getReviewedProductList(true, 'all', false);
             await Get.find<RestaurantController>().getRestaurantList('1', true);
             if (Get.find<AuthController>().isLoggedIn()) {
               await Get.find<UserController>().getUserInfo();

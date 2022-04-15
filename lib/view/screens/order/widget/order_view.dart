@@ -300,7 +300,18 @@ class OrderView extends StatelessWidget {
                                     child: Padding(
                                     padding: EdgeInsets.all(
                                         Dimensions.PADDING_SIZE_SMALL),
-                                    child: CircularProgressIndicator(),
+                                    child: ShaderMask(
+                                        shaderCallback: (shade) {
+                                          return LinearGradient(
+                                            colors: [
+                                              Color(0xffff8022),
+                                              Color(0xffff2222)
+                                            ],
+                                            tileMode: TileMode.mirror,
+                                          ).createShader(shade);
+                                        },
+                                        child: CircularProgressIndicator
+                                            .adaptive()),
                                   ))
                                 : SizedBox(),
                           ],

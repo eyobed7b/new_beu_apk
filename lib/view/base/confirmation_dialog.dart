@@ -99,7 +99,19 @@ class ConfirmationDialog extends StatelessWidget {
                             height: 40,
                           )),
                         ])
-                      : Center(child: CircularProgressIndicator());
+                      : Center(
+                          child: ShaderMask(
+                              shaderCallback: (shade) {
+                                return LinearGradient(
+                                  colors: [
+                                    Color(0xffff8022),
+                                    Color(0xffff2222)
+                                  ],
+                                  tileMode: TileMode.mirror,
+                                ).createShader(shade);
+                              },
+                              child: CircularProgressIndicator.adaptive()),
+                        );
                 }),
               ]),
             )),

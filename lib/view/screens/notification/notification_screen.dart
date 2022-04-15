@@ -174,7 +174,16 @@ class NotificationScreen extends StatelessWidget {
                           )),
                         )
                       : NoDataScreen(text: 'no_notification_found'.tr)
-                  : Center(child: CircularProgressIndicator());
+                  : Center(
+                      child: ShaderMask(
+                          shaderCallback: (shade) {
+                            return LinearGradient(
+                              colors: [Color(0xffff8022), Color(0xffff2222)],
+                              tileMode: TileMode.mirror,
+                            ).createShader(shade);
+                          },
+                          child: CircularProgressIndicator.adaptive()),
+                    );
             })
           : NotLoggedInScreen(),
     );

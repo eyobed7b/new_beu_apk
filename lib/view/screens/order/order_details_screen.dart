@@ -352,7 +352,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                     Dimensions.fontSizeSmall),
                                           ),
                                           Text(
-                                            _order.restaurant.address,
+                                            _order.restaurant.address
+                                                .toString(),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: sfRegular.copyWith(
@@ -668,7 +669,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         )
                       : SizedBox(),
                 ])
-              : Center(child: CircularProgressIndicator());
+              : Center(
+                  child: ShaderMask(
+                      shaderCallback: (shade) {
+                        return LinearGradient(
+                          colors: [Color(0xffff8022), Color(0xffff2222)],
+                          tileMode: TileMode.mirror,
+                        ).createShader(shade);
+                      },
+                      child: CircularProgressIndicator.adaptive()),
+                );
         }),
       ),
     );
