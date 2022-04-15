@@ -250,7 +250,7 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                                           ),
                                           Positioned(
                                             right: 2.w,
-                                            top: 5.h,
+                                            top: 7.h,
                                             child: Container(
                                               padding: EdgeInsets.all(7),
                                               decoration: BoxDecoration(

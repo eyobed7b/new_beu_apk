@@ -13,11 +13,13 @@ class CustomLoader extends StatelessWidget {
           borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL)),
       alignment: Alignment.center,
       child: ShaderMask(
-          shaderCallback: (shade) {
-            return LinearGradient(
-              colors: [Color(0xffff8022), Color(0xffff2222)],
-              tileMode: TileMode.mirror,
-            ).createShader(shade);
+          shaderCallback: (Rect bounds) {
+            return RadialGradient(
+              center: Alignment.topLeft,
+              radius: 0.5,
+              colors: <Color>[Color(0xffff8022), Color(0xffff2222)],
+              tileMode: TileMode.repeated,
+            ).createShader(bounds);
           },
           child: CircularProgressIndicator.adaptive()),
     ));

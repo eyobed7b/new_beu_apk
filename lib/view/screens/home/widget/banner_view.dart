@@ -131,8 +131,8 @@ class BannerView extends StatelessWidget {
                     int index = bannerController.bannerImageList.indexOf(bnr);
                     return TabPageSelectorIndicator(
                       backgroundColor: index == bannerController.currentIndex
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).primaryColor.withOpacity(0.5),
+                          ? Theme.of(context).colorScheme.secondary
+                          : Theme.of(context).disabledColor.withOpacity(0.5),
                       borderColor: Theme.of(context).backgroundColor,
                       size: index == bannerController.currentIndex ? 10 : 7,
                     );

@@ -365,7 +365,7 @@ class RouteHelper {
     GetPage(
         name: orderTracking,
         page: () =>
-            getRoute(OrderTrackingScreen(orderID: Get.parameters['id']))),
+            getRoute(OrderTrackingScreen(orderID: Get.parameters['id'],))),
     GetPage(
         name: basicCampaign,
         page: () => getRoute(CampaignScreen(
