@@ -78,10 +78,10 @@ class _ProductScreenState extends State<ProductScreen>
     final size = MediaQuery.of(context).size;
     final menuWidth = size.width / 1.05;
     return GetBuilder<CartController>(builder: (cartController) {
-      if (cartController.cartList.isEmpty) {
-        cartController.closeCart();
-        _controller.reverse(from: 0.5);
-      }
+      // if (cartController.cartList.isEmpty) {
+      //   cartController.closeCart();
+      //   _controller.reverse(from: 0.5);
+      // }
       return Scaffold(
         appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
         backgroundColor: Theme.of(context).cardColor,
