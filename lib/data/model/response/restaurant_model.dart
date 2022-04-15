@@ -62,39 +62,43 @@ class Restaurant {
   int veg;
   int nonVeg;
   Discount discount;
+  int avgPrice;
+  String distance;
 
   Restaurant(
       {this.id,
-        this.name,
-        this.phone,
-        this.email,
-        this.logo,
-        this.latitude,
-        this.longitude,
-        this.address,
-        this.minimumOrder,
-        this.currency,
-        this.openingTime,
-        this.closeingTime,
-        this.freeDelivery,
-        this.coverPhoto,
-        this.delivery,
-        this.takeAway,
-        this.scheduleOrder,
-        this.avgRating,
-        this.tax,
-        this.ratingCount,
-        this.offDay,
-        this.selfDeliverySystem,
-        this.posSystem,
-        this.deliveryCharge,
-        this.open,
-        this.active,
-        this.deliveryTime,
-        this.categoryIds,
-        this.veg,
-        this.nonVeg,
-        this.discount});
+      this.name,
+      this.phone,
+      this.email,
+      this.logo,
+      this.latitude,
+      this.longitude,
+      this.address,
+      this.minimumOrder,
+      this.currency,
+      this.openingTime,
+      this.closeingTime,
+      this.freeDelivery,
+      this.coverPhoto,
+      this.delivery,
+      this.takeAway,
+      this.scheduleOrder,
+      this.avgRating,
+      this.tax,
+      this.ratingCount,
+      this.offDay,
+      this.selfDeliverySystem,
+      this.posSystem,
+      this.deliveryCharge,
+      this.open,
+      this.active,
+      this.deliveryTime,
+      this.categoryIds,
+      this.veg,
+      this.nonVeg,
+      this.discount,
+      this.avgPrice,
+      this.distance});
 
   Restaurant.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -125,9 +129,14 @@ class Restaurant {
     active = json['active'];
     deliveryTime = json['delivery_time'];
     veg = json['veg'];
+    distance = json['distance'];
+    avgPrice = json['avgPrice'];
     nonVeg = json['non_veg'];
-    categoryIds = json['category_ids'] != null ? json['category_ids'].cast<int>() : [];
-    discount = json['discount'] != null ? new Discount.fromJson(json['discount']) : null;
+    categoryIds =
+        json['category_ids'] != null ? json['category_ids'].cast<int>() : [];
+    discount = json['discount'] != null
+        ? new Discount.fromJson(json['discount'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -185,24 +194,26 @@ class Discount {
 
   Discount(
       {this.id,
-        this.startDate,
-        this.endDate,
-        this.startTime,
-        this.endTime,
-        this.minPurchase,
-        this.maxDiscount,
-        this.discount,
-        this.discountType,
-        this.restaurantId,
-        this.createdAt,
-        this.updatedAt});
+      this.startDate,
+      this.endDate,
+      this.startTime,
+      this.endTime,
+      this.minPurchase,
+      this.maxDiscount,
+      this.discount,
+      this.discountType,
+      this.restaurantId,
+      this.createdAt,
+      this.updatedAt});
 
   Discount.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     startDate = json['start_date'];
     endDate = json['end_date'];
-    startTime = json['start_time'] != null ? json['start_time'].substring(0, 5) : null;
-    endTime = json['end_time'] != null ? json['end_time'].substring(0, 5) : null;
+    startTime =
+        json['start_time'] != null ? json['start_time'].substring(0, 5) : null;
+    endTime =
+        json['end_time'] != null ? json['end_time'].substring(0, 5) : null;
     minPurchase = json['min_purchase'].toDouble();
     maxDiscount = json['max_discount'].toDouble();
     discount = json['discount'].toDouble();

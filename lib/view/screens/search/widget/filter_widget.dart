@@ -1,3 +1,5 @@
+import 'package:efood_multivendor/controller/filter_controller.dart';
+import 'package:efood_multivendor/controller/restaurant_controller.dart';
 import 'package:efood_multivendor/controller/search_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
@@ -8,6 +10,7 @@ import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
 import 'package:efood_multivendor/view/screens/search/widget/custom_check_box.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:range_slider_flutter/range_slider_flutter.dart';
@@ -15,6 +18,7 @@ import 'package:range_slider_flutter/range_slider_flutter.dart';
 class FilterWidget extends StatelessWidget {
   final double maxValue;
   final bool isRestaurant;
+  FilterController filterController;
   FilterWidget({@required this.maxValue, @required this.isRestaurant});
 
   @override
@@ -33,7 +37,7 @@ class FilterWidget extends StatelessWidget {
       ),
 
       padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-      child: GetBuilder<SearchController>(builder: (searchController) {
+      child: GetBuilder<FilterController>(builder: (filterController) {
         double _lowerValue = 50;
         double _upperValue = 400;
         var _lowerValueDist = 0.1;
@@ -60,7 +64,7 @@ class FilterWidget extends StatelessWidget {
                               fontSize: Dimensions.fontSizeLarge * 1.2)),
                       CustomButton(
                         onPressed: () {
-                          searchController.resetFilter();
+                          filterController.clearFilters();
                         },
                         buttonText: 'clear_all'.tr,
                         transparent: true,
@@ -76,126 +80,133 @@ class FilterWidget extends StatelessWidget {
                 SizedBox(
                   height: 4.h,
                 ),
-                RangeSliderFlutter(
-                  // key: Key('3343'),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 3.w),
+                  child: RangeSliderFlutter(
+                      // key: Key('3343'),
 
-                  values: [_lowerValue, _upperValue],
-                  rangeSlider: true,
+                      values: [
+                        filterController.selpriceLower,
+                        filterController.selpriceHigher
+                      ],
+                      step: RangeSliderFlutterStep(step: 10),
+                      rangeSlider: true,
+                      tooltip: RangeSliderFlutterTooltip(
+                        boxStyle: RangeSliderFlutterTooltipBox(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(17),
+                                gradient: linearGradient)),
+                        alwaysShowTooltip: true,
+                        leftSuffix: Text(' Br',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                            )),
+                        rightSuffix: Text(' Br',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                            )),
+                      ),
+                      max: 1000,
+                      textPositionTop: -70,
+                      handlerHeight: 25,
+                      trackBar: RangeSliderFlutterTrackBar(
+                        activeTrackBarHeight: 10,
+                        inactiveTrackBarHeight: 10,
+                        activeTrackBar: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: linearGradient,
+                        ),
+                        inactiveTrackBar: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.3),
+                        ),
+                      ),
+                      min: 0,
+                      fontSize: 15,
+                      textColor: Colors.white,
+                      textBackgroundColor: Colors.red,
+                      onDragging: (handlerIndex, lowerValue, upperValue) {
+                        filterController.setPrice(lowerValue, upperValue);
+                      }
+                      // onDragging:
+                      //     (handlerIndex, lowerValue, upperValue) {
+                      //   _lowerValue = lowerValue;
+                      //   _upperValue = upperValue;
+                      //   context
+                      //       .read<FilterProvider>()
+                      //       .setCurrentRangeValues(
+                      //           lowerValue, upperValue);
 
-                  tooltip: RangeSliderFlutterTooltip(
-                    boxStyle: RangeSliderFlutterTooltipBox(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(17),
-                            gradient: linearGradient)),
-                    alwaysShowTooltip: true,
-                    leftSuffix: Text(' Br',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        )),
-                    rightSuffix: Text(' Br',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        )),
-                  ),
-
-                  max: 1000,
-                  textPositionTop: -70,
-                  handlerHeight: 25,
-
-                  trackBar: RangeSliderFlutterTrackBar(
-                    activeTrackBarHeight: 10,
-                    inactiveTrackBarHeight: 10,
-                    activeTrackBar: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: linearGradient,
-                    ),
-                    inactiveTrackBar: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).primaryColor.withOpacity(0.3),
-                    ),
-                  ),
-
-                  min: 0,
-                  fontSize: 15,
-                  textColor: Colors.white,
-                  textBackgroundColor: Colors.red,
-                  // onDragging:
-                  //     (handlerIndex, lowerValue, upperValue) {
-                  //   _lowerValue = lowerValue;
-                  //   _upperValue = upperValue;
-                  //   context
-                  //       .read<FilterProvider>()
-                  //       .setCurrentRangeValues(
-                  //           lowerValue, upperValue);
-
-                  // },
+                      // },
+                      ),
                 ),
-                Text(
-                  "distance_range".tr,
-                  style: sfMedium.copyWith(
-                      fontSize: Dimensions.fontSizeLarge * 1.3),
-                ),
-                SizedBox(
-                  height: 4.h,
-                ),
-                RangeSliderFlutter(
-                  // key: Key('3343'),
+                // Text(
+                //   "distance_range".tr,
+                //   style: sfMedium.copyWith(
+                //       fontSize: Dimensions.fontSizeLarge * 1.3),
+                // ),
+                // SizedBox(
+                //   height: 4.h,
+                // ),
+                // RangeSliderFlutter(
+                //   // key: Key('3343'),
 
-                  values: [_lowerValueDist, _upperValueDist],
-                  rangeSlider: true,
-                  tooltip: RangeSliderFlutterTooltip(
-                    boxStyle: RangeSliderFlutterTooltipBox(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(17),
-                            gradient: linearGradient)),
-                    alwaysShowTooltip: true,
-                    leftSuffix: Text(' Km',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        )),
-                    rightSuffix: Text(' Km',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        )),
-                  ),
+                //   values: [_lowerValueDist, _upperValueDist],
+                //   rangeSlider: true,
+                //   tooltip: RangeSliderFlutterTooltip(
+                //     boxStyle: RangeSliderFlutterTooltipBox(
+                //         decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(17),
+                //             gradient: linearGradient)),
+                //     alwaysShowTooltip: true,
+                //     leftSuffix: Text(' Km',
+                //         style: TextStyle(
+                //           fontSize: 15,
+                //           color: Colors.white,
+                //         )),
+                //     rightSuffix: Text(' Km',
+                //         style: TextStyle(
+                //           fontSize: 15,
+                //           color: Colors.white,
+                //         )),
+                //   ),
 
-                  max: 11,
-                  textPositionTop: -70,
-                  handlerHeight: 25,
+                //   max: 11,
+                //   textPositionTop: -70,
+                //   handlerHeight: 25,
 
-                  trackBar: RangeSliderFlutterTrackBar(
-                    activeTrackBarHeight: 10,
-                    inactiveTrackBarHeight: 10,
-                    activeTrackBar: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: linearGradient,
-                    ),
-                    inactiveTrackBar: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).primaryColor.withOpacity(0.3),
-                    ),
-                  ),
+                //   trackBar: RangeSliderFlutterTrackBar(
+                //     activeTrackBarHeight: 10,
+                //     inactiveTrackBarHeight: 10,
+                //     activeTrackBar: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(10),
+                //       gradient: linearGradient,
+                //     ),
+                //     inactiveTrackBar: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(10),
+                //       color: Theme.of(context).primaryColor.withOpacity(0.3),
+                //     ),
+                //   ),
 
-                  min: 0,
+                //   min: 0,
 
-                  fontSize: 15,
-                  textColor: Colors.white,
-                  textBackgroundColor: Colors.red,
-                  // onDragging:
-                  //     (handlerIndex, lowerValue, upperValue) {
-                  //   _lowerValue = lowerValue;
-                  //   _upperValue = upperValue;
-                  //   context
-                  //       .read<FilterProvider>()
-                  //       .setCurrentRangeValues(
-                  //           lowerValue, upperValue);
+                //   fontSize: 15,
+                //   textColor: Colors.white,
+                //   textBackgroundColor: Colors.red,
+                //   // onDragging:
+                //   //     (handlerIndex, lowerValue, upperValue) {
+                //   //   _lowerValue = lowerValue;
+                //   //   _upperValue = upperValue;
+                //   //   context
+                //   //       .read<FilterProvider>()
+                //   //       .setCurrentRangeValues(
+                //   //           lowerValue, upperValue);
 
-                  // },
-                ),
+                //   // },
+                // ),
                 Text('sort'.tr,
                     style: sfMedium.copyWith(
                         fontSize: Dimensions.fontSizeLarge * 1.3)),
@@ -209,18 +220,25 @@ class FilterWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "cost_high_to_low".tr,
+                            "cost_low_to_high".tr,
                             style: sfMedium.copyWith(
                                 fontSize: Dimensions.fontSizeDefault * 1.2),
                           ),
                           GestureDetector(
                             onTap: () {
-                              searchController.setSelectedIndex(0);
+                              if (filterController.selectedIndex ==
+                                  SortMode.CostAsc) {
+                                filterController
+                                    .setSelectedIndex(SortMode.Distance);
+                              } else {
+                                filterController
+                                    .setSelectedIndex(SortMode.CostAsc);
+                              }
                             },
-                            child: Image.asset(
-                                searchController.selectedIndex == 0
-                                    ? Images.checkboxTicked
-                                    : Images.checkboxOutlined),
+                            child: Image.asset(filterController.selectedIndex ==
+                                    SortMode.CostAsc
+                                ? Images.checkboxTicked
+                                : Images.checkboxOutlined),
                           )
                         ],
                       ),
@@ -231,16 +249,24 @@ class FilterWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "cost_low_to_high".tr,
+                            "cost_high_to_low".tr,
                             style: sfMedium.copyWith(
                                 fontSize: Dimensions.fontSizeDefault * 1.2),
                           ),
                           GestureDetector(
                               onTap: () {
-                                searchController.setSelectedIndex(1);
+                                if (filterController.selectedIndex ==
+                                    SortMode.CostDesc) {
+                                  filterController
+                                      .setSelectedIndex(SortMode.Distance);
+                                } else {
+                                  filterController
+                                      .setSelectedIndex(SortMode.CostDesc);
+                                }
                               },
                               child: Image.asset(
-                                  searchController.selectedIndex == 1
+                                  filterController.selectedIndex ==
+                                          SortMode.CostDesc
                                       ? Images.checkboxTicked
                                       : Images.checkboxOutlined))
                         ],
@@ -258,10 +284,22 @@ class FilterWidget extends StatelessWidget {
                           ),
                           GestureDetector(
                               onTap: () {
-                                searchController.setSelectedIndex(2);
+                                if (kDebugMode) {
+                                  print("Filter OnTap Rating Called");
+                                }
+                                if (filterController.selectedIndex ==
+                                    SortMode.Rating) {
+                                  print("I should be called");
+                                  filterController
+                                      .setSelectedIndex(SortMode.Distance);
+                                } else {
+                                  filterController
+                                      .setSelectedIndex(SortMode.Rating);
+                                }
                               },
                               child: Image.asset(
-                                  searchController.selectedIndex == 2
+                                  filterController.selectedIndex ==
+                                          SortMode.Rating
                                       ? Images.checkboxTicked
                                       : Images.checkboxOutlined))
                         ],
@@ -279,21 +317,21 @@ class FilterWidget extends StatelessWidget {
                       ),
                       ListView.builder(
                           shrinkWrap: true,
-                          itemCount: searchController.filters.length,
+                          itemCount: filterController.filters.length,
                           itemBuilder: ((context, index) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  searchController.filters[index],
+                                  filterController.filters[index],
                                   style: sfMedium.copyWith(
                                       fontSize:
                                           Dimensions.fontSizeDefault * 1.1),
                                 ),
                                 CupertinoSwitch(
-                                  value: searchController.activeFilters[index],
+                                  value: filterController.activeFilters[index],
                                   onChanged: (value) =>
-                                      searchController.setFilter(index, value),
+                                      filterController.setFilter(index, value),
                                 )
                               ],
                             );
@@ -448,12 +486,10 @@ class FilterWidget extends StatelessWidget {
                   buttonText: 'apply'.tr,
                   radius: 15,
                   onPressed: () {
-                    // if (isRestaurant) {
-                    //   searchController.sortRestSearchList();
-                    // } else {
-                    //   searchController.sortFoodSearchList();
-                    // }
-                    Get.back();
+                    filterController.setFilters();
+                        Get.find<RestaurantController>().getRestaurantList('1', true);
+
+                    Navigator.of(context).pop();
                   },
                 ),
               ]),

@@ -8,9 +8,20 @@ class RestaurantRepo {
   final ApiClient apiClient;
   RestaurantRepo({@required this.apiClient});
 
-  Future<Response> getRestaurantList(String offset, String filterBy) async {
-    return await apiClient.getData(
-        '${AppConstants.RESTAURANT_URI}/$filterBy?offset=$offset&limit=10');
+  Future<Response> getRestaurantList(String offset, String filterBy,
+      String sort, String priceRange, double locLat, double locLong) async {
+    if (sort != null) {
+      String uriToCall =
+          '${AppConstants.RESTAURANT_URI}/$filterBy?offset=$offset&limit=10&sort=$sort&price_range=$priceRange';
+      if (kDebugMode) {
+        print(uriToCall);
+      }
+      return await apiClient.getData(
+          '${AppConstants.RESTAURANT_URI}/$filterBy?offset=$offset&limit=10&sort=$sort&price_range=$priceRange&lat=$locLat&lon=$locLong');
+    } else {
+      return await apiClient.getData(
+          '${AppConstants.RESTAURANT_URI}/$filterBy?offset=$offset&limit=10&lat=$locLat&lon=$locLong');
+    }
   }
 
   Future<Response> getPopularRestaurantList(String type) async {
