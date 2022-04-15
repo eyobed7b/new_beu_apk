@@ -9,6 +9,7 @@ import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/checkout/widget/payment_failed_dialog.dart';
+import 'package:efood_multivendor/view/screens/order/order_tracking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -71,9 +72,11 @@ class OrderSuccessfulScreen extends StatelessWidget {
                     ),
                     SizedBox(height: Dimensions.PADDING_SIZE_SMALL * 2),
                     GestureDetector(
-                      onTap: () => Get.offAllNamed(
-                          RouteHelper.getOrderTrackingRoute(
-                              int.parse(orderID), true)),
+                      onTap: () => Get.offAll(
+                          // RouteHelper.getOrderTrackingRoute(
+                          //     int.parse(orderID), true),
+                          OrderTrackingScreen(
+                              orderID: orderID, fromComplete: true)),
                       child: Text(
                         status == 1 ? 'track_my_order'.tr : ''.tr,
                         style: sfMedium.copyWith(
