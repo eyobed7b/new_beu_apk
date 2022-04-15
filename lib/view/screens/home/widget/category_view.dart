@@ -133,11 +133,22 @@ class CategoryView extends StatelessWidget {
                               child: CircleAvatar(
                                 radius: 35,
                                 backgroundColor: Theme.of(context).primaryColor,
-                                child: Text('view_all'.tr,
-                                    style: TextStyle(
-                                        fontSize:
-                                            Dimensions.PADDING_SIZE_DEFAULT,
-                                        color: Theme.of(context).cardColor)),
+                                child: ShaderMask(
+                                  shaderCallback: (shade) {
+                                    return LinearGradient(
+                                      colors: [
+                                        Color(0xffff8022),
+                                        Color(0xffff2222)
+                                      ],
+                                      tileMode: TileMode.mirror,
+                                    ).createShader(shade);
+                                  },
+                                  child: Text('view_all'.tr,
+                                      style: TextStyle(
+                                          fontSize:
+                                              Dimensions.PADDING_SIZE_DEFAULT,
+                                          color: Colors.white)),
+                                ),
                               ),
                             ),
                           ),
