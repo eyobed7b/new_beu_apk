@@ -22,7 +22,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class OrderTrackingScreen extends StatefulWidget {
   final String orderID;
   final bool fromComplete;
-  OrderTrackingScreen({@required this.orderID, this.fromComplete});
+  OrderTrackingScreen({@required this.orderID, this.fromComplete = false});
 
   @override
   _OrderTrackingScreenState createState() => _OrderTrackingScreenState();
@@ -64,6 +64,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
       appBar: CustomAppBar(
         title: 'order_tracking'.tr,
         onBackPressed: () {
+          print(widget.fromComplete);
           if (widget.fromComplete) {
             Get.offAllNamed(RouteHelper.getInitialRoute());
           }
