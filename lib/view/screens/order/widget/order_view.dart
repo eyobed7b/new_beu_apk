@@ -38,7 +38,7 @@ class OrderView extends StatelessWidget {
           paginate = isRunning
               ? orderController.runningPaginate
               : orderController.historyPaginate;
-          pageSize = isRunning
+          pageSize = !isRunning
               ? (orderController.runningPageSize / 10).ceil()
               : (orderController.historyPageSize / 10).ceil();
           offset = isRunning
