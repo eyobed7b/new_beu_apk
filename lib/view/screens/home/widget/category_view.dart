@@ -143,7 +143,7 @@ class CategoryView extends StatelessWidget {
                                       tileMode: TileMode.mirror,
                                     ).createShader(shade);
                                   },
-                                  child: Text('beeleer',
+                                  child: Text('view_all'.toString(),
                                       style: TextStyle(
                                           fontSize:
                                               Dimensions.PADDING_SIZE_DEFAULT,

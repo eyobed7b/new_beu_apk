@@ -93,116 +93,127 @@ class _DashboardScreenState extends State<DashboardScreen> {
             body: _screens[_pageIndex],
             bottomNavigationBar: ResponsiveHelper.isDesktop(context)
                 ? SizedBox()
-                : Container(
-                    // color: Colors.black.withOpacity(0.3),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(0.6),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter),
-                    ),
-                    child: DotNavigationBar(
-                      enablePaddingAnimation: false,
-                      // enableFloatingNavBar: false,
-                      borderRadius: 20.w,
-                      // itemPadding: EdgeInsets.only(
-                      //     left: getProportionateScreenWidth(0),
-                      //     right: getProportionateScreenWidth(10)),
-                      margin: EdgeInsets.only(
-                          // bottom: getProportionateScreenHeight(100),
-                          left: 0,
-                          right: 0),
-                      dotIndicatorColor: Colors.transparent,
-                      backgroundColor: Colors.white,
-                      marginR:
-                          EdgeInsets.symmetric(horizontal: 35, vertical: 10),
-                      paddingR: EdgeInsets.only(bottom: 7, top: 10, right: 10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFF5A6CEA).withOpacity(0.1),
-                          spreadRadius: 5,
-                          blurRadius: 5,
+                : ClipRect(
+                    // <-- clips to the 200x200 [Container] below
+                    child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                        child: Container(
+                          // color: Colors.black.withOpacity(0.3),
+                          width: 100.w,
 
-                          offset: Offset(-4, 2), // changes position of shadow
-                        ),
-                      ],
-                      selectedItemColor: Colors.red,
-                      currentIndex: _pageIndex,
-                      unselectedItemColor: Colors.grey[300],
-                      onTap: _setPage,
-                      items: <DotNavigationBarItem>[
-                        DotNavigationBarItem(
-                          // selectedColor: Colors.green,
-                          icon: Opacity(
-                            opacity: _pageIndex == 0 ? 1 : 0.4,
-                            child: ShaderMask(
-                              shaderCallback: (Rect bounds) {
-                                return LinearGradient(
-                                  // center: Alignment.topLeft,
-                                  // radius: 0.5,
-                                  colors: <Color>[
-                                    Color(0xffff8022),
-                                    Color(0xffff2222)
-                                  ],
-                                  tileMode: TileMode.repeated,
-                                ).createShader(bounds);
-                              },
-                              child: SvgPicture.asset(
-                                'assets/icons/home.svg',
+                          decoration: BoxDecoration(
+                              // gradient: LinearGradient(
+                              //     colors: [
+                              //       Colors.transparent,
+                              //       Colors.black.withOpacity(0.3),
+                              //     ],
+                              //     begin: Alignment.bottomLeft,
+                              //     end: Alignment.bottomRight),
                               ),
-                            ),
-                          ),
-                        ),
-                        DotNavigationBarItem(
-                          // selectedColor: Colors.green,
-                          icon: Opacity(
-                            opacity: _pageIndex == 1 ? 1 : 0.4,
-                            child: ShaderMask(
-                              shaderCallback: (Rect bounds) {
-                                return LinearGradient(
-                                  // center: Alignment.topLeft,
-                                  // radius: 0.5,
-                                  colors: <Color>[
-                                    Color(0xffff8022),
-                                    Color(0xffff2222)
-                                  ],
-                                  tileMode: TileMode.repeated,
-                                ).createShader(bounds);
-                              },
-                              child: SvgPicture.asset(
-                                'assets/icons/order.svg',
+                          child: DotNavigationBar(
+                            enablePaddingAnimation: false,
+                            // enableFloatingNavBar: false,
+                            borderRadius: 20.w,
+                            // itemPadding: EdgeInsets.only(
+                            //     left: getProportionateScreenWidth(0),
+                            //     right: getProportionateScreenWidth(10)),
+                            margin: EdgeInsets.only(
+                                // bottom: getProportionateScreenHeight(100),
+                                left: 0,
+                                right: 0),
+                            dotIndicatorColor: Colors.transparent,
+                            backgroundColor: Colors.white,
+                            marginR: EdgeInsets.only(
+                                left: 35, right: 35, bottom: 10),
+                            paddingR:
+                                EdgeInsets.only(bottom: 7, top: 10, right: 10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF5A6CEA).withOpacity(0.1),
+                                // color: Theme.of(context)
+                                //     .colorScheme
+                                //     .secondary
+                                //     .withOpacity(0.1),
+                                spreadRadius: 5,
+                                blurRadius: 10,
+
+                                // offset: Offset(-4, 2), // changes position of shadow
                               ),
-                            ),
-                          ),
-                        ),
-                        DotNavigationBarItem(
-                          // selectedColor: Colors.green,
-                          icon: Opacity(
-                            opacity: _pageIndex == 2 ? 1 : 0.4,
-                            child: ShaderMask(
-                              shaderCallback: (Rect bounds) {
-                                return LinearGradient(
-                                  // center: Alignment.topLeft,
-                                  // radius: 0.5,
-                                  colors: <Color>[
-                                    Color(0xffff8022),
-                                    Color(0xffff2222)
-                                  ],
-                                  tileMode: TileMode.repeated,
-                                ).createShader(bounds);
-                              },
-                              child: SvgPicture.asset(
-                                'assets/icons/profile.svg',
+                            ],
+                            selectedItemColor: Colors.red,
+                            currentIndex: _pageIndex,
+                            unselectedItemColor: Colors.grey[300],
+                            onTap: _setPage,
+                            items: <DotNavigationBarItem>[
+                              DotNavigationBarItem(
+                                // selectedColor: Colors.green,
+                                icon: Opacity(
+                                  opacity: _pageIndex == 0 ? 1 : 0.4,
+                                  child: ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return LinearGradient(
+                                        // center: Alignment.topLeft,
+                                        // radius: 0.5,
+                                        colors: <Color>[
+                                          Color(0xffff8022),
+                                          Color(0xffff2222)
+                                        ],
+                                        tileMode: TileMode.repeated,
+                                      ).createShader(bounds);
+                                    },
+                                    child: SvgPicture.asset(
+                                      'assets/icons/home.svg',
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              DotNavigationBarItem(
+                                // selectedColor: Colors.green,
+                                icon: Opacity(
+                                  opacity: _pageIndex == 1 ? 1 : 0.4,
+                                  child: ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return LinearGradient(
+                                        // center: Alignment.topLeft,
+                                        // radius: 0.5,
+                                        colors: <Color>[
+                                          Color(0xffff8022),
+                                          Color(0xffff2222)
+                                        ],
+                                        tileMode: TileMode.repeated,
+                                      ).createShader(bounds);
+                                    },
+                                    child: SvgPicture.asset(
+                                      'assets/icons/order.svg',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DotNavigationBarItem(
+                                // selectedColor: Colors.green,
+                                icon: Opacity(
+                                  opacity: _pageIndex == 2 ? 1 : 0.4,
+                                  child: ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return LinearGradient(
+                                        // center: Alignment.topLeft,
+                                        // radius: 0.5,
+                                        colors: <Color>[
+                                          Color(0xffff8022),
+                                          Color(0xffff2222)
+                                        ],
+                                        tileMode: TileMode.repeated,
+                                      ).createShader(bounds);
+                                    },
+                                    child: SvgPicture.asset(
+                                      'assets/icons/profile.svg',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  )));
+                        )))));
   }
 
   void _setPage(int pageIndex) {
