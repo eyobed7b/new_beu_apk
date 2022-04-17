@@ -250,7 +250,7 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                                           ),
                                           Positioned(
                                             right: 2.w,
-                                            top: 7.h,
+                                            top: 4.5.h,
                                             child: Container(
                                               padding: EdgeInsets.all(7),
                                               decoration: BoxDecoration(
@@ -272,7 +272,7 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                                               // width: 10.w,
                                               // height: 3.w,
                                               child: Text(
-                                                "open_now",
+                                                "open_now".tr,
                                                 style: sfBold.copyWith(
                                                     color: Colors.white),
                                               ),

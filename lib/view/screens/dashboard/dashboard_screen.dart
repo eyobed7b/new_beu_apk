@@ -98,7 +98,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                           colors: [
-                            Colors.black.withOpacity(0.0),
+                            Colors.transparent,
                             Colors.black.withOpacity(0.6),
                           ],
                           begin: Alignment.topCenter,
