@@ -815,7 +815,7 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                             borderRadius: BorderRadius.circular(100)),
                         child: Center(
                           child: Text(
-                            cartController.cartList.length.toString(),
+                            cartController.getTotalQuantity().toString(),
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),

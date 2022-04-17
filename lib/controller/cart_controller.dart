@@ -17,6 +17,13 @@ class CartController extends GetxController implements GetxService {
   List<CartModel> get cartList => _cartList;
   double get amount => _amount;
   bool get isCartOpen => _isCartOpen;
+  int getTotalQuantity() {
+    int total = 0;
+    _cartList.forEach((element) {
+      total += element.quantity;
+    });
+    return total;
+  }
 
   void getCartData() {
     _cartList = [];

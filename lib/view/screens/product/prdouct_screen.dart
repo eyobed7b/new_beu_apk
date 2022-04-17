@@ -7,6 +7,7 @@ import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/helper/size_config.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
+import 'package:efood_multivendor/view/base/not_available_widget.dart';
 import 'package:efood_multivendor/view/base/quantity_button.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:flutter/foundation.dart';
@@ -229,6 +230,12 @@ class _ProductScreenState extends State<ProductScreen>
                                   fit: BoxFit.cover,
                                 ),
                               ),
+                              _isAvailable
+                                  ? SizedBox()
+                                  : NotAvailableWidget(
+                                      isRestaurant: false,
+                                      fontSize: Dimensions.fontSizeOverLarge,
+                                    ),
                               Positioned(
                                 bottom: -5.h,
                                 left: 5.w,
@@ -458,8 +465,10 @@ class _ProductScreenState extends State<ProductScreen>
                                   builder: (cartController) {
                                 return Row(children: [
                                   QuantityButton(
-                                    onTap: () =>
-                                        cartController.removeFromCart(product),
+                                    onTap: _isAvailable
+                                        ? () => cartController
+                                            .removeFromCart(product)
+                                        : () {},
                                     isIncrement: false,
                                   ),
                                   Text(
@@ -471,6 +480,9 @@ class _ProductScreenState extends State<ProductScreen>
                                               Dimensions.fontSizeExtraLarge)),
                                   QuantityButton(
                                     onTap: () {
+                                      if (!_isAvailable) {
+                                        return;
+                                      }
                                       if (Get.find<CartController>()
                                           .existAnotherRestaurantProduct(
                                               _cartModel
@@ -732,7 +744,7 @@ class _ProductScreenState extends State<ProductScreen>
                             borderRadius: BorderRadius.circular(100)),
                         child: Center(
                           child: Text(
-                            cartController.cartList.length.toString(),
+                            cartController.getTotalQuantity().toString(),
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),

@@ -176,7 +176,10 @@ class ProductWidget extends StatelessWidget {
                       : SizedBox(),
                   _isAvailable
                       ? SizedBox()
-                      : NotAvailableWidget(isRestaurant: isRestaurant),
+                      : NotAvailableWidget(
+                          isRestaurant: isRestaurant,
+                          fontSize: Dimensions.fontSizeLarge * 0.8,
+                        ),
                 ]),
               ),
 
@@ -323,6 +326,9 @@ class ProductWidget extends StatelessWidget {
                       return qty == 0
                           ? GestureDetector(
                               onTap: () {
+                                if (!_isAvailable) {
+                                  return;
+                                }
                                 if (Get.find<CartController>()
                                     .existAnotherRestaurantProduct(
                                         _cartModel.product.restaurantId)) {
@@ -344,38 +350,41 @@ class ProductWidget extends StatelessWidget {
                                       .addToCart(_cartModel);
                                 }
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(Dimensions
-                                            .PADDING_SIZE_EXTRA_SMALL)),
-                                    border: Border.all(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary)),
-                                width: 18.w,
-                                height: 3.5.h,
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.add,
-                                        size: _desktop ? 30 : 20,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                      ),
-                                      Text("add".tr,
-                                          style: sfRegular.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                          ))
-                                    ],
+                              child: ShaderMask(
+                                shaderCallback: ((bounds) {
+                                  return LinearGradient(
+                                    colors: _isAvailable
+                                        ? [Color(0xffff8022), Color(0xffff2222)]
+                                        : [Colors.grey, Colors.grey],
+                                    tileMode: TileMode.repeated,
+                                  ).createShader(bounds);
+                                }),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(Dimensions
+                                              .PADDING_SIZE_EXTRA_SMALL)),
+                                      border: Border.all(color: Colors.white)),
+                                  width: 18.w,
+                                  height: 3.5.h,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          size: _desktop ? 30 : 20,
+                                          color: Colors.white,
+                                        ),
+                                        Text("add".tr,
+                                            style: sfRegular.copyWith(
+                                                color: Colors.white))
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -383,10 +392,10 @@ class ProductWidget extends StatelessWidget {
                           : Row(
                               children: [
                                 QuantityButton(
-                                  isIncrement: false,
-                                  onTap: () =>
-                                      cartController.removeFromCart(product),
-                                ),
+                                    isIncrement: false,
+                                    onTap: () => _isAvailable
+                                        ? cartController.removeFromCart(product)
+                                        : () {}),
                                 Text(
                                     cartController
                                         .getQuantity(product)
@@ -397,6 +406,9 @@ class ProductWidget extends StatelessWidget {
                                 QuantityButton(
                                     isIncrement: true,
                                     onTap: () {
+                                      if (!_isAvailable) {
+                                        return;
+                                      }
                                       if (Get.find<CartController>()
                                           .existAnotherRestaurantProduct(
                                               _cartModel
