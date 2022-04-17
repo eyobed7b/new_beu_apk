@@ -18,11 +18,17 @@ class TitleWidget extends StatelessWidget {
               onTap: onTap,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(10, 5, 0, 5),
-                child: Text(
-                  'view_all'.tr,
-                  style: sfMedium.copyWith(
-                      fontSize: Dimensions.fontSizeSmall,
-                      color: Theme.of(context).primaryColor),
+                child: ShaderMask(
+                  shaderCallback: (shade) {
+                    return LinearGradient(
+                      colors: [Color(0xffff8022), Color(0xffff2222)],
+                      tileMode: TileMode.mirror,
+                    ).createShader(shade);
+                  },
+                  child: Text('view_all'.tr,
+                      style: TextStyle(
+                          fontSize: Dimensions.PADDING_SIZE_DEFAULT,
+                          color: Colors.white)),
                 ),
               ),
             )
