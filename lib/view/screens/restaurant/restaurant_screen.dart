@@ -108,10 +108,10 @@ class _RestaurantScreenState extends State<RestaurantScreen>
     final menuWidth = size.width / 1.05;
 
     return GetBuilder<CartController>(builder: (cartController) {
-      if (cartController.cartList.isEmpty) {
-        cartController.closeCart();
-        _controller.reverse(from: 0.5);
-      }
+      // if (cartController.cartList.isEmpty) {
+      //   cartController.closeCart();
+      //   _controller.reverse(from: 0.5);
+      // }
       return Scaffold(
           appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
           backgroundColor: Theme.of(context).cardColor,
@@ -132,13 +132,14 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                 GetBuilder<RestaurantController>(builder: (restController) {
                   return GetBuilder<CategoryController>(
                       builder: (categoryController) {
+                    bool isOpen;
                     Restaurant _restaurant;
                     if (restController.restaurant != null &&
                         restController.restaurant.name != null &&
                         categoryController.categoryList != null) {
                       _restaurant = restController.restaurant;
 
-                      DateConverter.isAvailable(
+                      isOpen = DateConverter.isAvailable(
                           _restaurant.openingTime, _restaurant.closeingTime);
                     }
 
@@ -250,29 +251,37 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                                           ),
                                           Positioned(
                                             right: 2.w,
-                                            top: 7.h,
+                                            top: 4.5.h,
                                             child: Container(
                                               padding: EdgeInsets.all(7),
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius
                                                     .circular(Dimensions
                                                         .PADDING_SIZE_EXTRA_SMALL),
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.topRight,
-                                                  colors: [
-                                                    Theme.of(context)
-                                                        .primaryColor,
-                                                    Theme.of(context)
-                                                        .colorScheme
-                                                        .secondary,
-                                                  ],
-                                                ),
+                                                gradient: isOpen
+                                                    ? LinearGradient(
+                                                        begin:
+                                                            Alignment.topLeft,
+                                                        end: Alignment.topRight,
+                                                        colors: [
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                        ],
+                                                      )
+                                                    : LinearGradient(colors: [
+                                                        Colors.grey,
+                                                        Colors.grey
+                                                      ]),
                                               ),
                                               // width: 10.w,
                                               // height: 3.w,
                                               child: Text(
-                                                "open_now",
+                                                isOpen
+                                                    ? "open_now".tr
+                                                    : "closed_now".tr,
                                                 style: sfBold.copyWith(
                                                     color: Colors.white),
                                               ),
@@ -806,7 +815,7 @@ class _RestaurantScreenState extends State<RestaurantScreen>
                             borderRadius: BorderRadius.circular(100)),
                         child: Center(
                           child: Text(
-                            cartController.cartList.length.toString(),
+                            cartController.getTotalQuantity().toString(),
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),
