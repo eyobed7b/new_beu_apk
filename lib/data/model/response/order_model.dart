@@ -31,7 +31,6 @@ class PaginatedOrderModel {
     }
     return data;
   }
-
 }
 
 class OrderModel {
@@ -72,45 +71,44 @@ class OrderModel {
 
   OrderModel(
       {this.id,
-        this.userId,
-        this.orderAmount,
-        this.couponDiscountAmount,
-        this.couponDiscountTitle,
-        this.paymentStatus,
-        this.orderStatus,
-        this.totalTaxAmount,
-        this.paymentMethod,
-        this.couponCode,
-        this.orderNote,
-        this.orderType,
-        this.createdAt,
-        this.updatedAt,
-        this.deliveryCharge,
-        this.scheduleAt,
-        this.otp,
-        this.pending,
-        this.accepted,
-        this.confirmed,
-        this.processing,
-        this.handover,
-        this.pickedUp,
-        this.delivered,
-        this.canceled,
-        this.refundRequested,
-        this.refunded,
-        this.scheduled,
-        this.restaurantDiscountAmount,
-        this.failed,
-        this.detailsCount,
-        this.deliveryMan,
-        this.deliveryAddress,
-        this.restaurant
-      });
+      this.userId,
+      this.orderAmount,
+      this.couponDiscountAmount,
+      this.couponDiscountTitle,
+      this.paymentStatus,
+      this.orderStatus,
+      this.totalTaxAmount,
+      this.paymentMethod,
+      this.couponCode,
+      this.orderNote,
+      this.orderType,
+      this.createdAt,
+      this.updatedAt,
+      this.deliveryCharge,
+      this.scheduleAt,
+      this.otp,
+      this.pending,
+      this.accepted,
+      this.confirmed,
+      this.processing,
+      this.handover,
+      this.pickedUp,
+      this.delivered,
+      this.canceled,
+      this.refundRequested,
+      this.refunded,
+      this.scheduled,
+      this.restaurantDiscountAmount,
+      this.failed,
+      this.detailsCount,
+      this.deliveryMan,
+      this.deliveryAddress,
+      this.restaurant});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
-    orderAmount = json['order_amount'].toDouble();
+    orderAmount = json['order_amount'].toDouble() ?? 0;
     couponDiscountAmount = json['coupon_discount_amount'].toDouble();
     couponDiscountTitle = json['coupon_discount_title'];
     paymentStatus = json['payment_status'];
@@ -214,20 +212,19 @@ class DeliveryMan {
 
   DeliveryMan(
       {this.id,
-        this.fName,
-        this.lName,
-        this.phone,
-        this.email,
-        this.image,
-        this.zoneId,
-        this.active,
-        this.available,
-        this.avgRating,
-        this.ratingCount,
-        this.lat,
-        this.lng,
-        this.location
-      });
+      this.fName,
+      this.lName,
+      this.phone,
+      this.email,
+      this.image,
+      this.zoneId,
+      this.active,
+      this.available,
+      this.avgRating,
+      this.ratingCount,
+      this.lat,
+      this.lng,
+      this.location});
 
   DeliveryMan.fromJson(Map<String, dynamic> json) {
     id = json['id'];
