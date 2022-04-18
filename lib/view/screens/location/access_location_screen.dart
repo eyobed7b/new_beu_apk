@@ -76,6 +76,7 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(children: [
         Image.asset(
           Images.setLocation,
@@ -261,6 +262,8 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                             locationController.addressList != null
                                 ? locationController.addressList.length > 0
                                     ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'saved_address'.tr,
@@ -269,14 +272,17 @@ class _AccessLocationScreenState extends State<AccessLocationScreen> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: Dimensions
                                                         .fontSizeExtraLarge *
-                                                    1.8),
+                                                    1.3),
                                           ),
                                           // NoDataScreen(
                                           //     text: 'no_saved_address_found'.tr)
                                           ListView.builder(
+                                            padding: EdgeInsets.all(
+                                                Dimensions.PADDING_SIZE_SMALL),
                                             physics: BouncingScrollPhysics(),
                                             itemCount: locationController
                                                 .addressList.length,
+                                            shrinkWrap: true,
                                             itemBuilder: (context, index) {
                                               return Center(
                                                   child: SizedBox(
