@@ -38,10 +38,10 @@ class FilterWidget extends StatelessWidget {
 
       padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
       child: GetBuilder<FilterController>(builder: (filterController) {
-        double _lowerValue = 50;
-        double _upperValue = 400;
-        var _lowerValueDist = 0.1;
-        var _upperValueDist = 5.5;
+        double _lowerValue = 0;
+        double _upperValue = 1000;
+        // var _lowerValueDist = 0.1;
+        // var _upperValueDist = 5.5;
         return SingleChildScrollView(
           child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -329,6 +329,8 @@ class FilterWidget extends StatelessWidget {
                                           Dimensions.fontSizeDefault * 1.1),
                                 ),
                                 CupertinoSwitch(
+                                  activeColor:
+                                      Theme.of(context).colorScheme.secondary,
                                   value: filterController.activeFilters[index],
                                   onChanged: (value) =>
                                       filterController.setFilter(index, value),
@@ -487,7 +489,8 @@ class FilterWidget extends StatelessWidget {
                   radius: 15,
                   onPressed: () {
                     filterController.setFilters();
-                        Get.find<RestaurantController>().getRestaurantList('1', true);
+                    Get.find<RestaurantController>()
+                        .getRestaurantList('1', true);
 
                     Navigator.of(context).pop();
                   },

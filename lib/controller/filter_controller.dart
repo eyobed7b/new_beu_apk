@@ -58,10 +58,10 @@ class FilterController extends GetxController implements GetxService {
   }
 
   void clearFilters() {
-    _priceHigher = null;
-    _priceLower = null;
-    _distHigher = null;
-    _distLower = null;
+    _priceHigher = 1000;
+    _priceLower = 0;
+    _distHigher = 10;
+    _distLower = 0;
     _sortMode = SortMode.Distance;
     _isSet = false;
     update();

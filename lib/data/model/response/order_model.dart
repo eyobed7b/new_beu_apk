@@ -108,19 +108,19 @@ class OrderModel {
   OrderModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
-    orderAmount = json['order_amount'].toDouble() ?? 0;
-    couponDiscountAmount = json['coupon_discount_amount'].toDouble();
+    orderAmount = json['order_amount'].toDouble() ?? 0.00;
+    couponDiscountAmount = json['coupon_discount_amount'].toDouble() ?? 0.00;
     couponDiscountTitle = json['coupon_discount_title'];
     paymentStatus = json['payment_status'];
     orderStatus = json['order_status'];
-    totalTaxAmount = json['total_tax_amount'].toDouble();
+    totalTaxAmount = json['total_tax_amount'].toDouble() ?? 0.00;
     paymentMethod = json['payment_method'];
     couponCode = json['coupon_code'];
     orderNote = json['order_note'];
     orderType = json['order_type'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    deliveryCharge = json['delivery_charge'].toDouble();
+    deliveryCharge = json['delivery_charge'].toDouble() ?? 0.00;
     scheduleAt = json['schedule_at'];
     otp = json['otp'];
     pending = json['pending'];
@@ -134,7 +134,8 @@ class OrderModel {
     refundRequested = json['refund_requested'];
     refunded = json['refunded'];
     scheduled = json['scheduled'];
-    restaurantDiscountAmount = json['restaurant_discount_amount'].toDouble();
+    restaurantDiscountAmount =
+        json['restaurant_discount_amount'].toDouble() ?? 0.00;
     failed = json['failed'];
     detailsCount = json['details_count'];
     deliveryMan = json['delivery_man'] != null
